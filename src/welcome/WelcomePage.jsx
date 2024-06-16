@@ -13,7 +13,7 @@ const WelcomePage = () => {
   const handleImportAccount = () => {
     // Handle import account logic
     console.log('Import existing account clicked');
-    // You can navigate to the import account page or do whatever you need
+    navigate("/import-account")
   };
 
   return (
