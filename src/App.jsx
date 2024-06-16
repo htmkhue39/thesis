@@ -2,7 +2,9 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import WelcomePage from './welcome/WelcomePage';
-import CreateAccount from './CreateAccount/CreateAccount';
+import CreatePassword from './CreateAccount/CreatePassword';
+import SecureAccount from './CreateAccount/SecureAccount';
+import ConfirmAccount from './CreateAccount/ConfirmAccount';
 import ImportAccount from './ImportAccount/ImportAccount';
 
 function App() {
@@ -10,7 +12,9 @@ function App() {
     <BrowserRouter>
         <Routes>
           <Route path="/" element={<WelcomePage />} />
-          <Route path="/create-account" element={<CreateAccount />} />
+          <Route path="/create-account/create-password" element={<CreatePassword />} />
+          <Route path="/create-account/secure-account" element={<SecureAccount />} />
+          <Route path="/create-account/confirm-account" element={<ConfirmAccount />} />
           <Route path="/import-account" element={<ImportAccount />} />
         </Routes>
     </BrowserRouter>

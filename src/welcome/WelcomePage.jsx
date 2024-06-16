@@ -7,7 +7,7 @@ const WelcomePage = () => {
   const handleCreateAccount = () => {
     // Handle create account logic
     console.log('Create new account clicked');
-    navigate("/create-account")
+    navigate("/create-account/create-password")
   };
 
   const handleImportAccount = () => {
