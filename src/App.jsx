@@ -6,6 +6,7 @@ import CreatePassword from './CreateAccount/CreatePassword';
 import SecureAccount from './CreateAccount/SecureAccount';
 import ConfirmAccount from './CreateAccount/ConfirmAccount';
 import ImportAccount from './ImportAccount/ImportAccount';
+import Homepage from './Homepage/Homepage'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/create-account/secure-account" element={<SecureAccount />} />
           <Route path="/create-account/confirm-account" element={<ConfirmAccount />} />
           <Route path="/import-account" element={<ImportAccount />} />
+          <Route path="/homepage" element={<Homepage />} />
         </Routes>
     </BrowserRouter>
   );
