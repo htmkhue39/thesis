@@ -5,7 +5,8 @@ import WelcomePage from './welcome/WelcomePage';
 import CreatePassword from './CreateAccount/CreatePassword';
 import SecureAccount from './CreateAccount/SecureAccount';
 import ConfirmAccount from './CreateAccount/ConfirmAccount';
-import ImportAccount from './ImportAccount/ImportAccount';
+import ImportAccountMnemonic from './CreateAccount/ImportAccountMnemonic';
+import ImportAccountPassword from './CreateAccount/ImportAccountPassword';
 import Homepage from './Homepage/Homepage'
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
           <Route path="/create-account/create-password" element={<CreatePassword />} />
           <Route path="/create-account/secure-account" element={<SecureAccount />} />
           <Route path="/create-account/confirm-account" element={<ConfirmAccount />} />
-          <Route path="/import-account" element={<ImportAccount />} />
+          <Route path="/import-account-mnemonic" element={<ImportAccountMnemonic />} />
+          <Route path="/import-account-password" element={<ImportAccountPassword />} />
           <Route path="/homepage" element={<Homepage />} />
         </Routes>
     </BrowserRouter>

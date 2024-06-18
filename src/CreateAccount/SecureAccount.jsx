@@ -37,10 +37,9 @@ const SecureAccount = () => {
 
                 <div className="circle-container">
                     <div className="circle-item">
-                    <div className="circle blue-border">1</div>
+                    <div className="circle blue-full">1</div>
                     <div className="description">Create password</div>
                     </div>
-                    
                     <div className="circle-item">
                     <div className="circle blue-border">2</div>
                     <div className="description">Secure Account</div>

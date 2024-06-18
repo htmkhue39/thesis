@@ -11,8 +11,12 @@
 
   html, body, #root {
     height: 100%;
+    width: 100%;
+    display: flex;
     margin: 0;
     padding: 0;
+    justify-content: center;
+    align-items: center;
   }
   
   body {
@@ -22,18 +26,19 @@
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     height: 100vh;
   }
   
   .homepage {
-    width: 1200px;
     height: 90%;
-    margin-top: 150px;
+    margin-top: 10%;
+    width: 100%;
     background-color: var(--white-color);
     box-shadow: 0 2px 8px var(--shadow-color);
     overflow: hidden;
     border-radius: 8px;
+    border: #0056b3;
+    border-bottom: none;
   }
   
   .header {
@@ -102,8 +107,8 @@
   }
   
   .copy-icon {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
   }
   
   .main-content {

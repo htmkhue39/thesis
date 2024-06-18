@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation  } from 'react-router-dom';
-import './CreatePassword.css';
+import './CreatePassword.css'
 import './Grid.css';
 
-const ConfirmAccount = () => {
+const ImportAccountMnemonic = () => {
   const navigate = useNavigate(); 
   const location = useLocation();
   const { mnemonic } = location.state || [];
@@ -35,38 +35,31 @@ const ConfirmAccount = () => {
     console.log("Provided Mnemonic:", mnemonic);
     if (arraysEqual(inputMnemonic, mnemonic)) {
         alert('Mnemonic phrase matches!');
-        navigate('/homepage'); 
+        navigate('/import-account-password'); 
     } else {
         alert('Mnemonic phrase does not match. Please try again.');
     }
   };
 
-
   return (
     <div>
-        <h1>Confirm Account Page</h1>
+      <h1>Import Account Page</h1>
 
-        <div className='create-account-wrapper'>
-
-            <div className="circle-container">
-                <div className="circle-item">
-                <div className="circle blue-full">1</div>
-                <div className="description">Create password</div>
-                </div>
-                
-                <div className="circle-item">
-                <div className="circle blue-full">2</div>
-                <div className="description">Secure Account</div>
-                </div>
-                <div className="circle-item">
-                <div className="circle blue-border">3</div>
-                <div className="description">Confirm secure chain</div>
-                </div>
+      <div className='create-account-wrapper'>
+        <div className="circle-container">
+            <div className="circle-item">
+              <div className="circle blue-border">1</div>
+              <div className="description">Enter mnemonic phrase</div>
             </div>
-
-            <h2>Confirm Secret Recovery Phrase</h2>
             
-            <div className='container'>
+            <div className="circle-item">
+              <div className="circle gray-border">2</div>
+              <div className="description">Enter password</div>
+            </div>
+          </div>
+          <h2>Enter mnemmonic phrase</h2>
+          <p className="mnemonic-phrase-description">Please enter your mnemonic phrase to import account.</p>
+          <div className='container'>
               <div className="grid-container">
                   {inputMnemonic.map((word, index) => (
                       <div key={index} className="grid-item">
@@ -84,9 +77,10 @@ const ConfirmAccount = () => {
             </div>
 
             <button onClick={handleNextClick}>Next</button>
-        </div>
+      </div>
     </div>
-  );
-};
 
-export default ConfirmAccount;
+  );
+}
+
+export default ImportAccountMnemonic;

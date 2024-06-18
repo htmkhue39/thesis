@@ -41,7 +41,7 @@ function Homepage() {
           <div className="account-address-wrapper">
             <span className="account-address">{truncateAddress(selectedAccount.address)}</span>
             <button onClick={copyAddress} className="copy-button">
-              <img src={copyIcon} className="copy-icon" alt="Copy" />
+              <img src={copyIcon} className="copy-icon" />
             </button>
           </div>
         </div>
