@@ -1,0 +1,131 @@
+.send-coin-wrapper {
+  display: flex;
+  justify-content: center;
+  flex: 1 0 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.send-coin-content {
+  max-height: 82vh;
+  min-height: 570px;
+  flex: 0 0 auto;
+  margin-right: auto;
+  margin-left: auto;
+  width: 408px;
+  background-color: var(--color-background-default);
+  box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
+  z-index: 25;
+  display: flex;
+  flex-flow: column;
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.send-coin-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-bottom: none;
+  padding: 14px 0 3px 0;
+  flex-flow: row;
+  flex: 0 0 auto;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-family: "Euclid Circular B", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 140%;
+  font-style: normal;
+  font-weight: normal;
+  text-align: center;
+  color: var(--color-text-default);
+}
+
+.send-to {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-bottom: none;
+  padding: 14px 0 3px 0;
+  flex-flow: row;
+  flex: 0 0 auto;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.send-to input {
+  flex: 1 1 auto;
+  align-items: center;
+  background: var(--color-background-default);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--color-border-muted);
+  transition: border-color 150ms ease-in-out;
+}
+
+.send-to input.invalid {
+  border-color: red;
+  
+}
+
+.error-message {
+  color: red;
+  background-color: #ffe6e6;
+  border: 1px solid red;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 10px 0;
+  text-align: center;
+  font-size: 12px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.send-details {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.account-info, .asset-info, .amount-info, .fee-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.clear-button {
+  background: none;
+  border: none;
+  color: #f00;
+  cursor: pointer;
+  right: 1rem;
+  position: absolute;
+  width: min-content;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  margin-bottom: 0px;
+  margin-top: 2px;
+}
+
+.send-button {
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.send-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

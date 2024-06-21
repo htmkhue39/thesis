@@ -1,0 +1,321 @@
+:root {
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --background-color: #f5f5f5;
+    --white-color: #fff;
+    --light-gray-color: #f7f7f7;
+    --gray-color: #888;
+    --border-color: #ddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .app-content-wrapper {
+    overflow-x: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-background-alternative);
+  }
+  
+  .app-content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: hidden;
+    position: relative;
+    align-items: center;
+  }
+  
+  .homepage {
+    display: flex;
+    justify-content: center;
+    flex: 1 0 auto;
+    min-height: 0;
+    width: 70%;
+    height: 90%;
+  }
+  
+  .account-info {
+    display: flex;
+    width: 200px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .account-details {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    flex-direction: column;
+  }
+  
+  .account-text {
+    display: flex;
+    align-items: center;
+  }
+  
+  .account-name {
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+  }
+  
+  .account-address {
+    font-size: 14px;
+    color: var(--gray-color);
+  }
+  
+  .account-address-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .dropdown-icon {
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+  }
+  
+  .copy-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    padding: 0;
+    margin: 10px;
+  }
+  
+  .copy-icon {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .main-content {
+    width: 85vw;
+    min-height: 90vh;
+    box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
+    z-index: 18;
+  }
+  
+  .balance-section {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .balance-section h1 {
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-around;
+    margin: 50px;
+  }
+  
+  .button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .round-button {
+    background-color: var(--color-primary-default);
+    color: var(--white-color);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .round-button:hover {
+    background-color: var(--primary-hover-color);
+  }
+  
+  .button-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .button-label {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  
+  .tabs .tab {
+    background-color: var(--light-gray-color);
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    border-radius: 0%;
+  }
+  
+  .tabs .tab:hover,
+  .tabs .tab.active {
+    border-bottom: 2px solid var(--color-primary-default);
+    color: var(--color-primary-default);
+    border-radius: 0%;
+  }
+  
+  .activity-section {
+    text-align: center;
+  }
+  
+  .transactions p {
+    font-size: 14px;
+    color: var(--gray-color);
+    margin-bottom: 8px;
+  }
+  
+  .transactions a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  
+  .transactions a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Overlay */
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+  }
+  
+  /* Account Selector Modal */
+  
+  .account-selector-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--white-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    width: 400px;
+    max-width: 100%;
+    z-index: 1000;
+    padding: 16px;
+  }
+  
+  .account-selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .account-selector-header span {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+  }
+  
+  .account-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .account-item:hover {
+    background-color: var(--light-gray-color);
+  }
+  
+  .add-account-button {
+    display: block;
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  
+  .add-account-button:hover {
+    background-color: var(--primary-hover-color);
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    color: black;
+  }
+  
+  .table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table .green {
+    color: green;
+  }
+  
+  .table .red {
+    color: red;
+  }
+  
+  .token-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .token-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .token-symbol {
+    color: #888;
+    font-size: 12px;
+  }
+
+  

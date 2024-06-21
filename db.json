@@ -1,0 +1,80 @@
+{
+  "accounts": [
+    {
+      "id": "1",
+      "name": "Account 1",
+      "address": "0x76721d7dE385beF55F8447C0afC704f7057e9aBE",
+      "password": "password123"
+    },
+    {
+      "id": "2",
+      "name": "Account 2",
+      "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234",
+      "password": "password456"
+    },
+    {
+      "id": "6800",
+      "name": "New Account",
+      "address": "0xNewAddress",
+      "password": "12345678"
+    }
+  ],
+  "mnemonics": [
+    {
+      "id": "1",
+      "address": "0x76721d7dE385beF55F8447C0afC704f7057e9aBE",
+      "phrase": [
+        "brush",
+        "swing",
+        "cram",
+        "width",
+        "spoon",
+        "visual",
+        "typical",
+        "recipe",
+        "obvious",
+        "damp",
+        "smart",
+        "depend"
+      ]
+    },
+    {
+      "id": "2",
+      "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234",
+      "phrase": [
+        "moon",
+        "galaxy",
+        "star",
+        "planet",
+        "comet",
+        "orbit",
+        "solar",
+        "lunar",
+        "space",
+        "alien",
+        "rocket",
+        "satellite"
+      ]
+    }
+  ],
+  
+  "transactions": [
+    { "id": 1, "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234", "type": "Receive", "amount": "0.5", "date": "2023-01-01", "description": "Received ETH from 0x123..." },
+    { "id": 2, "address": "0x45678d7dE385beF55F8447C0afC704f7057e4567", "type": "Send", "amount": "0.2", "date": "2023-01-02", "description": "Sent ETH to 0x456..." },
+    { "id": 3, "address": "0x78901d7dE385beF55F8447C0afC704f7057e7890", "type": "Receive", "amount": "1.0", "date": "2023-02-01", "description": "Received ETH from 0x789..." },
+    { "id": 4, "address": "0xabcde7dE385beF55F8447C0afC704f7057eabcd", "type": "Send", "amount": "0.3", "date": "2023-02-02", "description": "Sent ETH to 0xabc..." }
+  ],
+
+  "tokens": [
+    { "id": 1, "name": "Bitcoin", "symbol": "BTC", "logo": "src/assets/coin/bitcoin.png", "price": "$63.95k", "change1h": "0.61", "change24h": "-2.57", "change7d": "-4.32", "volume24h": "$20.22B" },
+    { "id": 2, "name": "Ethereum", "symbol": "ETH", "logo": "src/assets/coin/ethereum.png", "price": "$3.5k", "change1h": "1.1", "change24h": "-1.94", "change7d": "-0.08", "volume24h": "$13.27B" },
+    { "id": 3, "name": "Tether", "symbol": "USDT", "logo": "src/assets/coin/cardano.png", "price": "$0.998", "change1h": "0.03", "change24h": "-0.08", "change7d": "-0.06", "volume24h": "$34.04B" },
+    { "id": 4, "name": "BNB", "symbol": "BNB", "logo": "src/assets/coin/binance.png", "price": "$585.21", "change1h": "0.68", "change24h": "-2.7", "change7d": "-3.65", "volume24h": "$923.73M" },
+    { "id": 5, "name": "Solana", "symbol": "SOL", "logo": "src/assets/coin/solana.png", "price": "$132.16", "change1h": "0.85", "change24h": "-3.85", "change7d": "-10.55", "volume24h": "$1.98B" },
+    { "id": 6, "name": "Lido Staked Ether", "symbol": "STETH", "logo": "src/assets/coin/shiba-inu.png", "price": "$3.5k", "change1h": "1.01", "change24h": "-1.99", "change7d": "-0.15", "volume24h": "$61.87M" },
+    { "id": 7, "name": "USD Coin", "symbol": "USDC", "logo": "src/assets/coin/usdc.png", "price": "$0.999", "change1h": "-0.06", "change24h": "-0.04", "change7d": "-0.04", "volume24h": "$4.37B" },
+    { "id": 8, "name": "XRP", "symbol": "XRP", "logo": "src/assets/coin/ripple.png", "price": "$0.488", "change1h": "0.33", "change24h": "-1.29", "change7d": "2.58", "volume24h": "$827.27M" },
+    { "id": 9, "name": "Dogecoin", "symbol": "DOGE", "logo": "src/assets/coin/dogecoin.png", "price": "$0.124", "change1h": "1.21", "change24h": "-0.8", "change7d": "-12.61", "volume24h": "$615.12M" },
+    { "id": 10, "name": "Toncoin", "symbol": "TON", "logo": "src/assets/coin/usdt.png", "price": "$7.12", "change1h": "1.13", "change24h": "-0.84", "change7d": "-10.44", "volume24h": "$374.47M" }
+  ]
+}
