@@ -1,0 +1,53 @@
+.circle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .circle-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 30px;
+  }
+  
+  .circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px; 
+    font-size: 14px;
+    border: 2px solid var(--color-border-muted);
+  }
+  
+  .blue-border {
+    border: 2px solid #3572EF;
+    color: var(--color-primary-default);
+  }
+
+  .blue-full {
+    border: 2px solid #3572EF;
+    background-color: #3572EF;
+    color: #FFFFFF;
+  }
+
+  .gray-border {
+    border: 1px solid gray;
+  }
+  
+  .description {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .blue {
+    color: #3572EF;
+  }
+
+  .import {
+    margin-top: 20px;
+  }

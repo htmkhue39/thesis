@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 cột */
     grid-gap: 10px; /* Khoảng cách giữa các ô vuông */
-    margin-top: 20px;
+    margin-top: 40px;
     margin-bottom: 40px;
     max-width: 100%; 
     box-sizing: border-box; 

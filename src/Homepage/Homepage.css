@@ -9,45 +9,30 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
   }
 
-  html, body, #root {
+  .app-content-wrapper {
+    overflow-x: hidden;
     height: 100%;
-    width: 100%;
     display: flex;
-    margin: 0;
-    padding: 0;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    background: var(--color-background-alternative);
   }
   
-  body {
-    font-family: Arial, sans-serif;
-    background-color: var(--background-color);
-    margin: 0;
-    padding: 0;
+  .app-content{
     display: flex;
-    justify-content: center;
-    height: 100vh;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: hidden;
+    position: relative;
+    align-items: center;
   }
   
   .homepage {
-    height: 90%;
-    margin-top: 10%;
-    width: 100%;
-    background-color: var(--white-color);
-    box-shadow: 0 2px 8px var(--shadow-color);
-    overflow: hidden;
-    border-radius: 8px;
-    border: #0056b3;
-    border-bottom: none;
-  }
-  
-  .header {
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 16px;
-    background-color: var(--light-gray-color);
-    border-bottom: 1px solid var(--border-color);
+    flex: 1 0 auto;
+    min-height: 0;
+    width: 70%;
+    height: 90%;
   }
   
   .account-info {
@@ -112,7 +97,10 @@
   }
   
   .main-content {
-    padding: 16px;
+    width: 85vw;
+    min-height: 90vh;
+    box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
+    z-index: 18;
   }
   
   .balance-section {
@@ -138,12 +126,12 @@
   }
   
   .round-button {
-    background-color: var(--primary-color);
+    background-color: var(--color-primary-default);
     color: var(--white-color);
     border: none;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -177,11 +165,14 @@
     padding: 10px 16px;
     cursor: pointer;
     border-bottom: 2px solid transparent;
+    border-radius: 0%;
   }
   
   .tabs .tab:hover,
   .tabs .tab.active {
-    border-bottom: 2px solid var(--primary-color);
+    border-bottom: 2px solid var(--color-primary-default);
+    color: var(--color-primary-default);
+    border-radius: 0%;
   }
   
   .activity-section {
@@ -291,4 +282,40 @@
   .add-account-button:hover {
     background-color: var(--primary-hover-color);
   }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    color: black;
+  }
+  
+  .table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table .green {
+    color: green;
+  }
+  
+  .table .red {
+    color: red;
+  }
+  
+  .token-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .token-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .token-symbol {
+    color: #888;
+    font-size: 12px;
+  }
+
   

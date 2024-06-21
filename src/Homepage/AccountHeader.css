@@ -1,0 +1,14 @@
+.header {
+    flex-flow: column nowrap;
+    z-index: 55;
+    min-height: 68px;
+    background-color: var(--color-background-alternative);
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-shadow: var(--shadow-size-md) var(--color-shadow-default);
+  }

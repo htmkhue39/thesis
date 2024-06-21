@@ -1,92 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation  } from 'react-router-dom';
-import './CreatePassword.css';
-import './Grid.css';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import './CreatePassword.css'
+import '../components/Button.css'
+import '../components/Step.css'
 
-const ConfirmAccount = () => {
-  const navigate = useNavigate(); 
+const ConfirmSecureChain = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { mnemonic } = location.state || [];
-  const [inputMnemonic, setInputMnemonic] = useState(Array(12).fill(''));
+  const [userInput, setUserInput] = useState('');
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const mnemonic = location.state?.mnemonic || [];
 
-  const handlePaste = (e) => {
-    e.preventDefault();
-    const pasteData = e.clipboardData.getData('text');
-    const pastedWords = pasteData.split(' ').slice(0, 12);
-    setInputMnemonic(pastedWords);
+  const handleInputChange = (event) => {
+    setUserInput(event.target.value);
   };
 
-  const handleInputChange = (index, value) => {
-    const newInputMnemonic = [...inputMnemonic];
-    newInputMnemonic[index] = value.trim();
-    setInputMnemonic(newInputMnemonic);
-  };
+  const handleConfirm = async () => {
+    if (userInput === mnemonic.join(' ')) {
+      setIsConfirmed(true);
 
-  const arraysEqual = (arr1, arr2) => {
-    if (arr1.length !== arr2.length) return false;
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] !== arr2[i]) return false;
-    }
-    return true;
-  };
+      // Mock API call to confirm mnemonic
+      try {
+        const response = await fetch('http://localhost:3001/confirm-mnemonic', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ mnemonic })
+        });
 
-  const handleNextClick = () => {
-    console.log("Input Mnemonic:", inputMnemonic);
-    console.log("Provided Mnemonic:", mnemonic);
-    if (arraysEqual(inputMnemonic, mnemonic)) {
-        alert('Mnemonic phrase matches!');
-        navigate('/homepage'); 
+        if (response.ok) {
+          navigate('/homepage');
+        } else {
+          console.error('Failed to confirm mnemonic');
+        }
+      } catch (error) {
+        console.error('Error confirming mnemonic:', error);
+      }
+
     } else {
-        alert('Mnemonic phrase does not match. Please try again.');
+      setIsConfirmed(false);
+      alert('Mnemonic phrase does not match.');
     }
   };
-
 
   return (
-    <div>
-        <h1>Confirm Account Page</h1>
-
-        <div className='create-account-wrapper'>
-
-            <div className="circle-container">
-                <div className="circle-item">
+    <div className='app'>
+      <div className='onboarding-flow'>
+        <div className='onboarding-flow-wrapper'>
+          <div className="circle-container">
+              <div className="circle-item">
                 <div className="circle blue-full">1</div>
-                <div className="description">Create password</div>
-                </div>
-                
-                <div className="circle-item">
-                <div className="circle blue-full">2</div>
-                <div className="description">Secure Account</div>
-                </div>
-                <div className="circle-item">
-                <div className="circle blue-border">3</div>
-                <div className="description">Confirm secure chain</div>
-                </div>
-            </div>
-
-            <h2>Confirm Secret Recovery Phrase</h2>
-            
-            <div className='container'>
-              <div className="grid-container">
-                  {inputMnemonic.map((word, index) => (
-                      <div key={index} className="grid-item">
-                          <div className="grid-item-number">{index + 1}</div>
-                          <input 
-                              className="grid-item-input" 
-                              type="text" 
-                              value={word} 
-                              onPaste={handlePaste}
-                              onChange={(e) => handleInputChange(index, e.target.value)}
-                          />
-                      </div>
-                  ))}
+                <div className="description blue">Create password</div>
               </div>
-            </div>
+              <div className="circle-item">
+                <div className="circle blue-full">2</div>
+                <div className="description blue">Secure Account</div>
+              </div>
+              <div className="circle-item">
+                <div className="circle blue-border">3</div>
+                <div className="description blue">Confirm secure chain</div>
+              </div>
+          </div>
 
-            <button onClick={handleNextClick}>Next</button>
+          <h2>Confirm Mnemonic Phrase</h2>
+          <p className="mnemonic-phrase-description">Please enter your mnemonic phrase to confirm your account.</p>
+
+          <div className='form-wrapper'>
+            <textarea 
+                value={userInput}
+                onChange={handleInputChange}
+                className="mnemonic-input"
+            />
+            <button className='btn-primary medium' onClick={handleConfirm}>Confirm</button>
+          </div>
         </div>
+      </div>
     </div>
   );
-};
+}
 
-export default ConfirmAccount;
+export default ConfirmSecureChain;
