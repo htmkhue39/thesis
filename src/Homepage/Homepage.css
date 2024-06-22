@@ -158,7 +158,13 @@
     justify-content: center;
     margin-bottom: 16px;
   }
-  
+
+  .tabs select {
+    justify-content: center;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
   .tabs .tab {
     background-color: var(--light-gray-color);
     border: none;

@@ -18,11 +18,17 @@ function Homepage() {
   const [transactions, setTransactions] = useState([]);
   const [tokens, setTokens] = useState([]);
   const navigate = useNavigate();
+  const [dropdownValue, setDropdownValue] = useState('');
 
   useEffect(() => {
     fetchTransactions();
     fetchTokens();
   }, [selectedAccount]);
+
+  const handleDropdownChange = (e) => {
+    setDropdownValue(e.target.value);
+    setSelectedTab('Tab3'); // Automatically switch to Tab 3 when dropdown is used
+  };
 
   const fetchTransactions = async () => {
     try {
@@ -85,7 +91,12 @@ function Homepage() {
             <div className="tabs">
               <button className={`tab ${selectedTab === 'Transactions' ? 'active' : ''}`} onClick={() => setSelectedTab('Transactions')}>Transactions</button>
               <button className={`tab ${selectedTab === 'Tokens' ? 'active' : ''}`} onClick={() => setSelectedTab('Tokens')}>Tokens</button>
-              <button className={`tab ${selectedTab === 'Nodes' ? 'active' : ''}`} onClick={() => setSelectedTab('Nodes')}>Nodes</button>
+              <select onChange={handleDropdownChange} value={dropdownValue} className={`tab ${selectedTab === 'Nodes' ? 'active' : ''}`}>
+                <option value="">Connected</option>
+                <option value="Option1">0x76721d7dE385beF55F8447C0afC704f7057e9aBE</option>
+                <option value="Option2">Option 2</option>
+                <option value="Option3">Option 3</option>
+              </select>
             </div>
 
             {selectedTab === 'Transactions' ? (
