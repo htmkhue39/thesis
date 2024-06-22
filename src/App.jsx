@@ -10,12 +10,14 @@ import ImportAccountPassword from './CreateAccount/ImportAccountPassword';
 import Homepage from './Homepage/Homepage';
 import SendCoin from './Homepage/SendCoin'; // Ensure the path is correct
 import SwapCoin from './Homepage/SwapCoin';
+import { AccountProvider } from './AccountContext';
 
 import './App.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <AccountProvider>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<OnboardingPage />} />
           <Route path="/create-account/create-password" element={<CreatePassword />} />
@@ -28,6 +30,7 @@ function App() {
           <Route path="/homepage-swap" element={<SwapCoin />} />
         </Routes>
     </BrowserRouter>
+    </AccountProvider>
   );
 }
 

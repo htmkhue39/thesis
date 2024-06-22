@@ -2,16 +2,16 @@
 import React from 'react';
 import dropIcon from '../assets/dropdown-icon.svg';
 import copyIcon from '../assets/copy-icon.svg';
-import './AccountHeader.css'
+import './AccountHeader.css';
 
 const AccountHeader = ({ selectedAccount, setShowAccountSelector, truncateAddress, copyAddress }) => {
   return (
     <div className="header">
       <div className="account-info">
-        <div className="account-details" onClick={() => setShowAccountSelector(true)}>
+        <div className="account-details" onClick={() => setShowAccountSelector && setShowAccountSelector(true)}>
           <div className="account-text">
             <span className="account-name">{selectedAccount.name}</span>
-            <img src={dropIcon} className="dropdown-icon" alt="Dropdown" />
+            {setShowAccountSelector && <img src={dropIcon} className="dropdown-icon" alt="Dropdown" />}
           </div>
         </div>
         <div className="account-address-wrapper">
