@@ -12,6 +12,7 @@ const Homepage = () => {
   const [selectedTab, setSelectedTab] = useState('Activity');
   const [transactions, setTransactions] = useState([]);
   const [tokens, setTokens] = useState([]);
+  const [nodes, setNodes] = useState([]);
   const navigate = useNavigate();
   const [dropdownValue, setDropdownValue] = useState('');
 
@@ -20,11 +21,14 @@ const Homepage = () => {
       fetchTransactions();
       fetchTokens();
     }
+    fetchNodes();
   }, [selectedAccount]);
 
   const handleDropdownChange = (e) => {
     setDropdownValue(e.target.value);
-    setSelectedTab('Tab3');
+    setSelectedTab('Tab3'); // Automatically switch to Tab 3 when dropdown is used
+    console.log("Nodes:", nodes);
+    
   };
 
   const fetchTransactions = async () => {
@@ -44,6 +48,17 @@ const Homepage = () => {
       setTokens(data);
     } catch (error) {
       console.error('Error fetching tokens:', error);
+    }
+  };
+
+  const fetchNodes = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/nodes`);
+      const data = await response.json();
+      setNodes(data);
+      
+    } catch (error) {
+      console.error('Error fetching Nodes:', error);
     }
   };
 

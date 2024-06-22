@@ -24,6 +24,26 @@ button {
       margin-right: 4px;
     }
   }
+
+select {  /* Adjust select tag size while resize windows */
+    margin-bottom: 24px;
+  
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 6px;
+    width: 100%;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+
+    &__icon {
+      display: flex;
+      align-items: center;
+      margin-right: 4px;
+    }
+}
   
 .btn-primary {
   

@@ -283,10 +283,10 @@
   margin-right: 10px;
 }
 
-.token-info {
+/* .token-info {
   display: flex;
   flex-direction: column;
-}
+} */
 
 .token-name {
   font-size: 16px;
