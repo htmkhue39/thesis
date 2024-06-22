@@ -74,13 +74,7 @@ function Homepage() {
               <h1>0 ETH</h1>
               <div className="actions">
                 <div className="button-wrapper">
-                  <button className="round-button" onClick={() => navigate('/homepage-send')}>
-                    <img src={sendIcon} className="button-icon" alt="Send" />
-                  </button>
-                  <span className="button-label">Send</span>
-                </div>
-                <div className="button-wrapper">
-                  <button className="round-button">
+                  <button className="round-button" onClick={() => navigate('/homepage-swap')}>
                     <img src={swapIcon} className="button-icon" alt="Swap" />
                   </button>
                   <span className="button-label">Swap</span>
@@ -89,11 +83,12 @@ function Homepage() {
             </div>
 
             <div className="tabs">
-              <button className={`tab ${selectedTab === 'Activity' ? 'active' : ''}`} onClick={() => setSelectedTab('Activity')}>Activity</button>
+              <button className={`tab ${selectedTab === 'Transactions' ? 'active' : ''}`} onClick={() => setSelectedTab('Transactions')}>Transactions</button>
               <button className={`tab ${selectedTab === 'Tokens' ? 'active' : ''}`} onClick={() => setSelectedTab('Tokens')}>Tokens</button>
+              <button className={`tab ${selectedTab === 'Nodes' ? 'active' : ''}`} onClick={() => setSelectedTab('Nodes')}>Nodes</button>
             </div>
 
-            {selectedTab === 'Activity' ? (
+            {selectedTab === 'Transactions' ? (
               <div className="activity-section">
                 <table className="table">
                   <thead>

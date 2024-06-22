@@ -27,8 +27,10 @@ function SendCoin() {
   const [showAccountSelector, setShowAccountSelector] = useState(false);
   const [recipientAddress, setRecipientAddress] = useState('');
   const [amount, setAmount] = useState('');
-  const [validAddress, setValidAddress] = useState(true);
+  const [validAddress, setValidAddress] = useState(false);
   const [recipientDetails, setRecipientDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const copyAddress = () => {
@@ -48,11 +50,13 @@ function SendCoin() {
   const handleAddressChange = async (e) => {
     const address = e.target.value;
     setRecipientAddress(address);
-    const isValid = /^0x[a-fA-F0-9]{40}$/.test(address); // Basic validation for Ethereum address
+    const isValid = /^0x[a-fA-F0-9]{40}$/.test(address);
     setValidAddress(isValid);
     if (isValid) {
+      setLoading(true);
       const details = await mockApiCall(address);
       setRecipientDetails(details);
+      setLoading(false);
     } else {
       setRecipientDetails(null);
     }
@@ -60,7 +64,7 @@ function SendCoin() {
 
   const handleClear = () => {
     setRecipientAddress('');
-    setValidAddress(true);
+    setValidAddress(false);
     setRecipientDetails(null);
   };
 
@@ -82,7 +86,7 @@ function SendCoin() {
   return (
     <div className='app-content-wrapper'>
       <div className='app-content'>
-        <Header/>
+        <Header />
         <AccountHeader
           selectedAccount={selectedAccount}
           setShowAccountSelector={setShowAccountSelector}
@@ -91,51 +95,67 @@ function SendCoin() {
         />
         <div className='send-coin-wrapper'>
           <div className="send-coin-content">
-              <div className='send-coin-header'>
-                  <h2 className='title'>Send to</h2>
-                  <button className='btn-link' onClick={handleCancel}>Cancel</button>
-              </div>
+            <div className='send-coin-header'>
+              <h2 className='title'>Send to</h2>
+              <button className='btn-link' onClick={handleCancel}>Cancel</button>
+            </div>
 
+            {!validAddress ? (
               <div className="send-to">
-                  <input
-                      type="text"
-                      placeholder="Enter public address (0x) or ENS name"
-                      value={recipientAddress}
-                      onChange={handleAddressChange}
-                      className={!validAddress ? 'invalid' : ''}
-                  />
-                  {recipientAddress && (
-                      <button onClick={handleClear} className="clear-button">X</button>
-                  )}
+                <input
+                  type="text"
+                  placeholder="Enter public address (0x) or ENS name"
+                  value={recipientAddress}
+                  onChange={handleAddressChange}
+                  className={!validAddress && recipientAddress ? 'invalid' : ''}
+                />
+                {recipientAddress && (
+                  <button onClick={handleClear} className="clear-button">X</button>
+                )}
               </div>
-              {!validAddress && recipientAddress && (
-                  <div className="error-message">
-                      Recipient address is invalid
+            ) : (
+              recipientDetails && (
+                <div className="send-to">
+                  <span className="send-account-address">{recipientAddress}</span>
+                  <button onClick={handleClear} className="clear-button">X</button>
+                </div>
+              )
+            )}
+
+            {loading ? (
+              <div className="loading-message">Loading...</div>
+            ) : (
+              !validAddress && recipientAddress && (
+                <div className="error-message">
+                  Recipient address is invalid
+                </div>
+              )
+            )}
+
+            {validAddress && recipientDetails  && !loading && (
+              <div className="send-details-wrapper">
+                <div className='send-details'>
+                  <div className="send-row">
+                    <div className='send-label'> Asset: </div>
+                    <div className='send-field'>
+                      
+                    </div>
+                    <span>ETH</span>
+                    <span>Balance: {recipientDetails.balance}</span>
                   </div>
-              )}
-              {validAddress && recipientDetails && (
-                  <div className="send-details">
-                      <div className="account-info">
-                          <span>{recipientDetails.name}</span>
-                          <span>{truncateAddress(recipientAddress)}</span>
-                      </div>
-                      <div className="asset-info">
-                          <label>Asset:</label>
-                          <span>ETH</span>
-                          <span>Balance: {recipientDetails.balance}</span>
-                      </div>
-                      <div className="amount-info">
-                          <label>Amount:</label>
-                          <input type="number" value={amount} onChange={handleAmountChange} placeholder="0 ETH" />
-                      </div>
-                      <div className="fee-info">
-                          <label>Estimated fee:</label>
-                          <span>0.00028934 ETH</span>
-                          <span>Max fee: 0.00038987 ETH</span>
-                      </div>
-                      <button onClick={handleSend} className="send-button" disabled={!amount}>Send</button>
+                  <div className="send-row">
+                    <label>Amount:</label>
+                    <input type="number" value={amount} onChange={handleAmountChange} placeholder="0 ETH" />
                   </div>
-              )}
+                  <div className="fee-info">
+                    <label>Estimated fee:</label>
+                    <span>0.00028934 ETH</span>
+                    <span>Max fee: 0.00038987 ETH</span>
+                  </div>
+                  <button onClick={handleSend} className="send-button" disabled={!amount}>Send</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

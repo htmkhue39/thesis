@@ -9,7 +9,7 @@ import ImportAccountMnemonic from './CreateAccount/ImportAccountMnemonic';
 import ImportAccountPassword from './CreateAccount/ImportAccountPassword';
 import Homepage from './Homepage/Homepage';
 import SendCoin from './Homepage/SendCoin'; // Ensure the path is correct
-import Header from './components/Header';
+import SwapCoin from './Homepage/SwapCoin';
 
 import './App.css';
 
@@ -25,6 +25,7 @@ function App() {
           <Route path="/import-account-password" element={<ImportAccountPassword />} />
           <Route path="/homepage" element={<Homepage />} />
           <Route path="/homepage-send" element={<SendCoin />} />
+          <Route path="/homepage-swap" element={<SwapCoin />} />
         </Routes>
     </BrowserRouter>
   );
