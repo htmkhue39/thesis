@@ -11,6 +11,13 @@ button {
     width: 100%;
     transition: border-color 0.3s ease, background-color 0.3s ease;
 
+    &--disabled,
+    &[disabled] {
+      cursor: auto;
+      opacity: var(--opacity-disabled);
+      pointer-events: none;
+    }
+
     &__icon {
       display: flex;
       align-items: center;

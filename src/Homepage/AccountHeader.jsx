@@ -1,10 +1,16 @@
-// AccountHeader.jsx
 import React from 'react';
+import { useAccount } from '../AccountContext';
 import dropIcon from '../assets/dropdown-icon.svg';
 import copyIcon from '../assets/copy-icon.svg';
 import './AccountHeader.css';
 
-const AccountHeader = ({ selectedAccount, setShowAccountSelector, truncateAddress, copyAddress }) => {
+const AccountHeader = ({ setShowAccountSelector }) => {
+  const { selectedAccount, truncateAddress, copyAddress } = useAccount();
+
+  if (!selectedAccount) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="header">
       <div className="account-info">

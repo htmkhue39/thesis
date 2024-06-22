@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation  } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './CreatePassword.css';
 import './Grid.css';
 import './OnboardingPage.css';
-import '../components/Button.css'
-import '../components/Step.css'
+import '../components/Button.css';
+import '../components/Step.css';
 
 const ConfirmAccount = () => {
   const navigate = useNavigate(); 
@@ -33,58 +33,81 @@ const ConfirmAccount = () => {
     return true;
   };
 
-  const handleNextClick = () => {
+  const handleNextClick = async () => {
     console.log("Input Mnemonic:", inputMnemonic);
     console.log("Provided Mnemonic:", mnemonic);
     if (arraysEqual(inputMnemonic, mnemonic)) {
-        alert('Mnemonic phrase matches!');
-        navigate('/homepage'); 
+      alert('Mnemonic phrase matches!');
+      const password = localStorage.getItem('newPassword');
+      try {
+        const response = await fetch('http://localhost:3001/accounts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            name: 'New Account', 
+            address: '0xNewAddress', // Address cần được tạo động hoặc từ cơ sở dữ liệu
+            password: password,
+            mnemonic: mnemonic
+          })
+        });
+
+        if (response.ok) {
+          alert('Account created successfully!');
+          navigate('/homepage'); 
+        } else {
+          console.error('Failed to create account');
+        }
+      } catch (error) {
+        console.error('Error creating account:', error);
+      }
     } else {
-        alert('Mnemonic phrase does not match. Please try again.');
+      alert('Mnemonic phrase does not match. Please try again.');
     }
   };
 
   return (
     <div className='app'>
-        <div className='onboarding-flow'>
-          <div className='onboarding-flow-wrapper'>
-            <div className="circle-container">
-                <div className="circle-item">
-                  <div className="circle blue-full">1</div>
-                  <div className="description">Create password</div>
-                </div>
-
-                <div className="circle-item">
-                  <div className="circle blue-full">2</div>
-                  <div className="description">Secure Account</div>
-                </div>
-                <div className="circle-item">
-                  <div className="circle blue-border">3</div>
-                  <div className="description">Confirm secure chain</div>
-                </div>
+      <div className='onboarding-flow'>
+        <div className='onboarding-flow-wrapper'>
+          <div className="circle-container">
+            <div className="circle-item">
+              <div className="circle blue-full">1</div>
+              <div className="description">Create password</div>
             </div>
 
-            <h2>Confirm Secret Recovery Phrase</h2>
-
-            <div className="grid-container">
-                {inputMnemonic.map((word, index) => (
-                    <div key={index} className="grid-item">
-                        <div className="grid-item-number">{index + 1}</div>
-                        <input 
-                            className="grid-item-input" 
-                            type="text" 
-                            value={word} 
-                            onPaste={handlePaste}
-                            onChange={(e) => handleInputChange(index, e.target.value)}
-                        />
-                    </div>
-              ))}
+            <div className="circle-item">
+              <div className="circle blue-full">2</div>
+              <div className="description">Secure Account</div>
             </div>
-            <div className='button-wrapper'>
-              <button className='btn-primary medium' onClick={handleNextClick}>Next</button>
+            <div className="circle-item">
+              <div className="circle blue-border">3</div>
+              <div className="description">Confirm secure chain</div>
             </div>
           </div>
+
+          <h2>Confirm Secret Recovery Phrase</h2>
+
+          <div className="grid-container">
+            {inputMnemonic.map((word, index) => (
+              <div key={index} className="grid-item">
+                <div className="grid-item-number">{index + 1}</div>
+                <input 
+                  className="grid-item-input" 
+                  type="text" 
+                  value={word} 
+                  onPaste={handlePaste}
+                  onChange={(e) => handleInputChange(index, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+          <div className='button-wrapper'>
+            <button className='btn-primary medium' onClick={handleNextClick}>Next</button>
+          </div>
         </div>
+      </div>
     </div>
   );
 };

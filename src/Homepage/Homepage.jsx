@@ -2,17 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Homepage.css';
 import swapIcon from '../assets/swap-icon.svg';
-import sendIcon from '../assets/send-icon.svg';
 import AccountHeader from './AccountHeader';
 import Header from '../components/Header';
+import { useAccount } from '../AccountContext';
 
-const accounts = [
-  { name: 'Account 1', address: '0x76721d7dE385beF55F8447C0afC704f7057e9aBE' },
-  { name: 'Account 2', address: '0x12345d7dE385beF55F8447C0afC704f7057e1234' }
-];
-
-function Homepage() {
-  const [selectedAccount, setSelectedAccount] = useState(accounts[0]);
+const Homepage = () => {
+  const { selectedAccount, accounts, handleAccountChange, truncateAddress, copyAddress } = useAccount();
   const [showAccountSelector, setShowAccountSelector] = useState(false);
   const [selectedTab, setSelectedTab] = useState('Activity');
   const [transactions, setTransactions] = useState([]);
@@ -21,13 +16,15 @@ function Homepage() {
   const [dropdownValue, setDropdownValue] = useState('');
 
   useEffect(() => {
-    fetchTransactions();
-    fetchTokens();
+    if (selectedAccount) {
+      fetchTransactions();
+      fetchTokens();
+    }
   }, [selectedAccount]);
 
   const handleDropdownChange = (e) => {
     setDropdownValue(e.target.value);
-    setSelectedTab('Tab3'); // Automatically switch to Tab 3 when dropdown is used
+    setSelectedTab('Tab3');
   };
 
   const fetchTransactions = async () => {
@@ -50,30 +47,15 @@ function Homepage() {
     }
   };
 
-  const copyAddress = () => {
-    navigator.clipboard.writeText(selectedAccount.address);
-    alert('Address copied to clipboard');
-  };
-
-  const handleAccountChange = (event) => {
-    const accountName = event.target.value;
-    const account = accounts.find((acc) => acc.name === accountName);
-    setSelectedAccount(account);
-    setShowAccountSelector(false);
-  };
-
-  const truncateAddress = (address) => `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
-
   return (
     <div className='app-content-wrapper'>
       <div className='app-content'>
-        <Header/>
-        <AccountHeader
-          selectedAccount={selectedAccount}
-          setShowAccountSelector={setShowAccountSelector}
-          truncateAddress={truncateAddress}
-          copyAddress={copyAddress}
-        />
+        <Header />
+        {selectedAccount && (
+          <AccountHeader
+            setShowAccountSelector={setShowAccountSelector}
+          />
+        )}
         <div className='homepage'>
           <main className="main-content">
             <div className="balance-section">
@@ -188,7 +170,7 @@ function Homepage() {
                   {accounts.map((account, index) => (
                     <li
                       key={index}
-                      onClick={() => handleAccountChange({ target: { value: account.name } })}
+                      onClick={() => handleAccountChange(account.name)}
                       className="account-item"
                     >
                       <span className="account-name">{account.name}</span>

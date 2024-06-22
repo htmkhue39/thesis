@@ -2,100 +2,102 @@
   "accounts": [
     {
       "id": "1",
-      "name": "Account 1",
-      "address": "0x76721d7dE385beF55F8447C0afC704f7057e9aBE",
-      "password": "password123"
-    },
-    {
-      "id": "2",
-      "name": "Account 2",
-      "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234",
-      "password": "password456"
-    },
-    {
-      "id": "6800",
-      "name": "New Account",
-      "address": "0xNewAddress",
-      "password": "12345678"
-    },
-    {
-      "id": "229c",
-      "name": "New Account",
-      "address": "0xNewAddress",
-      "password": "12345678"
-    }
-  ],
-  "mnemonics": [
-    {
-      "id": "1",
-      "address": "0x76721d7dE385beF55F8447C0afC704f7057e9aBE",
-      "phrase": [
-        "brush",
-        "swing",
-        "cram",
-        "width",
-        "spoon",
-        "visual",
-        "typical",
-        "recipe",
-        "obvious",
-        "damp",
-        "smart",
-        "depend"
+      "name": "Main Account 1",
+      "address": "0xMainAddress1",
+      "mnemonic": ["brush", "swing", "cram", "width", "spoon", "visual", "typical", "recipe", "obvious", "damp", "smart", "depend"],
+      "password": "password123",
+      "balances": [
+        {
+          "token": "ETH",
+          "amount": 2
+        },
+        {
+          "token": "USDC",
+          "amount": 3
+        }
+      ],
+      "current": true,
+      "subAccounts": [
+        "2", "3"
       ]
     },
     {
       "id": "2",
-      "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234",
-      "phrase": [
-        "moon",
-        "galaxy",
-        "star",
-        "planet",
-        "comet",
-        "orbit",
-        "solar",
-        "lunar",
-        "space",
-        "alien",
-        "rocket",
-        "satellite"
-      ]
-    }
-  ],
-  "transactions": [
-    {
-      "id": "1",
-      "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234",
-      "type": "Receive",
-      "amount": "0.5",
-      "date": "2023-01-01",
-      "description": "Received ETH from 0x123..."
-    },
-    {
-      "id": "2",
-      "address": "0x45678d7dE385beF55F8447C0afC704f7057e4567",
-      "type": "Send",
-      "amount": "0.2",
-      "date": "2023-01-02",
-      "description": "Sent ETH to 0x456..."
+      "name": "Sub Account 1 of Main Account 1",
+      "address": "0x76721d7dE385beF55F8447C0afC704f7057e9aBE",
+      "mnemonic": ["moon", "galaxy", "star", "planet", "comet", "orbit", "solar", "lunar", "space", "alien", "rocket", "satellite"],
+      "password": "passwordSub1",
+      "balances": [
+        {
+          "token": "BTC",
+          "amount": 1
+        }
+      ],
+      "current": false
     },
     {
       "id": "3",
-      "address": "0x78901d7dE385beF55F8447C0afC704f7057e7890",
-      "type": "Receive",
-      "amount": "1.0",
-      "date": "2023-02-01",
-      "description": "Received ETH from 0x789..."
+      "name": "Sub Account 2 of Main Account 1",
+      "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234",
+      "mnemonic": ["subword13", "subword14", "subword15", "subword16", "subword17", "subword18", "subword19", "subword20", "subword21", "subword22", "subword23", "subword24"],
+      "password": "passwordSub2",
+      "balances": [
+        {
+          "token": "SOL",
+          "amount": 5
+        }
+      ],
+      "current": false
     },
     {
       "id": "4",
-      "address": "0xabcde7dE385beF55F8447C0afC704f7057eabcd",
-      "type": "Send",
-      "amount": "0.3",
-      "date": "2023-02-02",
-      "description": "Sent ETH to 0xabc..."
+      "name": "Main Account 2",
+      "address": "0xMainAddress2",
+      "mnemonic": ["word13", "word14", "word15", "word16", "word17", "word18", "word19", "word20", "word21", "word22", "word23", "word24"],
+      "password": "password456",
+      "balances": [
+        {
+          "token": "BNB",
+          "amount": 10
+        }
+      ],
+      "current": false,
+      "subAccounts": [
+        "5", "6"
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Sub Account 1 of Main Account 2",
+      "address": "0xNewAddress1",
+      "mnemonic": ["subword25", "subword26", "subword27", "subword28", "subword29", "subword30", "subword31", "subword32", "subword33", "subword34", "subword35", "subword36"],
+      "password": "passwordSub3",
+      "balances": [
+        {
+          "token": "XRP",
+          "amount": 8
+        }
+      ],
+      "current": false
+    },
+    {
+      "id": "6",
+      "name": "Sub Account 2 of Main Account 2",
+      "address": "0xNewAddress2",
+      "mnemonic": ["subword37", "subword38", "subword39", "subword40", "subword41", "subword42", "subword43", "subword44", "subword45", "subword46", "subword47", "subword48"],
+      "password": "passwordSub4",
+      "balances": [
+        {
+          "token": "DOGE",
+          "amount": 12
+        }
+      ],
+      "current": false
     }
+  ],
+  "mnemonics": [
+    ["brush", "swing", "cram", "width", "spoon", "visual", "typical", "recipe", "obvious", "damp", "smart", "depend"],
+    ["moon", "galaxy", "star", "planet", "comet", "orbit", "solar", "lunar", "space", "alien", "rocket", "satellite"]
   ],
   "tokens": [
     {

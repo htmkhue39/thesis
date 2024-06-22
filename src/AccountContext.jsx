@@ -1,17 +1,29 @@
 // AccountContext.js
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AccountContext = createContext();
 
 export const useAccount = () => useContext(AccountContext);
 
 export const AccountProvider = ({ children }) => {
-  const accounts = [
-    { name: 'Account 1', address: '0x76721d7dE385beF55F8447C0afC704f7057e9aBE' },
-    { name: 'Account 2', address: '0x12345d7dE385beF55F8447C0afC704f7057e1234' }
-  ];
+  const [accounts, setAccounts] = useState([]);
+  const [selectedAccount, setSelectedAccount] = useState(null);
 
-  const [selectedAccount, setSelectedAccount] = useState(accounts[0]);
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/accounts');
+        const data = await response.json();
+        setAccounts(data);
+        const currentAccount = data.find(account => account.current === true);
+        setSelectedAccount(currentAccount);
+      } catch (error) {
+        console.error('Error fetching accounts:', error);
+      }
+    };
+
+    fetchAccounts();
+  }, []);
 
   const handleAccountChange = (accountName) => {
     const account = accounts.find((acc) => acc.name === accountName);

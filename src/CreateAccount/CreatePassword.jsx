@@ -27,27 +27,8 @@ const CreatePassword = () => {
       return;
     } else {
       setPasswordsMatch(true);
-      navigate("/create-account/secure-account");
-      
-      // TODO: API call to create account
-      try {
-        const response = await fetch('http://localhost:3001/accounts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ name: 'New Account', address: '0xNewAddress', password: newPassword })
-        });
-  
-        if (response.ok) {
-          alert('Passwords match and meet the requirements!');
-          navigate("/create-account/secure-account");
-        } else {
-          console.error('Failed to create account');
-        }
-      } catch (error) {
-        console.error('Error creating account:', error);
-      }
+      localStorage.setItem('newPassword', newPassword);
+      navigate("/create-account/secure-account");      
     }
   };
 
