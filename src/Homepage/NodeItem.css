@@ -1,0 +1,42 @@
+.node-item-header{
+    display: flex;
+    flex-flow: column;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    height: 66px;
+    width: 100%;
+}
+
+.item-back-icon {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  width: 150px;
+}
+  
+.item-back-icon-detail {
+    --icon-size: var(--size, 16px);
+    font-size: var(--icon-size);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.node-item-title {
+    font-size: 1.25rem;
+    line-height: 140%;
+    font-style: normal;
+    font-weight: bold;
+    color: var(--color-text-default);
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}

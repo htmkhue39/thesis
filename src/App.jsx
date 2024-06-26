@@ -10,6 +10,8 @@ import ImportAccountPassword from './CreateAccount/ImportAccountPassword';
 import Homepage from './Homepage/Homepage';
 import SendCoin from './Homepage/SendCoin'; // Ensure the path is correct
 import SwapCoin from './Homepage/SwapCoin';
+import NodeList from './Homepage/NodeList';
+import NodeItem from './Homepage/NodeItem';
 import { AccountProvider } from './AccountContext';
 
 import './App.css';
@@ -26,8 +28,10 @@ function App() {
           <Route path="/import-account-mnemonic" element={<ImportAccountMnemonic />} />
           <Route path="/import-account-password" element={<ImportAccountPassword />} />
           <Route path="/homepage" element={<Homepage />} />
-          <Route path="/homepage-send" element={<SendCoin />} />
-          <Route path="/homepage-swap" element={<SwapCoin />} />
+          <Route path="/homepage/send" element={<SendCoin />} />
+          <Route path="/homepage/swap" element={<SwapCoin />} />
+          <Route path="/homepage/nodes" element={<NodeList/>} />
+          <Route path="/homepage/nodes/:nodeAddress" element={<NodeItem />} />
         </Routes>
     </BrowserRouter>
     </AccountProvider>

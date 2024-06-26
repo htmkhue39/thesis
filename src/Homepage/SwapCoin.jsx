@@ -10,19 +10,21 @@ import './SwapCoin.css';
 import './Homepage.css';
 
 import dropIcon from '../assets/dropdown-icon.svg';
-import ethereum from '../assets/coin/ethereum.png';
 import switchIcon from '../assets/switch.png';
+import searchIcon from '../assets/search-icon.svg';
 
 function SwapCoin() {
-    const { selectedAccount, truncateAddress, copyAddress } = useAccount();
+    const { selectedAccount } = useAccount();
     const navigate = useNavigate();
     const [tokens, setTokens] = useState([]);
     const [balances, setBalances] = useState({});
-    const [fromToken, setFromToken] = useState({ symbol: 'ETH', logo: ethereum });
+    const [fromToken, setFromToken] = useState({ symbol: 'ETH', logo: '/coin/ethereum.png?url' });
     const [toToken, setToToken] = useState(null);
     const [fromAmount, setFromAmount] = useState(0);
+    const [toAmount, setToAmount] = useState(0);
     const [showFromTokenDropdown, setShowFromTokenDropdown] = useState(false);
     const [showToTokenDropdown, setShowToTokenDropdown] = useState(false);
+    const [isAmountExceedBalance, setIsAmountExceedBalance] = useState(false);
 
     useEffect(() => {
         fetchTokens();
@@ -37,6 +39,10 @@ function SwapCoin() {
             setBalances(accountBalances);
         }
     }, [selectedAccount]);
+
+    useEffect(() => {
+        calculateToAmount();
+    }, [fromAmount, fromToken, toToken]);
 
     const fetchTokens = async () => {
         try {
@@ -81,6 +87,64 @@ function SwapCoin() {
         return balances[token.symbol] || 0;
     };
 
+    const handleAmountChange = (e) => {
+        const value = e.target.value;
+        const amount = value === '' ? 0 : Number(value);
+        setFromAmount(amount);
+        setIsAmountExceedBalance(amount > getBalance(fromToken));
+    };
+
+    const calculateToAmount = () => {
+        if (!fromToken || !toToken || fromAmount <= 0) {
+            setToAmount(0);
+            return;
+        }
+
+        // AMM logic to calculate toAmount??
+        const fromTokenReserve = 10000; // Example reserve value
+        const toTokenReserve = 10000; // Example reserve value
+        const amountOut = (fromAmount * toTokenReserve) / (fromTokenReserve + fromAmount);
+        setToAmount(amountOut.toFixed(4));
+    };
+
+    const handleSwap = async () => {
+        if (!selectedAccount || !fromToken || !toToken || !fromAmount) {
+            return;
+        }
+
+        // Perform the swap logic here, like updating balances, etc.
+        // Assuming the swap is successful, record the transaction.
+
+        const newTransaction = {
+            id: Date.now().toString(),
+            address: selectedAccount.address,
+            fromToken: fromToken.symbol,
+            toToken: toToken.symbol,
+            fromAmount: fromAmount,
+            toAmount: toAmount,
+            date: new Date().toISOString(),
+        };
+
+        try {
+            const response = await fetch('http://localhost:3001/transactions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTransaction),
+            });
+
+            if (response.ok) {
+                // Navigate to homepage or show a success message
+                navigate('/homepage');
+            } else {
+                console.error('Failed to record transaction');
+            }
+        } catch (error) {
+            console.error('Error recording transaction:', error);
+        }
+    };
+
     return (
         <div className={`app-content-wrapper ${showFromTokenDropdown || showToTokenDropdown ? 'modal-open' : ''}`}>
             <div className='app-content'>
@@ -88,9 +152,6 @@ function SwapCoin() {
                 {selectedAccount && (
                     <AccountHeader
                         selectedAccount={selectedAccount}
-                        setShowAccountSelector={() => {}}
-                        truncateAddress={truncateAddress}
-                        copyAddress={copyAddress}
                     />
                 )}
                 <div className='swap-coin-wrapper'>
@@ -104,23 +165,30 @@ function SwapCoin() {
                             <div className='prepare-swap'>
                                 <div className='prepare-swap-from'>
                                     <div className='from-token'>
-                                        <div className='from-token-dropdown' onClick={() => setShowFromTokenDropdown(true)}>
-                                            <div className='from-token-list'>
+                                        <div className='token-dropdown' onClick={() => setShowFromTokenDropdown(true)}>
+                                            <div className='token-list'>
                                                 {fromToken && <img src={fromToken.logo} alt={fromToken.symbol} className='token-logo' />}
-                                                <span className='from-token-name'>{fromToken ? fromToken.symbol : 'Select token'}</span>
+                                                <span className='swap-token-name'>{fromToken ? fromToken.symbol : 'Select token'}</span>
                                             </div>
                                             <img src={dropIcon} className="dropdown-search" alt="Dropdown" />
                                         </div>
-                                        <input 
-                                            type='number' 
-                                            value={fromAmount} 
-                                            onChange={(e) => setFromAmount(e.target.value)} 
-                                            className='amount-input' 
-                                        />
+                                        <div className='amount-wrapper'>
+                                            <input 
+                                                type='number' 
+                                                value={fromAmount || 0} 
+                                                onChange={handleAmountChange} 
+                                                className='amount-input' 
+                                            />
+                                        </div>
                                     </div>
                                     <div className='balance'>
                                         Balance: {getBalance(fromToken)}
                                     </div>
+                                    {isAmountExceedBalance && (
+                                        <div className='balance-error'>
+                                            Not enough balance
+                                        </div>
+                                    )}
                                     <div className="btn-switch-container">
                                         <button className="btn-switch" onClick={handleSwitch}>
                                             <img src={switchIcon} className="switch-icon" alt="Swap" />
@@ -129,12 +197,20 @@ function SwapCoin() {
                                 </div>
                                 <div className='prepare-swap-to'>
                                     <div className='to-token'>
-                                        <div className='from-token-dropdown' onClick={() => setShowToTokenDropdown(true)}>
-                                            <div className='from-token-list'>
+                                        <div className='token-dropdown' onClick={() => setShowToTokenDropdown(true)}>
+                                            <div className='token-list'>
                                                 {toToken && <img src={toToken.logo} alt={toToken.symbol} className='token-logo' />}
-                                                <span className='from-token-name'>{toToken ? toToken.symbol : 'Select token'}</span>
+                                                <span className='swap-token-name'>{toToken ? toToken.symbol : 'Select token'}</span>
                                             </div>
                                             <img src={dropIcon} className="dropdown-search" alt="Dropdown" />
+                                        </div>
+                                        <div className='amount-wrapper'>
+                                            <input 
+                                                type='number' 
+                                                value={toAmount || 0} 
+                                                readOnly 
+                                                className='amount-input' 
+                                            />
                                         </div>
                                     </div>
                                     <div className='balance'>
@@ -145,7 +221,7 @@ function SwapCoin() {
                         </div>
                         <div className="swap-footer">
                             <footer className='swap-footer-btn'>
-                                <button className="btn-primary" disabled={swapButtonState.disabled}>
+                                <button className="btn-primary" disabled={swapButtonState.disabled} onClick={handleSwap}>
                                     {swapButtonState.text}
                                 </button>
                             </footer>
@@ -159,29 +235,36 @@ function SwapCoin() {
                     <div className='token-modal'>
                         <div className='token-modal-content'>
                             <div className='token-modal-header'>
-                                <h3>{showFromTokenDropdown ? 'Swap from' : 'Swap to'}</h3>
+                                <div className='modal-title'>{showFromTokenDropdown ? 'Swap from' : 'Swap to'}</div>
                                 <button onClick={() => {
                                     setShowFromTokenDropdown(false);
                                     setShowToTokenDropdown(false);
                                 }}>✕</button>
                             </div>
-                            <div className='token-search'>
-                                <input type='text' placeholder='Enter token name or paste address' />
-                            </div>
-                            <div className='token-list'>
-                                {tokens.map(token => (
-                                    <div
-                                        key={token.id}
-                                        className='token-item'
-                                        onClick={() => handleTokenSelect(token, showFromTokenDropdown ? setFromToken : setToToken)}
-                                    >
-                                        <img src={token.logo} alt={token.name} className='token-logo' />
-                                        <div className='token-info'>
-                                            <span className='token-name'>{token.name}</span>
-                                            <span className='token-symbol'>{token.symbol}</span>
-                                        </div>
-                                    </div>
-                                ))}
+                            <div className='token-modal-search-box'>
+                                <div className='token-modal-search'>
+                                    <div className='token-modal-search-content'>
+                                        <img src={searchIcon} className='search-icon'></img>
+                                        <input type='text' placeholder='Enter token name or paste address' />
+                                    </div>    
+                                </div>
+                                <div className='searchable-list'>
+                                    <div className='searchable-list-container'>
+                                        {tokens.map(token => (
+                                            <div
+                                                key={token.id}
+                                                className='token-modal-item'
+                                                onClick={() => handleTokenSelect(token, showFromTokenDropdown ? setFromToken : setToToken)}
+                                            >
+                                                <img src={token.logo} alt={token.name} className='token-modal-logo' />
+                                                <div className='token-modal-info'>
+                                                    <span className='token-modal-name'>{token.name}</span>
+                                                    <span className='token-modal-symbol'>{token.symbol}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>    
+                                </div>
                             </div>
                         </div>
                     </div>

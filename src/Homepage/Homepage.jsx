@@ -2,38 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Homepage.css';
 import swapIcon from '../assets/swap-icon.svg';
+import connectIcon from '../assets/connect-icon.svg'
 import AccountHeader from './AccountHeader';
 import Header from '../components/Header';
 import { useAccount } from '../AccountContext';
 
 const Homepage = () => {
-  const { selectedAccount, accounts, handleAccountChange, truncateAddress, copyAddress } = useAccount();
+  const { selectedAccount, accounts, handleAccountChange, truncateAddress, copyAddress, connectNode } = useAccount();
   const [showAccountSelector, setShowAccountSelector] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('Activity');
+  const [selectedTab, setSelectedTab] = useState('Exchanges');
   const [transactions, setTransactions] = useState([]);
   const [tokens, setTokens] = useState([]);
-  const [nodes, setNodes] = useState([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectedNodeAddress, setConnectedNodeAddress] = useState('');
   const navigate = useNavigate();
-  const [dropdownValue, setDropdownValue] = useState('');
 
   useEffect(() => {
     if (selectedAccount) {
       fetchTransactions();
-      fetchTokens();
+      checkConnectionStatus();
     }
-    fetchNodes();
   }, [selectedAccount]);
-
-  const handleDropdownChange = (e) => {
-    setDropdownValue(e.target.value);
-    setSelectedTab('Tab3'); // Automatically switch to Tab 3 when dropdown is used
-    console.log("Nodes:", nodes);
-    
-  };
 
   const fetchTransactions = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/transactions?address=${selectedAccount.address}`);
+      const response = await fetch('http://localhost:3001/transactions');
       const data = await response.json();
       setTransactions(data);
     } catch (error) {
@@ -41,94 +34,96 @@ const Homepage = () => {
     }
   };
 
-  const fetchTokens = async () => {
+  const fetchTokens = async (nodeAddress) => {
     try {
-      const response = await fetch(`http://localhost:3001/tokens`);
+      const response = await fetch(`http://localhost:3001/nodes?address=${nodeAddress}`);
+      if (!response.ok) {
+        throw new Error(`Error fetching tokens for node ${nodeAddress}`);
+      }
       const data = await response.json();
-      setTokens(data);
+      if (Array.isArray(data) && data.length > 0 && Array.isArray(data[0].tokens)) {
+        setTokens(data[0].tokens);
+      } else {
+        setTokens([]);
+      }
     } catch (error) {
-      console.error('Error fetching tokens:', error);
+      console.error('Error fetching tokens:', error.message);
     }
   };
 
-  const fetchNodes = async () => {
-    try {
-      const response = await fetch(`http://localhost:3001/nodes`);
-      const data = await response.json();
-      setNodes(data);
-      
-    } catch (error) {
-      console.error('Error fetching Nodes:', error);
+  const checkConnectionStatus = () => {
+    if (selectedAccount.connectedNodeAddress) 
+    {
+      setConnectedNodeAddress(selectedAccount.connectedNodeAddress);
+      fetchTokens(selectedAccount.connectedNodeAddress);
+      setIsConnected(true);
+    } 
+    else if (selectedAccount.node && selectedAccount.node.length > 0) 
+    {
+      const firstNodeAddress = selectedAccount.node[0].address;
+      setConnectedNodeAddress(firstNodeAddress);
+      fetchTokens(firstNodeAddress);
+    } 
+    else 
+    {
+      setConnectedNodeAddress('');
+      setTokens([]);
+      setIsConnected(false);
     }
   };
+
+  if (!selectedAccount) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='app-content-wrapper'>
       <div className='app-content'>
         <Header />
         {selectedAccount && (
-          <AccountHeader
-            setShowAccountSelector={setShowAccountSelector}
+          <AccountHeader 
+            setShowAccountSelector={setShowAccountSelector} 
           />
         )}
+
         <div className='homepage'>
-          <main className="main-content">
+          <div className="main-content">
             <div className="balance-section">
               <h1>0 ETH</h1>
               <div className="actions">
                 <div className="button-wrapper">
-                  <button className="round-button" onClick={() => navigate('/homepage-swap')}>
-                    <img src={swapIcon} className="button-icon" alt="Swap" />
+                  <button 
+                    className="round-button" 
+                    onClick={() => navigate('/homepage/nodes')}
+                  >
+                    <img src={connectIcon} className="button-icon" alt="Node" />
                   </button>
+                  <span className="button-label">Node</span>
+                </div>
+                
+                <div className="button-wrapper">
+                  <div className="tooltip">
+                    <button 
+                      className="round-button" 
+                      onClick={() => navigate('/homepage/swap')}
+                      disabled={!isConnected} // Disable button if not connected
+                    >
+                      <img src={swapIcon} className="button-icon" alt="Swap" />
+                    </button>
+                    {!isConnected && <span className="tooltiptext">Please connect to a node</span>}
+                  </div>
                   <span className="button-label">Swap</span>
                 </div>
               </div>
             </div>
 
             <div className="tabs">
+              <button className={`tab ${selectedTab === 'Exchanges' ? 'active' : ''}`} onClick={() => setSelectedTab('Exchanges')}>Exchanges</button>
               <button className={`tab ${selectedTab === 'Transactions' ? 'active' : ''}`} onClick={() => setSelectedTab('Transactions')}>Transactions</button>
-              <button className={`tab ${selectedTab === 'Tokens' ? 'active' : ''}`} onClick={() => setSelectedTab('Tokens')}>Tokens</button>
-              <select onChange={handleDropdownChange} value={dropdownValue} className={`tab ${selectedTab === 'Nodes' ? 'active' : ''}`}>
-                <option value="">Connected</option>
-                <option value="Option1">0x76721d7dE385beF55F8447C0afC704f7057e9aBE</option>
-                <option value="Option2">Option 2</option>
-                <option value="Option3">Option 3</option>
-              </select>
             </div>
 
-            {selectedTab === 'Transactions' ? (
+            {selectedTab === 'Exchanges' ? (
               <div className="activity-section">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Type</th>
-                      <th>Amount</th>
-                      <th>Address</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {transactions.length > 0 ? (
-                      transactions.map((tx, index) => (
-                        <tr key={tx.id}>
-                          <td>{index + 1}</td>
-                          <td>{tx.type}</td>
-                          <td>{tx.amount}</td>
-                          <td>{tx.address}</td>
-                          <td>{tx.date}</td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5">You have no transactions</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="tokens-section">
                 <table className="table">
                   <thead>
                     <tr>
@@ -170,8 +165,41 @@ const Homepage = () => {
                   </tbody>
                 </table>
               </div>
+            ) : (
+              <div className="activity-section">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>From Token</th>
+                      <th>To Token</th>
+                      <th>From Amount</th>
+                      <th>To Amount</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.length > 0 ? (
+                      transactions.map((tx, index) => (
+                        <tr key={tx.id}>
+                          <td>{index + 1}</td>
+                          <td>{tx.fromToken}</td>
+                          <td>{tx.toToken}</td>
+                          <td>{tx.fromAmount}</td>
+                          <td>{tx.toAmount}</td>
+                          <td>{new Date(tx.date).toLocaleString()}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6">You have no transactions</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             )}
-          </main>
+          </div>
 
           {showAccountSelector && (
             <>

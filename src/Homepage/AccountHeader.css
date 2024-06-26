@@ -1,14 +1,134 @@
+.header-wrapper{
+  display: flex;
+  align-items: center;
+  flex-flow: column nowrap;
+  z-index: 55;
+  width: 100%;
+  margin-bottom: 0px;
+}
+
 .header {
-    flex-flow: column nowrap;
-    z-index: 55;
-    min-height: 68px;
-    background-color: var(--color-background-alternative);
-    width: 70%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 16px;
-    padding-left: 16px;
-    padding-right: 16px;
-    box-shadow: var(--shadow-size-md) var(--color-shadow-default);
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* grid-template-columns: 1fr 2fr 1fr; */
+  height: 68px;
+  flex-flow: column nowrap;
+  z-index: 55;
+  min-height: 68px;
+  background-color: var(--color-background-default);
+  width: 70%;
+  gap: 8px;
+  padding: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-shadow: var(--shadow-size-md) var(--color-shadow-default);
+}
+
+.account-info {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.account-details {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex-direction: column;
+}
+
+.account-text {
+  display: flex;
+  align-items: center;
+}
+
+.account-name {
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.account-address {
+  font-size: 14px;
+  color: var(--gray-color);
+}
+
+.account-address-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.dropdown-icon {
+  width: 12px;
+  height: 12px;
+  margin-left: 4px;
+}
+
+.copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  display: flex;
+  padding: 0;
+  margin: 10px;
+}
+
+.copy-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.node-dropdown-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; 
+  position: relative;
+  
+}
+
+.node-dropdown {
+  top: 40px;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 100%;
+  max-width: 400px; 
+}
+
+.node-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.node-item {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.node-item:hover {
+  background-color: #f0f0f0;
+}
+
+.connect-new-node {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+}

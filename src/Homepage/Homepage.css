@@ -33,67 +33,7 @@
     min-height: 0;
     width: 70%;
     height: 90%;
-  }
-  
-  .account-info {
-    display: flex;
-    width: 200px;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .account-details {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    flex-direction: column;
-  }
-  
-  .account-text {
-    display: flex;
-    align-items: center;
-  }
-  
-  .account-name {
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    padding: 5px;
-  }
-  
-  .account-address {
-    font-size: 14px;
-    color: var(--gray-color);
-  }
-  
-  .account-address-wrapper {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
-  }
-  
-  .dropdown-icon {
-    width: 12px;
-    height: 12px;
-    margin-left: 4px;
-  }
-  
-  .copy-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    align-items: center;
-    display: flex;
-    padding: 0;
-    margin: 10px;
-  }
-  
-  .copy-icon {
-    width: 14px;
-    height: 14px;
+    background-color: var(--color-background-default);
   }
   
   .main-content {
@@ -156,7 +96,6 @@
   .tabs {
     display: flex;
     justify-content: center;
-    margin-bottom: 16px;
   }
 
   .tabs select {
@@ -176,9 +115,9 @@
   
   .tabs .tab:hover,
   .tabs .tab.active {
-    border-bottom: 2px solid var(--color-primary-default);
     color: var(--color-primary-default);
     border-radius: 0%;
+    font-weight: bold;
   }
   
   .activity-section {
@@ -324,4 +263,106 @@
     font-size: 12px;
   }
 
+  button.tab,
+  button.tab.active{
+    margin-bottom: 0px;
+  }
+  
+  .connect-modal {
+    background: white;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .connect-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .connect-modal-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+.button-disconnect {
+  border: 2px solid red;
+  color: red;
+  background-color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.button-connected {
+  border: 2px solid green;
+  color: green;
+  background-color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position the tooltip above the button */
+  left: 50%;
+  margin-left: -80px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
   

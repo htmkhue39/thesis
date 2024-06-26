@@ -2,9 +2,22 @@
   "accounts": [
     {
       "id": "1",
-      "name": "Main Account 1",
-      "address": "0xMainAddress1",
-      "mnemonic": ["brush", "swing", "cram", "width", "spoon", "visual", "typical", "recipe", "obvious", "damp", "smart", "depend"],
+      "name": "Account 1",
+      "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234",
+      "mnemonic": [
+        "brush",
+        "swing",
+        "cram",
+        "width",
+        "spoon",
+        "visual",
+        "typical",
+        "recipe",
+        "obvious",
+        "damp",
+        "smart",
+        "depend"
+      ],
       "password": "password123",
       "balances": [
         {
@@ -17,15 +30,45 @@
         }
       ],
       "current": true,
+      "connectedNodeAddress": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
       "subAccounts": [
-        "2", "3"
-      ]
+        "2",
+        "3"
+      ],
+      "node": [
+        {
+          "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+        },
+        {
+          "address": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d"
+        },
+        {
+          "address": "0xdc24316b9ae028f1497c275eb9192a3ea0f67022"
+        },
+        {
+          "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8"
+        }
+      ],
+      "connected": true
     },
     {
       "id": "2",
-      "name": "Sub Account 1 of Main Account 1",
+      "name": "Account 2",
       "address": "0x76721d7dE385beF55F8447C0afC704f7057e9aBE",
-      "mnemonic": ["moon", "galaxy", "star", "planet", "comet", "orbit", "solar", "lunar", "space", "alien", "rocket", "satellite"],
+      "mnemonic": [
+        "moon",
+        "galaxy",
+        "star",
+        "planet",
+        "comet",
+        "orbit",
+        "solar",
+        "lunar",
+        "space",
+        "alien",
+        "rocket",
+        "satellite"
+      ],
       "password": "passwordSub1",
       "balances": [
         {
@@ -33,13 +76,36 @@
           "amount": 1
         }
       ],
-      "current": false
+      "current": false,
+      "connectedNodeAddress": "",
+      "subAccounts": [
+        "1",
+        "3"
+      ],
+      "node": [
+        {
+          "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8"
+        }
+      ]
     },
     {
       "id": "3",
-      "name": "Sub Account 2 of Main Account 1",
-      "address": "0x12345d7dE385beF55F8447C0afC704f7057e1234",
-      "mnemonic": ["subword13", "subword14", "subword15", "subword16", "subword17", "subword18", "subword19", "subword20", "subword21", "subword22", "subword23", "subword24"],
+      "name": "Account 3",
+      "address": "0x1234500000000000000000000000004f7057e1234",
+      "mnemonic": [
+        "subword13",
+        "subword14",
+        "subword15",
+        "subword16",
+        "subword17",
+        "subword18",
+        "subword19",
+        "subword20",
+        "subword21",
+        "subword22",
+        "subword23",
+        "subword24"
+      ],
       "password": "passwordSub2",
       "balances": [
         {
@@ -47,64 +113,565 @@
           "amount": 5
         }
       ],
-      "current": false
+      "current": false,
+      "connectedNodeAddress": "",
+      "subAccounts": [
+        "1",
+        "2"
+      ],
+      "node": [
+        {
+          "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3"
+        },
+        {
+          "address": "0x61edcdf5bb737adffb0c940e9c3f76c82b008a47"
+        }
+      ]
+    }
+  ],
+  "mnemonics": [
+    [
+      "brush",
+      "swing",
+      "cram",
+      "width",
+      "spoon",
+      "visual",
+      "typical",
+      "recipe",
+      "obvious",
+      "damp",
+      "smart",
+      "depend"
+    ],
+    [
+      "moon",
+      "galaxy",
+      "star",
+      "planet",
+      "comet",
+      "orbit",
+      "solar",
+      "lunar",
+      "space",
+      "alien",
+      "rocket",
+      "satellite"
+    ]
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "address": "0xMainAddress1",
+      "fromToken": "ETH",
+      "toToken": "USDC",
+      "fromAmount": "2",
+      "toAmount": "3000",
+      "date": "2023-06-21T18:25:43.511Z"
+    },
+    {
+      "id": "2",
+      "address": "0xMainAddress2",
+      "fromToken": "BTC",
+      "toToken": "ETH",
+      "fromAmount": "1",
+      "toAmount": "10",
+      "date": "2023-06-21T19:25:43.511Z"
+    },
+    {
+      "id": "1719134934433",
+      "address": "0xMainAddress1",
+      "fromToken": "ETH",
+      "toToken": "BNB",
+      "fromAmount": 10,
+      "toAmount": "9.9900",
+      "date": "2024-06-23T09:28:54.433Z"
+    },
+    {
+      "id": "1719236735547",
+      "address": "0xMainAddress1",
+      "fromToken": "ETH",
+      "toToken": "USDT",
+      "fromAmount": 20,
+      "toAmount": "19.9601",
+      "date": "2024-06-24T13:45:35.547Z"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "1",
+      "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+      "tokens": [
+        {
+          "id": "1",
+          "name": "Bitcoin",
+          "symbol": "BTC",
+          "logo": "/coin/bitcoin.png",
+          "price": "$63.95k",
+          "change1h": "0.61",
+          "change24h": "-2.57",
+          "change7d": "-4.32",
+          "volume24h": "$20.22B"
+        },
+        {
+          "id": "2",
+          "name": "Ethereum",
+          "symbol": "ETH",
+          "logo": "/coin/ethereum.png",
+          "price": "$3.5k",
+          "change1h": "1.1",
+          "change24h": "-1.94",
+          "change7d": "-0.08",
+          "volume24h": "$13.27B"
+        },
+        {
+          "id": "3",
+          "name": "Tether",
+          "symbol": "USDT",
+          "logo": "/coin/cardano.png",
+          "price": "$0.998",
+          "change1h": "0.03",
+          "change24h": "-0.08",
+          "change7d": "-0.06",
+          "volume24h": "$34.04B"
+        },
+        {
+          "id": "4",
+          "name": "BNB",
+          "symbol": "BNB",
+          "logo": "/coin/binance.png",
+          "price": "$585.21",
+          "change1h": "0.68",
+          "change24h": "-2.7",
+          "change7d": "-3.65",
+          "volume24h": "$923.73M"
+        },
+        {
+          "id": "5",
+          "name": "Solana",
+          "symbol": "SOL",
+          "logo": "/coin/solana.png",
+          "price": "$132.16",
+          "change1h": "0.85",
+          "change24h": "-3.85",
+          "change7d": "-10.55",
+          "volume24h": "$1.98B"
+        },
+        {
+          "id": "6",
+          "name": "Lido Staked Ether",
+          "symbol": "STETH",
+          "logo": "/coin/shiba-inu.png",
+          "price": "$3.5k",
+          "change1h": "1.01",
+          "change24h": "-1.99",
+          "change7d": "-0.15",
+          "volume24h": "$61.87M"
+        },
+        {
+          "id": "7",
+          "name": "USD Coin",
+          "symbol": "USDC",
+          "logo": "/coin/usdc.png",
+          "price": "$0.999",
+          "change1h": "-0.06",
+          "change24h": "-0.04",
+          "change7d": "-0.04",
+          "volume24h": "$4.37B"
+        },
+        {
+          "id": "8",
+          "name": "XRP",
+          "symbol": "XRP",
+          "logo": "/coin/ripple.png",
+          "price": "$0.488",
+          "change1h": "0.33",
+          "change24h": "-1.29",
+          "change7d": "2.58",
+          "volume24h": "$827.27M"
+        },
+        {
+          "id": "9",
+          "name": "Dogecoin",
+          "symbol": "DOGE",
+          "logo": "/coin/dogecoin.png",
+          "price": "$0.124",
+          "change1h": "1.21",
+          "change24h": "-0.8",
+          "change7d": "-12.61",
+          "volume24h": "$615.12M"
+        },
+        {
+          "id": "10",
+          "name": "Toncoin",
+          "symbol": "TON",
+          "logo": "/coin/usdt.png",
+          "price": "$7.12",
+          "change1h": "1.13",
+          "change24h": "-0.84",
+          "change7d": "-10.44",
+          "volume24h": "$374.47M"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "address": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
+      "tokens": [
+        {
+          "id": "1",
+          "name": "Bitcoin",
+          "symbol": "BTC",
+          "logo": "/coin/bitcoin.png",
+          "price": "$63.95k",
+          "change1h": "0.61",
+          "change24h": "-2.57",
+          "change7d": "-4.32",
+          "volume24h": "$20.22B"
+        },
+        {
+          "id": "2",
+          "name": "Ethereum",
+          "symbol": "ETH",
+          "logo": "/coin/ethereum.png",
+          "price": "$3.5k",
+          "change1h": "1.1",
+          "change24h": "-1.94",
+          "change7d": "-0.08",
+          "volume24h": "$13.27B"
+        },
+        {
+          "id": "3",
+          "name": "Tether",
+          "symbol": "USDT",
+          "logo": "/coin/cardano.png",
+          "price": "$0.998",
+          "change1h": "0.03",
+          "change24h": "-0.08",
+          "change7d": "-0.06",
+          "volume24h": "$34.04B"
+        },
+        {
+          "id": "4",
+          "name": "BNB",
+          "symbol": "BNB",
+          "logo": "/coin/binance.png",
+          "price": "$585.21",
+          "change1h": "0.68",
+          "change24h": "-2.7",
+          "change7d": "-3.65",
+          "volume24h": "$923.73M"
+        },
+        {
+          "id": "5",
+          "name": "Solana",
+          "symbol": "SOL",
+          "logo": "/coin/solana.png",
+          "price": "$132.16",
+          "change1h": "0.85",
+          "change24h": "-3.85",
+          "change7d": "-10.55",
+          "volume24h": "$1.98B"
+        },
+        {
+          "id": "6",
+          "name": "Lido Staked Ether",
+          "symbol": "STETH",
+          "logo": "/coin/shiba-inu.png",
+          "price": "$3.5k",
+          "change1h": "1.01",
+          "change24h": "-1.99",
+          "change7d": "-0.15",
+          "volume24h": "$61.87M"
+        },
+        {
+          "id": "7",
+          "name": "USD Coin",
+          "symbol": "USDC",
+          "logo": "/coin/usdc.png",
+          "price": "$0.999",
+          "change1h": "-0.06",
+          "change24h": "-0.04",
+          "change7d": "-0.04",
+          "volume24h": "$4.37B"
+        },
+        {
+          "id": "8",
+          "name": "XRP",
+          "symbol": "XRP",
+          "logo": "/coin/ripple.png",
+          "price": "$0.488",
+          "change1h": "0.33",
+          "change24h": "-1.29",
+          "change7d": "2.58",
+          "volume24h": "$827.27M"
+        },
+        {
+          "id": "9",
+          "name": "Dogecoin",
+          "symbol": "DOGE",
+          "logo": "/coin/dogecoin.png",
+          "price": "$0.124",
+          "change1h": "1.21",
+          "change24h": "-0.8",
+          "change7d": "-12.61",
+          "volume24h": "$615.12M"
+        },
+        {
+          "id": "10",
+          "name": "Toncoin",
+          "symbol": "TON",
+          "logo": "/coin/usdt.png",
+          "price": "$7.12",
+          "change1h": "1.13",
+          "change24h": "-0.84",
+          "change7d": "-10.44",
+          "volume24h": "$374.47M"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",
+      "tokens": [
+        {
+          "id": "1",
+          "name": "Bitcoin",
+          "symbol": "BTC",
+          "logo": "/coin/bitcoin.png",
+          "price": "$63.95k",
+          "change1h": "0.61",
+          "change24h": "-2.57",
+          "change7d": "-4.32",
+          "volume24h": "$20.22B"
+        },
+        {
+          "id": "2",
+          "name": "Ethereum",
+          "symbol": "ETH",
+          "logo": "/coin/ethereum.png",
+          "price": "$3.5k",
+          "change1h": "1.1",
+          "change24h": "-1.94",
+          "change7d": "-0.08",
+          "volume24h": "$13.27B"
+        },
+        {
+          "id": "3",
+          "name": "Tether",
+          "symbol": "USDT",
+          "logo": "/coin/cardano.png",
+          "price": "$0.998",
+          "change1h": "0.03",
+          "change24h": "-0.08",
+          "change7d": "-0.06",
+          "volume24h": "$34.04B"
+        }
+      ]
     },
     {
       "id": "4",
-      "name": "Main Account 2",
-      "address": "0xMainAddress2",
-      "mnemonic": ["word13", "word14", "word15", "word16", "word17", "word18", "word19", "word20", "word21", "word22", "word23", "word24"],
-      "password": "password456",
-      "balances": [
+      "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3",
+      "tokens": [
         {
-          "token": "BNB",
-          "amount": 10
+          "id": "1",
+          "name": "BNB",
+          "symbol": "BNB",
+          "logo": "/coin/binance.png",
+          "price": "$585.21",
+          "change1h": "0.68",
+          "change24h": "-2.7",
+          "change7d": "-3.65",
+          "volume24h": "$923.73M"
+        },
+        {
+          "id": "2",
+          "name": "Solana",
+          "symbol": "SOL",
+          "logo": "/coin/solana.png",
+          "price": "$132.16",
+          "change1h": "0.85",
+          "change24h": "-3.85",
+          "change7d": "-10.55",
+          "volume24h": "$1.98B"
         }
-      ],
-      "current": false,
-      "subAccounts": [
-        "5", "6"
       ]
     },
     {
       "id": "5",
-      "name": "Sub Account 1 of Main Account 2",
-      "address": "0xNewAddress1",
-      "mnemonic": ["subword25", "subword26", "subword27", "subword28", "subword29", "subword30", "subword31", "subword32", "subword33", "subword34", "subword35", "subword36"],
-      "password": "passwordSub3",
-      "balances": [
+      "address": "0x61edcdf5bb737adffb0c940e9c3f76c82b008a47",
+      "tokens": [
         {
-          "token": "XRP",
-          "amount": 8
+          "id": "1",
+          "name": "USD Coin",
+          "symbol": "USDC",
+          "logo": "/coin/usdc.png",
+          "price": "$0.999",
+          "change1h": "-0.06",
+          "change24h": "-0.04",
+          "change7d": "-0.04",
+          "volume24h": "$4.37B"
+        },
+        {
+          "id": "2",
+          "name": "XRP",
+          "symbol": "XRP",
+          "logo": "/coin/ripple.png",
+          "price": "$0.488",
+          "change1h": "0.33",
+          "change24h": "-1.29",
+          "change7d": "2.58",
+          "volume24h": "$827.27M"
         }
-      ],
-      "current": false
+      ]
     },
     {
       "id": "6",
-      "name": "Sub Account 2 of Main Account 2",
-      "address": "0xNewAddress2",
-      "mnemonic": ["subword37", "subword38", "subword39", "subword40", "subword41", "subword42", "subword43", "subword44", "subword45", "subword46", "subword47", "subword48"],
-      "password": "passwordSub4",
-      "balances": [
+      "address": "0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+      "tokens": [
         {
-          "token": "DOGE",
-          "amount": 12
+          "id": "1",
+          "name": "Dogecoin",
+          "symbol": "DOGE",
+          "logo": "/coin/dogecoin.png",
+          "price": "$0.124",
+          "change1h": "1.21",
+          "change24h": "-0.8",
+          "change7d": "-12.61",
+          "volume24h": "$615.12M"
+        },
+        {
+          "id": "2",
+          "name": "Toncoin",
+          "symbol": "TON",
+          "logo": "/coin/usdt.png",
+          "price": "$7.12",
+          "change1h": "1.13",
+          "change24h": "-0.84",
+          "change7d": "-10.44",
+          "volume24h": "$374.47M"
         }
-      ],
-      "current": false
+      ]
+    },
+    {
+      "id": "7",
+      "address": "0x5a52e96bacdabb82fd05763e25335261b270efcb",
+      "tokens": [
+        {
+          "id": "1",
+          "name": "Bitcoin",
+          "symbol": "BTC",
+          "logo": "/coin/bitcoin.png",
+          "price": "$63.95k",
+          "change1h": "0.61",
+          "change24h": "-2.57",
+          "change7d": "-4.32",
+          "volume24h": "$20.22B"
+        },
+        {
+          "id": "2",
+          "name": "Ethereum",
+          "symbol": "ETH",
+          "logo": "/coin/ethereum.png",
+          "price": "$3.5k",
+          "change1h": "1.1",
+          "change24h": "-1.94",
+          "change7d": "-0.08",
+          "volume24h": "$13.27B"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "address": "0x742d35Cc3333C0532925a3b844Bc454e4438f44e",
+      "tokens": [
+        {
+          "id": "1",
+          "name": "Tether",
+          "symbol": "USDT",
+          "logo": "/coin/cardano.png",
+          "price": "$0.998",
+          "change1h": "0.03",
+          "change24h": "-0.08",
+          "change7d": "-0.06",
+          "volume24h": "$34.04B"
+        },
+        {
+          "id": "2",
+          "name": "BNB",
+          "symbol": "BNB",
+          "logo": "/coin/binance.png",
+          "price": "$585.21",
+          "change1h": "0.68",
+          "change24h": "-2.7",
+          "change7d": "-3.65",
+          "volume24h": "$923.73M"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "address": "0x267be1c1d684f78cb4f6a176c4911b741e4ffdc0",
+      "tokens": [
+        {
+          "id": "1",
+          "name": "Solana",
+          "symbol": "SOL",
+          "logo": "/coin/solana.png",
+          "price": "$132.16",
+          "change1h": "0.85",
+          "change24h": "-3.85",
+          "change7d": "-10.55",
+          "volume24h": "$1.98B"
+        },
+        {
+          "id": "2",
+          "name": "Lido Staked Ether",
+          "symbol": "STETH",
+          "logo": "/coin/shiba-inu.png",
+          "price": "$3.5k",
+          "change1h": "1.01",
+          "change24h": "-1.99",
+          "change7d": "-0.15",
+          "volume24h": "$61.87M"
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "address": "0x0a3f6849f78076aef4c1343d6a639f0a56a9d0a6",
+      "tokens": [
+        {
+          "id": "1",
+          "name": "USD Coin",
+          "symbol": "USDC",
+          "logo": "/coin/usdc.png",
+          "price": "$0.999",
+          "change1h": "-0.06",
+          "change24h": "-0.04",
+          "change7d": "-0.04",
+          "volume24h": "$4.37B"
+        },
+        {
+          "id": "2",
+          "name": "XRP",
+          "symbol": "XRP",
+          "logo": "/coin/ripple.png",
+          "price": "$0.488",
+          "change1h": "0.33",
+          "change24h": "-1.29",
+          "change7d": "2.58",
+          "volume24h": "$827.27M"
+        }
+      ]
     }
-  ],
-  "mnemonics": [
-    ["brush", "swing", "cram", "width", "spoon", "visual", "typical", "recipe", "obvious", "damp", "smart", "depend"],
-    ["moon", "galaxy", "star", "planet", "comet", "orbit", "solar", "lunar", "space", "alien", "rocket", "satellite"]
   ],
   "tokens": [
     {
       "id": "1",
       "name": "Bitcoin",
       "symbol": "BTC",
-      "logo": "src/assets/coin/bitcoin.png",
+      "logo": "/coin/bitcoin.png",
       "price": "$63.95k",
       "change1h": "0.61",
       "change24h": "-2.57",
@@ -115,7 +682,7 @@
       "id": "2",
       "name": "Ethereum",
       "symbol": "ETH",
-      "logo": "src/assets/coin/ethereum.png",
+      "logo": "/coin/ethereum.png",
       "price": "$3.5k",
       "change1h": "1.1",
       "change24h": "-1.94",
@@ -126,7 +693,7 @@
       "id": "3",
       "name": "Tether",
       "symbol": "USDT",
-      "logo": "src/assets/coin/cardano.png",
+      "logo": "/coin/cardano.png",
       "price": "$0.998",
       "change1h": "0.03",
       "change24h": "-0.08",
@@ -137,7 +704,7 @@
       "id": "4",
       "name": "BNB",
       "symbol": "BNB",
-      "logo": "src/assets/coin/binance.png",
+      "logo": "/coin/binance.png",
       "price": "$585.21",
       "change1h": "0.68",
       "change24h": "-2.7",
@@ -148,7 +715,7 @@
       "id": "5",
       "name": "Solana",
       "symbol": "SOL",
-      "logo": "src/assets/coin/solana.png",
+      "logo": "/coin/solana.png",
       "price": "$132.16",
       "change1h": "0.85",
       "change24h": "-3.85",
@@ -159,7 +726,7 @@
       "id": "6",
       "name": "Lido Staked Ether",
       "symbol": "STETH",
-      "logo": "src/assets/coin/shiba-inu.png",
+      "logo": "/coin/shiba-inu.png",
       "price": "$3.5k",
       "change1h": "1.01",
       "change24h": "-1.99",
@@ -170,7 +737,7 @@
       "id": "7",
       "name": "USD Coin",
       "symbol": "USDC",
-      "logo": "src/assets/coin/usdc.png",
+      "logo": "/coin/usdc.png",
       "price": "$0.999",
       "change1h": "-0.06",
       "change24h": "-0.04",
@@ -181,7 +748,7 @@
       "id": "8",
       "name": "XRP",
       "symbol": "XRP",
-      "logo": "src/assets/coin/ripple.png",
+      "logo": "/coin/ripple.png",
       "price": "$0.488",
       "change1h": "0.33",
       "change24h": "-1.29",
@@ -192,7 +759,7 @@
       "id": "9",
       "name": "Dogecoin",
       "symbol": "DOGE",
-      "logo": "src/assets/coin/dogecoin.png",
+      "logo": "/coin/dogecoin.png",
       "price": "$0.124",
       "change1h": "1.21",
       "change24h": "-0.8",
@@ -203,7 +770,7 @@
       "id": "10",
       "name": "Toncoin",
       "symbol": "TON",
-      "logo": "src/assets/coin/usdt.png",
+      "logo": "/coin/usdt.png",
       "price": "$7.12",
       "change1h": "1.13",
       "change24h": "-0.84",
