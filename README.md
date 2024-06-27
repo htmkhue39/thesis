@@ -41,8 +41,6 @@ Follow these steps to set up and run the project:
     npm run dev
     ```
 
-    This will start the Vite development server. You should see output indicating that the server is running and providing a local URL (typically `http://localhost:3000`) where you can view your React application.
-
 5. **Build the project for production:**
     ```bash
     npm run build

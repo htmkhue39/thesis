@@ -30,7 +30,7 @@
         }
       ],
       "current": true,
-      "connectedNodeAddress": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+      "connectedNodeAddress": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
       "subAccounts": [
         "2",
         "3"
@@ -47,6 +47,26 @@
         },
         {
           "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8"
+        }
+      ],
+      "transactions": [
+        {
+          "id": "1",
+          "nodeAddress": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+          "fromToken": "ETH",
+          "toToken": "USDC",
+          "fromAmount": "2",
+          "toAmount": "3000",
+          "date": "2023-06-21T18:25:43.511Z"
+        },
+        {
+          "id": "2",
+          "nodeAddress": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
+          "fromToken": "BTC",
+          "toToken": "ETH",
+          "fromAmount": "1",
+          "toAmount": "10",
+          "date": "2023-06-21T19:25:43.511Z"
         }
       ],
       "connected": true
@@ -86,7 +106,9 @@
         {
           "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8"
         }
-      ]
+      ],
+      "transactions": [],
+      "connected": false
     },
     {
       "id": "3",
@@ -126,7 +148,9 @@
         {
           "address": "0x61edcdf5bb737adffb0c940e9c3f76c82b008a47"
         }
-      ]
+      ],
+      "transactions": [],
+      "connected": false
     }
   ],
   "mnemonics": [
@@ -158,44 +182,6 @@
       "rocket",
       "satellite"
     ]
-  ],
-  "transactions": [
-    {
-      "id": "1",
-      "address": "0xMainAddress1",
-      "fromToken": "ETH",
-      "toToken": "USDC",
-      "fromAmount": "2",
-      "toAmount": "3000",
-      "date": "2023-06-21T18:25:43.511Z"
-    },
-    {
-      "id": "2",
-      "address": "0xMainAddress2",
-      "fromToken": "BTC",
-      "toToken": "ETH",
-      "fromAmount": "1",
-      "toAmount": "10",
-      "date": "2023-06-21T19:25:43.511Z"
-    },
-    {
-      "id": "1719134934433",
-      "address": "0xMainAddress1",
-      "fromToken": "ETH",
-      "toToken": "BNB",
-      "fromAmount": 10,
-      "toAmount": "9.9900",
-      "date": "2024-06-23T09:28:54.433Z"
-    },
-    {
-      "id": "1719236735547",
-      "address": "0xMainAddress1",
-      "fromToken": "ETH",
-      "toToken": "USDT",
-      "fromAmount": 20,
-      "toAmount": "19.9601",
-      "date": "2024-06-24T13:45:35.547Z"
-    }
   ],
   "nodes": [
     {

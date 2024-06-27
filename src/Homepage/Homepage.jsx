@@ -25,10 +25,12 @@ const Homepage = () => {
   }, [selectedAccount]);
 
   const fetchTransactions = async () => {
+    if (!selectedAccount) return;
     try {
-      const response = await fetch('http://localhost:3001/transactions');
-      const data = await response.json();
-      setTransactions(data);
+      const accountTransactions = selectedAccount.transactions.filter(
+        tx => tx.nodeAddress === selectedAccount.connectedNodeAddress
+      );
+      setTransactions(accountTransactions);
     } catch (error) {
       console.error('Error fetching transactions:', error);
     }

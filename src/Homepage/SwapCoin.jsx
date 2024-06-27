@@ -14,7 +14,7 @@ import switchIcon from '../assets/switch.png';
 import searchIcon from '../assets/search-icon.svg';
 
 function SwapCoin() {
-    const { selectedAccount } = useAccount();
+    const { selectedAccount, handleAccountChange } = useAccount();
     const navigate = useNavigate();
     const [tokens, setTokens] = useState([]);
     const [balances, setBalances] = useState({});
@@ -60,6 +60,9 @@ function SwapCoin() {
         }
         if (!fromAmount) {
             return { disabled: true, text: "Enter an Amount" };
+        }
+        if (isAmountExceedBalance) {
+            return { disabled: true, text: "Insufficient Balance" };
         }
         return { disabled: false, text: "Swap" };
     };
@@ -126,16 +129,19 @@ function SwapCoin() {
         };
 
         try {
-            const response = await fetch('http://localhost:3001/transactions', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:3001/accounts/${selectedAccount.id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newTransaction),
+                body: JSON.stringify({
+                    ...selectedAccount,
+                    transactions: [...selectedAccount.transactions, newTransaction],
+                }),
             });
 
             if (response.ok) {
-                // Navigate to homepage or show a success message
+                handleAccountChange(selectedAccount.name);
                 navigate('/homepage');
             } else {
                 console.error('Failed to record transaction');

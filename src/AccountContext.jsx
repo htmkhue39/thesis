@@ -74,8 +74,20 @@ export const AccountProvider = ({ children }) => {
     }
   };
 
+  const clearConnectedNodeAddress = async () => {
+    const updatedAccount = { ...selectedAccount, connectedNodeAddress: '' };
+    setSelectedAccount(updatedAccount);
+    await fetch(`http://localhost:3001/accounts/${selectedAccount.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedAccount),
+    });
+  };
+
   return (
-    <AccountContext.Provider value={{ selectedAccount, handleAccountChange, truncateAddress, copyAddress, accounts, connectNode }}>
+    <AccountContext.Provider value={{ selectedAccount, handleAccountChange, truncateAddress, copyAddress, accounts, connectNode, clearConnectedNodeAddress }}>
       {children}
     </AccountContext.Provider>
   );

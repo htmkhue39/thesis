@@ -11,9 +11,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* grid-template-columns: 1fr 2fr 1fr; */
   height: 68px;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   z-index: 55;
   min-height: 68px;
   background-color: var(--color-background-default);
@@ -131,4 +130,48 @@
   border-top: 1px solid #ddd;
   display: flex;
   justify-content: center;
+}
+
+.more-icon-wrapper{
+  position: relative;
+}
+
+.more-icon-btn{
+  width: 0px;
+  height: 0px;
+  background-color: var(--color-background-default);
+  margin-bottom: 0px;
+}
+
+.more-icon{
+  width: 24px;
+  height: 24px;
+}
+
+.more-options {
+  position: absolute;
+  width: 200px;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  box-shadow: 2px 2px 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px; /* Add margin to separate the menu from the button */
+}
+
+.more-options ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.more-options li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.more-options li:hover {
+  background-color: #f0f0f0;
 }
