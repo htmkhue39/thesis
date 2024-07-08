@@ -75,8 +75,15 @@ export const AccountProvider = ({ children }) => {
   };
 
   const clearConnectedNodeAddress = async () => {
-    const updatedAccount = { ...selectedAccount, connectedNodeAddress: '' };
-    setSelectedAccount(updatedAccount);
+    const updatedAccount = { ...selectedAccount, connectedNodeAddress: '', current: false };
+    setSelectedAccount(null);
+    setAccounts(prevAccounts =>
+      prevAccounts.map(acc =>
+        acc.id === selectedAccount.id
+          ? updatedAccount
+          : acc
+      )
+    );
     await fetch(`http://localhost:3001/accounts/${selectedAccount.id}`, {
       method: 'PUT',
       headers: {
@@ -84,6 +91,13 @@ export const AccountProvider = ({ children }) => {
       },
       body: JSON.stringify(updatedAccount),
     });
+  };
+
+  const logout = async () => {
+    if (selectedAccount) {
+      await clearConnectedNodeAddress();
+      setSelectedAccount(null);
+    }
   };
 
   return (
@@ -94,8 +108,10 @@ export const AccountProvider = ({ children }) => {
       truncateAddress,
       copyAddress,
       accounts,
+      setAccounts,
       connectNode,
-      clearConnectedNodeAddress
+      clearConnectedNodeAddress,
+      logout,
     }}>
       {children}
     </AccountContext.Provider>

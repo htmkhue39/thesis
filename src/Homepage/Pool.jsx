@@ -14,10 +14,13 @@ const Pool = () => {
     const navigate = useNavigate();
   
     useEffect(() => {
-      if (selectedAccount) {
-        setLiquidityPositions(selectedAccount.liquidityPositions);
+      if (selectedAccount && selectedAccount.connectedNodeAddress) {
+          const connectedNode = selectedAccount.node.find(node => node.address === selectedAccount.connectedNodeAddress);
+          if (connectedNode) {
+              setLiquidityPositions(connectedNode.liquidityPositions);
+          }
       }
-    }, [selectedAccount]);
+  }, [selectedAccount]);
 
     const handleToggleDetails = (poolId) => {
       setShowDetails(showDetails === poolId ? null : poolId);

@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation  } from 'react-router-dom';
-import './CreatePassword.css'
+import { useNavigate } from 'react-router-dom';
+import './CreatePassword.css';
 import './Grid.css';
-import '../components/Button.css'
-import '../components/Step.css'
+import '../components/Button.css';
+import '../components/Step.css';
 
 const ImportAccountMnemonic = () => {
   const navigate = useNavigate(); 
-  const location = useLocation();
-  const { mnemonic } = location.state || [];
   const [inputMnemonic, setInputMnemonic] = useState(Array(12).fill(''));
 
   const handlePaste = (e) => {
@@ -24,23 +22,9 @@ const ImportAccountMnemonic = () => {
     setInputMnemonic(newInputMnemonic);
   };
 
-  const arraysEqual = (arr1, arr2) => {
-    if (arr1.length !== arr2.length) return false;
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] !== arr2[i]) return false;
-    }
-    return true;
-  };
-
   const handleNextClick = () => {
     console.log("Input Mnemonic:", inputMnemonic);
-    console.log("Provided Mnemonic:", mnemonic);
-    if (arraysEqual(inputMnemonic, mnemonic)) {
-        alert('Mnemonic phrase matches!');
-        navigate('/import-account-password'); 
-    } else {
-        alert('Mnemonic phrase does not match. Please try again.');
-    }
+    navigate('/import-account-password', { state: { mnemonic: inputMnemonic } });
   };
 
   return (

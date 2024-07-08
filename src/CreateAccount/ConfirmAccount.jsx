@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAccount } from '../AccountContext'; // Import the account context
 import './CreatePassword.css';
 import './Grid.css';
 import './OnboardingPage.css';
@@ -10,6 +11,7 @@ const ConfirmAccount = () => {
   const navigate = useNavigate(); 
   const location = useLocation();
   const { mnemonic } = location.state || [];
+  const { accounts, setSelectedAccount, setAccounts } = useAccount(); // Use the account context
   const [inputMnemonic, setInputMnemonic] = useState(Array(12).fill(''));
 
   const handlePaste = (e) => {
@@ -39,21 +41,26 @@ const ConfirmAccount = () => {
     if (arraysEqual(inputMnemonic, mnemonic)) {
       alert('Mnemonic phrase matches!');
       const password = localStorage.getItem('newPassword');
+      const newAccount = {
+        name: 'New Account', 
+        address: '0xNewAddress', // Address needs to be generated dynamically or from the database
+        password: password,
+        mnemonic: mnemonic
+      };
+
       try {
         const response = await fetch('http://localhost:3001/accounts', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ 
-            name: 'New Account', 
-            address: '0xNewAddress', // Address cần được tạo động hoặc từ cơ sở dữ liệu
-            password: password,
-            mnemonic: mnemonic
-          })
+          body: JSON.stringify(newAccount)
         });
 
         if (response.ok) {
+          const data = await response.json();
+          setAccounts([...accounts, data]);
+          setSelectedAccount(data);
           alert('Account created successfully!');
           navigate('/swap'); 
         } else {

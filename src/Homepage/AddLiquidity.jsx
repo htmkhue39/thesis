@@ -8,7 +8,6 @@ import './Explore.css';
 import './SwapCoin.css'
 
 import dropIcon from '../assets/dropdown-icon.svg';
-import switchIcon from '../assets/switch.png';
 import searchIcon from '../assets/search-icon.svg';
 import backIcon from '../assets/back-icon.svg';
 
@@ -25,7 +24,6 @@ function AddLiquidity() {
     const [showFromTokenDropdown, setShowFromTokenDropdown] = useState(false);
     const [showToTokenDropdown, setShowToTokenDropdown] = useState(false);
     const [isAmountExceedBalance, setIsAmountExceedBalance] = useState(false);
-    const [feeTier, setFeeTier] = useState('0.01%');
     const [showFeeOptions, setShowFeeOptions] = useState(false);
     const [selectedFee, setSelectedFee] = useState("0.30%");
     const [poolExists, setPoolExists] = useState(false);
@@ -141,7 +139,7 @@ function AddLiquidity() {
     };
 
     const handleAddLiquidity = async () => {
-        if (!selectedAccount || !fromToken || !toToken || !fromAmount || !toAmount || !feeTier) {
+        if (!selectedAccount || !fromToken || !toToken || !fromAmount || !toAmount || !selectedFee) {
             return;
         }
 
@@ -157,7 +155,7 @@ function AddLiquidity() {
             liquidityToken: "UNI-V2",
             poolShare: "0.5%", // Example pool share
             totalPoolTokens: fromAmount + toAmount, // Example total pool tokens
-            feeTier: feeTier
+            selectedFee: selectedFee
         };
 
         try {
@@ -255,7 +253,7 @@ function AddLiquidity() {
                             </div>
                         </div>
 
-                        {!poolExists && (
+                        {!poolExists && (toToken != null) && (
                             <div className='fee-dropdown'>
                                 <div className='fee-dropdown-header' onClick={toggleFeeOptions}>
                                 <span>{selectedFee}</span>

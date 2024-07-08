@@ -9,7 +9,7 @@ import moreIcon from '../assets/more-icon.png';
 import './AccountHeader.css';
 
 const AccountHeader = () => {
-  const { selectedAccount, clearConnectedNodeAddress } = useAccount();
+  const { selectedAccount, logout } = useAccount();
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); // Get the current path
@@ -23,10 +23,10 @@ const AccountHeader = () => {
   };
 
   const handleLogout = async () => {
-    await clearConnectedNodeAddress();
-    selectedAccount(null); // Clear the selected account to update the authentication state
+    await logout();
     alert('Logged out successfully');
     navigate('/');
+    window.location.reload();
   };
 
   const Menus = [

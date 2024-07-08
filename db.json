@@ -19,8 +19,8 @@
         "depend"
       ],
       "password": "password123",
-      "current": true,
-      "connectedNodeAddress": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+      "current": false,
+      "connectedNodeAddress": "",
       "subAccounts": [
         "2",
         "3"
@@ -55,57 +55,60 @@
               "toAmount": "10",
               "date": "2023-06-21T19:25:43.511Z"
             }
+          ],
+          "liquidityPositions": [
+            {
+              "poolId": "1",
+              "tokenA": "ETH",
+              "tokenB": "USDC",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2",
+              "poolShare": "0.5%",
+              "totalPoolTokens": "10"
+            },
+            {
+              "poolId": "2",
+              "tokenA": "BTC",
+              "tokenB": "BNB",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2",
+              "poolShare": "0.3%",
+              "totalPoolTokens": "8"
+            },
+            {
+              "poolId": "3",
+              "tokenA": "ETH",
+              "tokenB": "BTC",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2",
+              "poolShare": "0.22%",
+              "totalPoolTokens": "9"
+            }
           ]
         },
         {
           "address": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
           "balances": [],
-          "transactions": []
+          "transactions": [],
+          "liquidityPositions": []
         },
         {
           "address": "0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
           "balances": [],
-          "transactions": []
+          "transactions": [],
+          "liquidityPositions": []
         },
         {
           "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",
           "balances": [],
-          "transactions": []
+          "transactions": [],
+          "liquidityPositions": []
         }
       ],
-      "connected": true,
-      "liquidityPositions": [
-        {
-          "poolId": "1",
-          "tokenA": "ETH",
-          "tokenB": "USDC",
-          "amountA": "5",
-          "amountB": "2500",
-          "liquidityToken": "UNI-V2",
-          "poolShare": "0.5%",
-          "totalPoolTokens": "10"
-        },
-        {
-          "poolId": "2",
-          "tokenA": "BTC",
-          "tokenB": "BNB",
-          "amountA": "2",
-          "amountB": "5000",
-          "liquidityToken": "UNI-V2",
-          "poolShare": "0.3%",
-          "totalPoolTokens": "8"
-        },
-        {
-          "poolId": "3",
-          "tokenA": "ETH",
-          "tokenB": "BTC",
-          "amountA": "3",
-          "amountB": "3000",
-          "liquidityToken": "UNI-V2",
-          "poolShare": "0.22%",
-          "totalPoolTokens": "9"
-        }
-      ]
+      "connected": true
     },
     {
       "id": "2",
@@ -136,7 +139,8 @@
         {
           "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",
           "balances": [],
-          "transactions": []
+          "transactions": [],
+          "liquidityPositions": []
         }
       ],
       "connected": false
@@ -170,7 +174,8 @@
         {
           "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3",
           "balances": [],
-          "transactions": []
+          "transactions": [],
+          "liquidityPositions": []
         },
         {
           "address": "0x61edcdf5bb737adffb0c940e9c3f76c82b008a47",
@@ -179,6 +184,88 @@
         }
       ],
       "connected": false
+    },
+    {
+      "id": "f520",
+      "name": "New Account",
+      "address": "0xNewAddress",
+      "password": "aaaaaaA@1",
+      "mnemonic": [
+        "brush",
+        "swing",
+        "cram",
+        "width",
+        "spoon",
+        "visual",
+        "typical",
+        "recipe",
+        "obvious",
+        "damp",
+        "smart",
+        "depend"
+      ]
+    },
+    {
+      "id": "2053",
+      "name": "New Account",
+      "address": "0xNewAddress",
+      "password": "aaaaaA@1",
+      "mnemonic": [
+        "brush",
+        "swing",
+        "cram",
+        "width",
+        "spoon",
+        "visual",
+        "typical",
+        "recipe",
+        "obvious",
+        "damp",
+        "smart",
+        "depend"
+      ]
+    },
+    {
+      "id": "8e6b",
+      "name": "New Account",
+      "address": "0xNewAddress",
+      "password": "aaaaaA@1",
+      "mnemonic": [
+        "brush",
+        "swing",
+        "cram",
+        "width",
+        "spoon",
+        "visual",
+        "typical",
+        "recipe",
+        "obvious",
+        "damp",
+        "smart",
+        "depend"
+      ]
+    },
+    {
+      "id": "b211",
+      "name": "New Account",
+      "address": "0xNewAddress",
+      "password": "aaaaaA@1",
+      "mnemonic": [
+        "brush",
+        "swing",
+        "cram",
+        "width",
+        "spoon",
+        "visual",
+        "typical",
+        "recipe",
+        "obvious",
+        "damp",
+        "smart",
+        "depend"
+      ],
+      "connectedNodeAddress": "",
+      "current": false
     }
   ],
   "mnemonics": [

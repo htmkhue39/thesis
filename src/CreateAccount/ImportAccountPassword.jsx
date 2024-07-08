@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation  } from 'react-router-dom';
-import './CreatePassword.css'
-import '../components/Button.css'
-import '../components/Step.css'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAccount } from '../AccountContext'; // Import the account context
+import './CreatePassword.css';
+import '../components/Button.css';
+import '../components/Step.css';
 
 const ImportAccountPassword = () => {
   const navigate = useNavigate();
+  const { accounts, setSelectedAccount } = useAccount(); // Use the account context
   const [password, setPassword] = useState('');
 
   const handlePasswordChange = (event) => {
@@ -13,12 +15,12 @@ const ImportAccountPassword = () => {
   };
 
   const handleSubmit = () => {
-    // Xử lý logic đăng nhập ở đây, ví dụ: kiểm tra mật khẩu và điều hướng
-    if (password) {
-      // Điều hướng tới trang khác sau khi nhập mật khẩu
+    const account = accounts.find(acc => acc.password === password);
+    if (account) {
+      setSelectedAccount(account);
       navigate('/swap');
     } else {
-      alert('Please enter a password.');
+      alert('Password is incorrect.');
     }
   };
 
