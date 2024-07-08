@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
 
-import dropIcon from '../assets/dropdown-icon.svg';
-import copyIcon from '../assets/copy-icon.svg';
 import connectIcon from '../assets/connected-status.png';
 import disconnectIcon from '../assets/disconnect-status.png';
-import moreIcon from '../assets/more-icon.png'
+import moreIcon from '../assets/more-icon.png';
 
 import './AccountHeader.css';
 
-const AccountHeader = ({ setShowAccountSelector }) => {
-  const { selectedAccount, truncateAddress, copyAddress, clearConnectedNodeAddress } = useAccount();
+const AccountHeader = () => {
+  const { selectedAccount, clearConnectedNodeAddress } = useAccount();
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const navigate = useNavigate();
-  
+  const location = useLocation(); // Get the current path
 
   const handleMoreClick = () => {
     setShowMoreOptions(prevState => !prevState);
@@ -26,12 +24,20 @@ const AccountHeader = ({ setShowAccountSelector }) => {
 
   const handleLogout = async () => {
     await clearConnectedNodeAddress();
+    selectedAccount(null); // Clear the selected account to update the authentication state
     alert('Logged out successfully');
     navigate('/');
   };
 
   const Menus = [
-    // { name: 'Account details', action: handleViewAccountDetail },
+    { name: 'Trade', path: '/swap' },
+    { name: 'Explore', path: '/explore' },
+    { name: 'Node', path: '/nodes' },
+    { name: 'Pool', path: '/pool' }
+  ];
+
+  const MoreOptions = [
+    { name: 'Account Info', action: handleViewAccountDetail },
     { name: 'Logout', action: handleLogout },
   ];
 
@@ -42,24 +48,37 @@ const AccountHeader = ({ setShowAccountSelector }) => {
   return (
     <div className="header-wrapper">
       <div className='header'>
-        <div className="account-info">
-          <div className="account-details" onClick={() => setShowAccountSelector && setShowAccountSelector(true)}>
-            <div className="account-text">
-              {selectedAccount.connectedNodeAddress ? (
-                <img src={connectIcon} alt="Connected" className="dropdown-icon" />
-              ) : (
-                <img src={disconnectIcon} alt="Disconnected" className="dropdown-icon" />
-              )}
-              <span className="account-name">{selectedAccount.name}</span>
-              {setShowAccountSelector && <img src={dropIcon} className="dropdown-icon" alt="Dropdown" />}
-            </div>
+        <div className='nav-menu'>
+          <ul>
+            {Menus.map((menu) => (
+              <li
+                key={menu.name}
+                onClick={() => navigate(menu.path)}
+                className={`menu-item ${location.pathname === menu.path ? 'active' : ''}`}
+              >
+                {menu.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="account-status-wrapper tooltip">
+          <div className="account-status">
+            {selectedAccount.connectedNodeAddress ? (
+              <span className="connected">
+                <img src={connectIcon} alt="Connected" className="status-icon" />
+                Connected
+              </span>
+            ) : (
+              <span className="disconnected">
+                <img src={disconnectIcon} alt="Disconnected" className="status-icon" />
+                Disconnected
+              </span>
+            )}
           </div>
-          <div className="account-address-wrapper">
-            <span className="account-address">{truncateAddress(selectedAccount.address)}</span>
-            <button onClick={copyAddress} className="copy-button">
-              <img src={copyIcon} className="copy-icon" alt="Copy" />
-            </button>
-          </div>
+          {selectedAccount.connectedNodeAddress && (
+            <div className="tooltiptext">{selectedAccount.connectedNodeAddress}</div>
+          )}
         </div>
 
         <div className='more-icon-wrapper'>
@@ -69,13 +88,11 @@ const AccountHeader = ({ setShowAccountSelector }) => {
           {showMoreOptions && (
             <div className="more-options">
               <ul>
-                {
-                  Menus.map((menu) => (
-                    <li key={menu.name} onClick={menu.action}>
-                      {menu.name}
-                    </li>
-                  ))
-                }
+                {MoreOptions.map((menu) => (
+                  <li key={menu.name} onClick={menu.action}>
+                    {menu.name}
+                  </li>
+                ))}
               </ul>
             </div>
           )}

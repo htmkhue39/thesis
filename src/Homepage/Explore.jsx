@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Homepage.css';
-import swapIcon from '../assets/swap-icon.svg';
-import connectIcon from '../assets/connect-icon.svg'
-import AccountHeader from './AccountHeader';
-import Header from '../components/Header';
+import './Explore.css';
 import { useAccount } from '../AccountContext';
 
-const Homepage = () => {
-  const { selectedAccount, accounts, handleAccountChange, truncateAddress, copyAddress, connectNode } = useAccount();
-  const [showAccountSelector, setShowAccountSelector] = useState(false);
+const Explore = () => {
+  const { selectedAccount } = useAccount();
   const [selectedTab, setSelectedTab] = useState('Exchanges');
   const [transactions, setTransactions] = useState([]);
   const [tokens, setTokens] = useState([]);
@@ -81,46 +76,14 @@ const Homepage = () => {
   return (
     <div className='app-content-wrapper'>
       <div className='app-content'>
-        <Header />
-        {selectedAccount && (
-          <AccountHeader 
-            setShowAccountSelector={setShowAccountSelector} 
-          />
-        )}
-
         <div className='homepage'>
           <div className="main-content">
             <div className="balance-section">
               <h1>0 ETH</h1>
-              <div className="actions">
-                <div className="button-wrapper">
-                  <button 
-                    className="round-button" 
-                    onClick={() => navigate('/homepage/nodes')}
-                  >
-                    <img src={connectIcon} className="button-icon" alt="Node" />
-                  </button>
-                  <span className="button-label">Node</span>
-                </div>
-                
-                <div className="button-wrapper">
-                  <div className="tooltip">
-                    <button 
-                      className="round-button" 
-                      onClick={() => navigate('/homepage/swap')}
-                      disabled={!isConnected} // Disable button if not connected
-                    >
-                      <img src={swapIcon} className="button-icon" alt="Swap" />
-                    </button>
-                    {!isConnected && <span className="tooltiptext">Please connect to a node</span>}
-                  </div>
-                  <span className="button-label">Swap</span>
-                </div>
-              </div>
             </div>
 
             <div className="tabs">
-              <button className={`tab ${selectedTab === 'Exchanges' ? 'active' : ''}`} onClick={() => setSelectedTab('Exchanges')}>Exchanges</button>
+              <button className={`tab ${selectedTab === 'Exchanges' ? 'active' : ''}`} onClick={() => setSelectedTab('Exchanges')}>Tokens</button>
               <button className={`tab ${selectedTab === 'Transactions' ? 'active' : ''}`} onClick={() => setSelectedTab('Transactions')}>Transactions</button>
             </div>
 
@@ -202,36 +165,10 @@ const Homepage = () => {
               </div>
             )}
           </div>
-
-          {showAccountSelector && (
-            <>
-              <div className="overlay" onClick={() => setShowAccountSelector(false)}></div>
-              <div className="account-selector-modal">
-                <div className="account-selector-header">
-                  <span>Select an account</span>
-                  <button onClick={() => setShowAccountSelector(false)} className="close-button">X</button>
-                </div>
-                <ul className="account-list">
-                  {accounts.map((account, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleAccountChange(account.name)}
-                      className="account-item"
-                    >
-                      <span className="account-name">{account.name}</span>
-                      <span className="account-address">{truncateAddress(account.address)}</span>
-                      <span className="account-balance">0 ETH</span>
-                    </li>
-                  ))}
-                </ul>
-                <button className="add-account-button">+ Add account or hardware wallet</button>
-              </div>
-            </>
-          )}
         </div>
       </div>
     </div>
   );
 }
 
-export default Homepage;
+export default Explore;

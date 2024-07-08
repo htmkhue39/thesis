@@ -34,8 +34,23 @@ const CreatePassword = () => {
 
   const handlePasswordChange = (password) => {
     setNewPassword(password);
-    if (password.length < 8) {
+    
+    const lengthRequirement = password.length >= 8;
+    const uppercaseRequirement = /[A-Z]/.test(password);
+    const lowercaseRequirement = /[a-z]/.test(password);
+    const numberRequirement = /[0-9]/.test(password);
+    const specialCharRequirement = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+    if (!lengthRequirement) {
       setPasswordStrength('Password not long enough');
+    } else if (!uppercaseRequirement) {
+      setPasswordStrength('Password should contain at least one uppercase letter');
+    } else if (!lowercaseRequirement) {
+      setPasswordStrength('Password should contain at least one lowercase letter');
+    } else if (!numberRequirement) {
+      setPasswordStrength('Password should contain at least one number');
+    } else if (!specialCharRequirement) {
+      setPasswordStrength('Password should contain at least one special character');
     } else {
       setPasswordStrength('Password strength: Good');
     }
@@ -77,7 +92,11 @@ const CreatePassword = () => {
                     onChange={(e) => handlePasswordChange(e.target.value)}
                     className='password-input'
                   />
-                  {passwordStrength && <p className="error">{passwordStrength}</p>}
+                  {passwordStrength && 
+                    <p className={passwordStrength === 'Password strength: Good' ? 'good' : 'error'}>
+                      {passwordStrength}
+                    </p>
+                  }
                 </div>
 
                 <div className="form-group">

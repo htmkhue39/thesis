@@ -3,17 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
 
 import '../components/Button.css';
-import './SwapCoin.css';
+import './AddLiquidity.css';
 import './Explore.css';
+import './SwapCoin.css'
 
 import dropIcon from '../assets/dropdown-icon.svg';
 import switchIcon from '../assets/switch.png';
 import searchIcon from '../assets/search-icon.svg';
+import backIcon from '../assets/back-icon.svg';
 
-function SwapCoin() {
+function AddLiquidity() {
     const { selectedAccount, handleAccountChange } = useAccount();
     const navigate = useNavigate();
     const [tokens, setTokens] = useState([]);
+    const [nodes, setNodes] = useState([]);
     const [balances, setBalances] = useState({});
     const [fromToken, setFromToken] = useState({ symbol: 'ETH', logo: '/coin/ethereum.png?url' });
     const [toToken, setToToken] = useState(null);
@@ -22,9 +25,14 @@ function SwapCoin() {
     const [showFromTokenDropdown, setShowFromTokenDropdown] = useState(false);
     const [showToTokenDropdown, setShowToTokenDropdown] = useState(false);
     const [isAmountExceedBalance, setIsAmountExceedBalance] = useState(false);
+    const [feeTier, setFeeTier] = useState('0.01%');
+    const [showFeeOptions, setShowFeeOptions] = useState(false);
+    const [selectedFee, setSelectedFee] = useState("0.30%");
+    const [poolExists, setPoolExists] = useState(false);
 
     useEffect(() => {
         fetchTokens();
+        fetchNodes();
     }, []);
 
     useEffect(() => {
@@ -41,8 +49,12 @@ function SwapCoin() {
     }, [selectedAccount]);
 
     useEffect(() => {
-        calculateToAmount();
-    }, [fromAmount, fromToken, toToken]);
+        if (selectedAccount && selectedAccount.connectedNodeAddress) {
+            checkPoolExists();
+        } else {
+            setPoolExists(false);
+        }
+    }, [selectedAccount, fromToken, toToken]);
 
     const fetchTokens = async () => {
         try {
@@ -54,7 +66,29 @@ function SwapCoin() {
         }
     };
 
-    const getSwapButtonState = () => {
+    const fetchNodes = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/nodes');
+            const data = await response.json();
+            setNodes(data);
+        } catch (error) {
+            console.error('Error fetching tokens:', error);
+        }
+    };
+
+    const checkPoolExists = () => {
+        const connectedNode = nodes.find(node => node.address === selectedAccount.connectedNodeAddress);
+        if (connectedNode) {
+            const pool = connectedNode.liquidityPools.find(
+                pool =>
+                    (pool.tokenA === fromToken.symbol && pool.tokenB === toToken.symbol) ||
+                    (pool.tokenA === toToken.symbol && pool.tokenB === fromToken.symbol)
+            );
+            setPoolExists(!!pool);
+        }
+    };
+
+    const getAddLiquidityButtonState  = () => {
         if (!selectedAccount.connectedNodeAddress) {
             return { disabled: false, text: "+ Connect to Node" };
         }
@@ -67,10 +101,19 @@ function SwapCoin() {
         if (isAmountExceedBalance) {
             return { disabled: true, text: "Insufficient Balance" };
         }
-        return { disabled: false, text: "Swap" };
+        return { disabled: false, text: "Add Liquidity" };
     };
 
-    const swapButtonState = getSwapButtonState();
+    const addLiquidityButtonState = getAddLiquidityButtonState();
+
+    const toggleFeeOptions = () => {
+        setShowFeeOptions(!showFeeOptions);
+    };
+
+    const selectFeeOption = (fee) => {
+        setSelectedFee(fee);
+        setShowFeeOptions(false);
+    };
 
     const handleTokenSelect = (token, setToken) => {
         setToken(token);
@@ -78,53 +121,43 @@ function SwapCoin() {
         setShowToTokenDropdown(false);
     };
 
-    const handleSwitch = () => {
-        const temp = fromToken;
-        setFromToken(toToken);
-        setToToken(temp);
-    };
-
     const getBalance = (token) => {
         if (!token) return 0;
         return balances[token.symbol] || 0;
     };
 
-    const handleAmountChange = (e) => {
+    const handleFirstAmountChange = (e) => {
         const value = e.target.value;
         const amount = value === '' ? 0 : Number(value);
         setFromAmount(amount);
         setIsAmountExceedBalance(amount > getBalance(fromToken));
     };
 
-    const calculateToAmount = () => {
-        if (!fromToken || !toToken || fromAmount <= 0) {
-            setToAmount(0);
-            return;
-        }
-
-        // AMM logic to calculate toAmount??
-        const fromTokenReserve = 10000; // Example reserve value
-        const toTokenReserve = 10000; // Example reserve value
-        const amountOut = (fromAmount * toTokenReserve) / (fromTokenReserve + fromAmount);
-        setToAmount(amountOut.toFixed(4));
+    const handleSecondAmountChange = (e) => {
+        const value = e.target.value;
+        const amount = value === '' ? 0 : Number(value);
+        setToAmount(amount);
+        setIsAmountExceedBalance(amount > getBalance(toToken));
     };
 
-    const handleSwap = async () => {
-        if (!selectedAccount || !fromToken || !toToken || !fromAmount) {
+    const handleAddLiquidity = async () => {
+        if (!selectedAccount || !fromToken || !toToken || !fromAmount || !toAmount || !feeTier) {
             return;
         }
 
-        // Perform the swap logic here, like updating balances, etc.
-        // Assuming the swap is successful, record the transaction.
+        // Perform the add liquidity logic here, like updating balances, etc.
+        // Assuming the add liquidity is successful, record the transaction.
 
-        const newTransaction = {
-            id: Date.now().toString(),
-            address: selectedAccount.address,
-            fromToken: fromToken.symbol,
-            toToken: toToken.symbol,
-            fromAmount: fromAmount,
-            toAmount: toAmount,
-            date: new Date().toISOString(),
+        const newLiquidityPosition = {
+            poolId: Date.now().toString(),
+            tokenA: fromToken.symbol,
+            tokenB: toToken.symbol,
+            amountA: fromAmount,
+            amountB: toAmount,
+            liquidityToken: "UNI-V2",
+            poolShare: "0.5%", // Example pool share
+            totalPoolTokens: fromAmount + toAmount, // Example total pool tokens
+            feeTier: feeTier
         };
 
         try {
@@ -135,18 +168,18 @@ function SwapCoin() {
                 },
                 body: JSON.stringify({
                     ...selectedAccount,
-                    transactions: [...selectedAccount.transactions, newTransaction],
+                    liquidityPositions: [...selectedAccount.liquidityPositions, newLiquidityPosition],
                 }),
             });
 
             if (response.ok) {
                 handleAccountChange(selectedAccount.name);
-                navigate('/swap');
+                navigate('/pool');
             } else {
-                console.error('Failed to record transaction');
+                console.error('Failed to add liquidity');
             }
         } catch (error) {
-            console.error('Error recording transaction:', error);
+            console.error('Error adding liquidity:', error);
         }
     };
 
@@ -154,16 +187,23 @@ function SwapCoin() {
         navigate('/nodes');
     };
 
+    const handleBack = () => {
+        navigate('/pool');
+    };
+    
     return (
-        <div className={`app-content-wrapper ${showFromTokenDropdown || showToTokenDropdown ? 'modal-open' : ''}`}>
+        <div className={`app-content-wrapper`}>
             <div className='app-content'>
                 <div className='swap-coin-wrapper'>
                     <div className="swap-coin-content">
-                        <div className='swap-coin-header'>
-                            <h2 className='title'>Swap</h2>
+                        <div className='liquidity-header'>
+                            <div className='liquidity-back-icon'>
+                                <img src={backIcon} className='liquidity-back-icon-detail' onClick={handleBack}/>
+                            </div>
+                            <h2 className='title liquidity-title'>Add Liquidity</h2>
                         </div>
 
-                        <div className='prepare-swap-wrapper'>
+                        <div className='prepare-liquidity-wrapper'>
                             <div className='prepare-swap'>
                                 <div className='prepare-swap-from'>
                                     <div className='from-token'>
@@ -178,24 +218,16 @@ function SwapCoin() {
                                             <input 
                                                 type='number' 
                                                 value={fromAmount || 0} 
-                                                onChange={handleAmountChange} 
+                                                onChange={handleFirstAmountChange} 
                                                 className='amount-input' 
+                                                disabled={!selectedAccount.connectedNodeAddress}
                                             />
                                         </div>
                                     </div>
                                     <div className='balance'>
                                         Balance: {getBalance(fromToken)}
                                     </div>
-                                    {isAmountExceedBalance && (
-                                        <div className='balance-error'>
-                                            Not enough balance
-                                        </div>
-                                    )}
-                                    <div className="btn-switch-container">
-                                        <button className="btn-switch" onClick={handleSwitch}>
-                                            <img src={switchIcon} className="switch-icon" alt="Swap" />
-                                        </button>
-                                    </div>
+                  
                                 </div>
                                 <div className='prepare-swap-to'>
                                     <div className='to-token'>
@@ -210,8 +242,9 @@ function SwapCoin() {
                                             <input 
                                                 type='number' 
                                                 value={toAmount || 0} 
-                                                readOnly 
-                                                className='amount-input' 
+                                                onChange={handleSecondAmountChange} 
+                                                className='amount-input'
+                                                disabled={!selectedAccount.connectedNodeAddress}
                                             />
                                         </div>
                                     </div>
@@ -221,21 +254,60 @@ function SwapCoin() {
                                 </div>
                             </div>
                         </div>
+
+                        {!poolExists && (
+                            <div className='fee-dropdown'>
+                                <div className='fee-dropdown-header' onClick={toggleFeeOptions}>
+                                <span>{selectedFee}</span>
+                                <img src={dropIcon} className='dropdown-icon' alt='Dropdown' />
+                                </div>
+                                {showFeeOptions && (
+                                <div className='fee-options'>
+                                    {['0.01%', '0.05%', '0.30%', '1.00%'].map(fee => (
+                                    <div
+                                        key={fee}
+                                        className={`fee-option ${selectedFee === fee ? 'selected' : ''}`}
+                                        onClick={() => selectFeeOption(fee)}
+                                    >
+                                        {fee} fee tier
+                                    </div>
+                                    ))}
+                                </div>
+                                )}
+                            </div>
+                        )}
+
+                        {selectedAccount.connectedNodeAddress && fromToken && toToken && (
+                            <div className='initial-prices'>
+                                <div className='price-info'>
+                                    <span>{fromToken.symbol}/{toToken.symbol} price:</span>
+                                    <span>{poolExists ? (fromAmount / toAmount).toFixed(4) : '-'}</span>
+                                </div>
+                                <div className='price-info'>
+                                    <span>{toToken.symbol}/{fromToken.symbol} price:</span>
+                                    <span>{poolExists ? (toAmount / fromAmount).toFixed(4) : '-'}</span>
+                                </div>
+                                <div className='pool-share'>
+                                    <span>Share of pool:</span>
+                                    <span>0%</span>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="swap-footer">
                             <footer className='swap-footer-btn'>
                                 <button 
                                     className="btn-primary" 
-                                    disabled={swapButtonState.disabled} 
-                                    onClick={selectedAccount?.connectedNodeAddress ? handleSwap : handleConnectToNode}
+                                    disabled={addLiquidityButtonState .disabled} 
+                                    onClick={selectedAccount?.connectedNodeAddress ? handleAddLiquidity : handleConnectToNode}
                                 >
-                                    {swapButtonState.text}
+                                    {addLiquidityButtonState .text}
                                 </button>
                             </footer>
                         </div>
                     </div>
                 </div>
             </div>
-
             {(showFromTokenDropdown || showToTokenDropdown) && (
                 <div className='modal-overlay'>
                     <div className='token-modal'>
@@ -280,4 +352,4 @@ function SwapCoin() {
     );
 }
 
-export default SwapCoin;
+export default AddLiquidity;

@@ -1,0 +1,102 @@
+.liquidity-header{
+    display: flex;
+    align-items: center;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+    height: 66px;
+    width: 100%;
+}
+
+.liquidity-back-icon{
+    position: relative;
+    left: 1rem;
+}
+
+.liquidity-back-icon-detail{
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.liquidity-title{
+    flex: 1;
+    margin-right: 20px;
+}
+
+.fee-dropdown {
+    margin: 24px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .fee-dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .dropdown-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .fee-options {
+    margin-top: 10px;
+  }
+  
+  .fee-option {
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .fee-option:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .selected {
+    border: 2px solid #007bff;
+    background-color: #e7f1ff;
+  }
+
+  .prepare-liquidity-wrapper{
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+  }
+
+.initial-prices {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.price-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.pool-share {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+  

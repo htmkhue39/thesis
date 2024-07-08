@@ -87,8 +87,19 @@ export const AccountProvider = ({ children }) => {
   };
 
   return (
-    <AccountContext.Provider value={{ selectedAccount, handleAccountChange, truncateAddress, copyAddress, accounts, connectNode, clearConnectedNodeAddress }}>
+    <AccountContext.Provider value={{
+      selectedAccount,
+      setSelectedAccount,
+      handleAccountChange,
+      truncateAddress,
+      copyAddress,
+      accounts,
+      connectNode,
+      clearConnectedNodeAddress
+    }}>
       {children}
     </AccountContext.Provider>
   );
 };
+
+export default AccountContext;

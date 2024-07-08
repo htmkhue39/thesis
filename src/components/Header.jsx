@@ -8,7 +8,7 @@ export default function Header() {
     
     const handleBacktoHomepage = () => {
         console.log('backto homepage');
-        navigate("/homepage")
+        navigate("/swap")
       };
 
     return (

@@ -19,57 +19,93 @@
         "depend"
       ],
       "password": "password123",
-      "balances": [
-        {
-          "token": "ETH",
-          "amount": 2
-        },
-        {
-          "token": "USDC",
-          "amount": 3
-        }
-      ],
       "current": true,
-      "connectedNodeAddress": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
+      "connectedNodeAddress": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
       "subAccounts": [
         "2",
         "3"
       ],
       "node": [
         {
-          "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+          "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+          "balances": [
+            {
+              "token": "ETH",
+              "amount": 2
+            },
+            {
+              "token": "USDC",
+              "amount": 3
+            }
+          ],
+          "transactions": [
+            {
+              "id": "1",
+              "fromToken": "ETH",
+              "toToken": "USDC",
+              "fromAmount": "2",
+              "toAmount": "3000",
+              "date": "2023-06-21T18:25:43.511Z"
+            },
+            {
+              "id": "2",
+              "fromToken": "BTC",
+              "toToken": "ETH",
+              "fromAmount": "1",
+              "toAmount": "10",
+              "date": "2023-06-21T19:25:43.511Z"
+            }
+          ]
         },
         {
-          "address": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d"
+          "address": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
+          "balances": [],
+          "transactions": []
         },
         {
-          "address": "0xdc24316b9ae028f1497c275eb9192a3ea0f67022"
+          "address": "0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+          "balances": [],
+          "transactions": []
         },
         {
-          "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8"
+          "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",
+          "balances": [],
+          "transactions": []
         }
       ],
-      "transactions": [
+      "connected": true,
+      "liquidityPositions": [
         {
-          "id": "1",
-          "nodeAddress": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-          "fromToken": "ETH",
-          "toToken": "USDC",
-          "fromAmount": "2",
-          "toAmount": "3000",
-          "date": "2023-06-21T18:25:43.511Z"
+          "poolId": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "amountA": "5",
+          "amountB": "2500",
+          "liquidityToken": "UNI-V2",
+          "poolShare": "0.5%",
+          "totalPoolTokens": "10"
         },
         {
-          "id": "2",
-          "nodeAddress": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
-          "fromToken": "BTC",
-          "toToken": "ETH",
-          "fromAmount": "1",
-          "toAmount": "10",
-          "date": "2023-06-21T19:25:43.511Z"
+          "poolId": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "amountA": "2",
+          "amountB": "5000",
+          "liquidityToken": "UNI-V2",
+          "poolShare": "0.3%",
+          "totalPoolTokens": "8"
+        },
+        {
+          "poolId": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "amountA": "3",
+          "amountB": "3000",
+          "liquidityToken": "UNI-V2",
+          "poolShare": "0.22%",
+          "totalPoolTokens": "9"
         }
-      ],
-      "connected": true
+      ]
     },
     {
       "id": "2",
@@ -90,12 +126,6 @@
         "satellite"
       ],
       "password": "passwordSub1",
-      "balances": [
-        {
-          "token": "BTC",
-          "amount": 1
-        }
-      ],
       "current": false,
       "connectedNodeAddress": "",
       "subAccounts": [
@@ -104,10 +134,11 @@
       ],
       "node": [
         {
-          "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8"
+          "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",
+          "balances": [],
+          "transactions": []
         }
       ],
-      "transactions": [],
       "connected": false
     },
     {
@@ -129,12 +160,6 @@
         "subword24"
       ],
       "password": "passwordSub2",
-      "balances": [
-        {
-          "token": "SOL",
-          "amount": 5
-        }
-      ],
       "current": false,
       "connectedNodeAddress": "",
       "subAccounts": [
@@ -143,13 +168,16 @@
       ],
       "node": [
         {
-          "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3"
+          "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3",
+          "balances": [],
+          "transactions": []
         },
         {
-          "address": "0x61edcdf5bb737adffb0c940e9c3f76c82b008a47"
+          "address": "0x61edcdf5bb737adffb0c940e9c3f76c82b008a47",
+          "balances": [],
+          "transactions": []
         }
       ],
-      "transactions": [],
       "connected": false
     }
   ],
@@ -298,11 +326,111 @@
           "change7d": "-10.44",
           "volume24h": "$374.47M"
         }
+      ],
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
       ]
     },
     {
       "id": "2",
       "address": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",
@@ -419,6 +547,56 @@
     {
       "id": "3",
       "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",
@@ -458,6 +636,56 @@
     {
       "id": "4",
       "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",
@@ -486,6 +714,56 @@
     {
       "id": "5",
       "address": "0x61edcdf5bb737adffb0c940e9c3f76c82b008a47",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",
@@ -514,6 +792,56 @@
     {
       "id": "6",
       "address": "0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",
@@ -542,6 +870,56 @@
     {
       "id": "7",
       "address": "0x5a52e96bacdabb82fd05763e25335261b270efcb",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",
@@ -570,6 +948,56 @@
     {
       "id": "8",
       "address": "0x742d35Cc3333C0532925a3b844Bc454e4438f44e",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",
@@ -598,6 +1026,56 @@
     {
       "id": "9",
       "address": "0x267be1c1d684f78cb4f6a176c4911b741e4ffdc0",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",
@@ -626,6 +1104,56 @@
     {
       "id": "10",
       "address": "0x0a3f6849f78076aef4c1343d6a639f0a56a9d0a6",
+      "liquidityPools": [
+        {
+          "id": "1",
+          "tokenA": "ETH",
+          "tokenB": "USDC",
+          "totalLiquidityTokenA": "1000",
+          "totalLiquidityTokenB": "50000",
+          "totalLiquidityTokens": "5000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "5",
+              "amountB": "2500",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "tokenA": "BTC",
+          "tokenB": "BNB",
+          "totalLiquidityTokenA": "500",
+          "totalLiquidityTokenB": "25000",
+          "totalLiquidityTokens": "3000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "2",
+              "amountB": "5000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "tokenA": "ETH",
+          "tokenB": "BTC",
+          "totalLiquidityTokenA": "300",
+          "totalLiquidityTokenB": "15000",
+          "totalLiquidityTokens": "2000",
+          "liquidityProviderPositions": [
+            {
+              "accountId": "1",
+              "amountA": "3",
+              "amountB": "3000",
+              "liquidityToken": "UNI-V2"
+            }
+          ]
+        }
+      ],
       "tokens": [
         {
           "id": "1",

@@ -1,0 +1,143 @@
+.pool-header-wrapper {
+    display: flex;
+    align-items: center;
+    flex-flow: column nowrap;
+}
+
+.pool-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-flow: row nowrap;
+    width: 90%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.position-title{
+    margin: 0;
+}
+
+.create-pool{
+    margin-bottom: 0;
+    font-size: 14px;
+    padding: 5px;
+    width: 120px;
+    height: 45px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+
+}
+
+.liquidity-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.liquidity-box {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    color: #555;
+    margin-left: 80px;
+    margin-right: 80px;
+}
+
+.pool-card {
+    border: 1px solid var(--color-primary-default);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #fff;
+}
+
+.pool-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.pool-card-body {
+    padding: 10px;
+    
+}
+
+.pool-card-p{
+    text-align: left;
+    font-weight: bold;
+    font-size: 16pxpx;
+}
+
+.manage-button {
+    width: 70px;
+    background: none;
+    border: none;
+    color: var(--color-primary-default);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.pool-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.pool-button {
+    background-color: var(--color-primary-default);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s;
+    width: 200px;
+    margin-top: 20px;
+}
+
+.pool-button:hover {
+    background-color: var(--color-primary-default);
+}
+
+.pool-card-span{
+    font-weight: bold;
+}
+
+.pool-card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.pool-card-row{
+    display: flex;
+    justify-content: space-between;
+    grid-gap: 5px;
+}
+
+.pool-card-row-detail{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 52%;
+}
+
+.pool-card-row-detail p{
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 20px;
+}
+  

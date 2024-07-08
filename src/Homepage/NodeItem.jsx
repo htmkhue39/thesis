@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import AccountHeader from './AccountHeader';
 
-import './Homepage.css';
+import './Explore.css';
 import './NodeItem.css';
 import '../components/Button.css'
 import backIcon from '../assets/back-icon.svg';
@@ -32,11 +32,11 @@ const NodeItem = () => {
   };
 
   const handleBack = () => {
-    navigate('/homepage/nodes');
+    navigate('/nodes');
   };
 
   const handleConnect = () => {
-    connectNode(nodeAddress, () => navigate('/homepage'));
+    connectNode(nodeAddress, () => navigate('/swap'));
   };
 
   if (!node) {
@@ -46,12 +46,6 @@ const NodeItem = () => {
   return (
     <div className='app-content-wrapper'>
       <div className='app-content'>
-        <Header />
-        {selectedAccount && (
-            <AccountHeader
-                selectedAccount={selectedAccount}
-            />
-        )}
         <div className='homepage'>
           <div className="main-content">
             <div className='node-item-header'>

@@ -16,7 +16,7 @@ const ImportAccountPassword = () => {
     // Xử lý logic đăng nhập ở đây, ví dụ: kiểm tra mật khẩu và điều hướng
     if (password) {
       // Điều hướng tới trang khác sau khi nhập mật khẩu
-      navigate('/homepage');
+      navigate('/swap');
     } else {
       alert('Please enter a password.');
     }

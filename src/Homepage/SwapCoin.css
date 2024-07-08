@@ -4,6 +4,7 @@
   flex: 1 0 auto;
   min-height: 0;
   width: 100%;
+  margin-top: 20px;
 }
 
 .swap-coin-content {
@@ -15,7 +16,8 @@
   width: 460px;
   height: 620px;
   background-color: var(--color-background-default);
-  box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
+  box-shadow: var(--shadow-size-xs) var(--color-shadow-default) ;
+  border: 0.25px solid #ddd;
   z-index: 25;
   display: flex;
   flex-flow: column;
@@ -53,7 +55,7 @@
 
 .prepare-swap{
   display: flex;
-  height: 100%;
+  height: auto;
   flex-direction: column;
   margin-left: 24px;
   margin-right: 24px;
@@ -194,6 +196,7 @@
   position: sticky;
   bottom: 0;
   background-color: var(--color-background-default);
+  margin-top: auto;
 }
 
 

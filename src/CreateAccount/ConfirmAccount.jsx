@@ -55,7 +55,7 @@ const ConfirmAccount = () => {
 
         if (response.ok) {
           alert('Account created successfully!');
-          navigate('/homepage'); 
+          navigate('/swap'); 
         } else {
           console.error('Failed to create account');
         }

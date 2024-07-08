@@ -5,7 +5,7 @@ import './SecureAccount.css';
 import Grid from './Grid';
 import '../components/Button.css';
 import '../components/Step.css';
-
+import copyIcon from "../assets/copy-icon.svg"
 const SecureAccount = () => {
   const navigate = useNavigate();
   const gridRef = useRef(null);
@@ -67,7 +67,7 @@ const SecureAccount = () => {
           <Grid mnemonic={mnemonic} ref={gridRef} />
 
           <div className='button-wrapper'>
-            <button className='btn-primary medium' onClick={handleCopyClick}>Copy Mnemonic Phrase</button>
+            <button className='btn-secondary medium' onClick={handleCopyClick}>Copy Mnemonic Phrase</button>
             <button className='btn-primary medium' onClick={handleNextClick}>Next</button>
           </div>
         </div>
