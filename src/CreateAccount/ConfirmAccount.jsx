@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAccount } from '../AccountContext'; // Import the account context
+import { useAccount } from '../AccountContext';
+
+import Header from '../components/Header';
+
 import './CreatePassword.css';
 import './Grid.css';
 import './OnboardingPage.css';
@@ -18,7 +21,11 @@ const ConfirmAccount = () => {
     e.preventDefault();
     const pasteData = e.clipboardData.getData('text');
     const pastedWords = pasteData.split(' ').slice(0, 12);
-    setInputMnemonic(pastedWords);
+    const newInputMnemonic = Array(12).fill('');
+    pastedWords.forEach((word, index) => {
+      newInputMnemonic[index] = word;
+    });
+    setInputMnemonic(newInputMnemonic);
   };
 
   const handleInputChange = (index, value) => {
@@ -75,43 +82,48 @@ const ConfirmAccount = () => {
   };
 
   return (
-    <div className='app'>
-      <div className='onboarding-flow'>
-        <div className='onboarding-flow-wrapper'>
-          <div className="circle-container">
-            <div className="circle-item">
-              <div className="circle blue-full">1</div>
-              <div className="description">Create password</div>
-            </div>
+    <div className='app-content-wrapper'>
+      <div className='app-content'>
+        <Header />
+        <div className='app'>
+          <div className='onboarding-flow'>
+            <div className='onboarding-flow-wrapper'>
+              <div className="circle-container">
+                <div className="circle-item">
+                  <div className="circle blue-full">1</div>
+                  <div className="description">Create password</div>
+                </div>
 
-            <div className="circle-item">
-              <div className="circle blue-full">2</div>
-              <div className="description">Secure Account</div>
-            </div>
-            <div className="circle-item">
-              <div className="circle blue-border">3</div>
-              <div className="description">Confirm secure chain</div>
-            </div>
-          </div>
-
-          <h2>Confirm Secret Recovery Phrase</h2>
-
-          <div className="grid-container">
-            {inputMnemonic.map((word, index) => (
-              <div key={index} className="grid-item">
-                <div className="grid-item-number">{index + 1}</div>
-                <input 
-                  className="grid-item-input" 
-                  type="text" 
-                  value={word} 
-                  onPaste={handlePaste}
-                  onChange={(e) => handleInputChange(index, e.target.value)}
-                />
+                <div className="circle-item">
+                  <div className="circle blue-full">2</div>
+                  <div className="description">Secure Account</div>
+                </div>
+                <div className="circle-item">
+                  <div className="circle blue-border">3</div>
+                  <div className="description">Confirm secure chain</div>
+                </div>
               </div>
-            ))}
-          </div>
-          <div className='button-wrapper'>
-            <button className='btn-primary medium' onClick={handleNextClick}>Next</button>
+
+              <h2>Confirm Secret Recovery Phrase</h2>
+
+              <div className="grid-container">
+                {inputMnemonic.map((word, index) => (
+                  <div key={index} className="grid-item">
+                    <div className="grid-item-number">{index + 1}</div>
+                    <input 
+                      className="grid-item-input" 
+                      type="text" 
+                      value={word} 
+                      onPaste={handlePaste}
+                      onChange={(e) => handleInputChange(index, e.target.value)}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className='button-wrapper'>
+                <button className='btn-primary medium' onClick={handleNextClick}>Next</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

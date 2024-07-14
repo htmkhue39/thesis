@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AccountHeader from './Homepage/AccountHeader';
-import Header from './components/Header';
 import OnboardingPage from './CreateAccount/OnboardingPage';
 import CreatePassword from './CreateAccount/CreatePassword';
 import SecureAccount from './CreateAccount/SecureAccount';
@@ -14,6 +13,7 @@ import NodeList from './Homepage/NodeList';
 import NodeItem from './Homepage/NodeItem';
 import Pool from './Homepage/Pool';
 import AddLiquidity from './Homepage/AddLiquidity';
+import AccountInfo from './Homepage/AccountInfo';
 
 import { AccountProvider, useAccount } from './AccountContext';
 
@@ -40,7 +40,6 @@ const MainContent = () => {
   return (
     <div className='app-content-wrapper'>
       <div className='app-content'>
-        <Header />
         {isAuthenticated && <AccountHeader />}
         <Routes>
           {!isAuthenticated ? (
@@ -61,6 +60,7 @@ const MainContent = () => {
               <Route path="/nodes/:nodeAddress" element={<NodeItem />} />
               <Route path="/pool" element={<Pool />} />
               <Route path="/pool/liquidity" element={<AddLiquidity />} />
+              <Route path="/account" element={<AccountInfo />} />
               <Route path="*" element={<Navigate to="/swap" />} />
             </>
           )}

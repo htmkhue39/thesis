@@ -8,15 +8,17 @@ export default function Header() {
     
     const handleBacktoHomepage = () => {
         console.log('backto homepage');
-        navigate("/swap")
+        navigate("/")
       };
 
     return (
-        <div className='app-header'>
-            <button className='logo-button' onClick={handleBacktoHomepage}>
-                <img src={logo} alt="Logo" className='logobar' />
-                <p className='header-title'>Wallet</p>
-            </button>
-        </div>
+        <div className='app-header-color'>
+            <div className='app-header'>
+                <button className='logo-button' onClick={handleBacktoHomepage}>
+                    <img src={logo} alt="Logo" className='logobar' />
+                    <p className='header-title'>Wallet</p>
+                </button>
+            </div>
+        </div> 
     )
 }

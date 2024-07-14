@@ -193,7 +193,7 @@ function AddLiquidity() {
         <div className={`app-content-wrapper`}>
             <div className='app-content'>
                 <div className='swap-coin-wrapper'>
-                    <div className="swap-coin-content">
+                    <div className="liquidity-content">
                         <div className='liquidity-header'>
                             <div className='liquidity-back-icon'>
                                 <img src={backIcon} className='liquidity-back-icon-detail' onClick={handleBack}/>

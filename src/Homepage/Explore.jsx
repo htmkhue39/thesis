@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Explore.css';
 import { useAccount } from '../AccountContext';
+
+import './Explore.css';
+import CombinedTokenLogo from '../components/CombinedTokenLogo';
 
 const Explore = () => {
   const { selectedAccount } = useAccount();
   const [selectedTab, setSelectedTab] = useState('Exchanges');
   const [transactions, setTransactions] = useState([]);
   const [tokens, setTokens] = useState([]);
+  const [pools, setPools] = useState([]);
+  const [balances, setBalances] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
   const [connectedNodeAddress, setConnectedNodeAddress] = useState('');
   const navigate = useNavigate();
@@ -48,11 +52,63 @@ const Explore = () => {
     }
   };
 
+  const fetchPools = async (nodeAddress) => {
+    try {
+      const response = await fetch(`http://localhost:3001/nodes?address=${nodeAddress}`);
+      if (!response.ok) {
+        throw new Error(`Error fetching pools for node ${nodeAddress}`);
+      }
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0 && Array.isArray(data[0].liquidityPools)) {
+        const node = data[0];
+        const poolData = node.liquidityPools.map((pool) => {
+          const tokenALogo = node.tokens.find(token => token.symbol === pool.tokenA)?.logo || '';
+          const tokenBLogo = node.tokens.find(token => token.symbol === pool.tokenB)?.logo || '';
+          return {
+            id: pool.id,
+            pool: `${pool.tokenA}/${pool.tokenB}`,
+            transactions: pool.transactions,
+            tvl: pool.tvl,
+            dayVolume: pool.dayVolume,
+            weekVolume: pool.weekVolume,
+            apr: pool.apr,
+            logo1: tokenALogo,
+            logo2: tokenBLogo,
+          };
+        });
+        setPools(poolData);
+      } else {
+        setPools([]);
+      }
+    } catch (error) {
+      console.error('Error fetching pools:', error.message);
+    }
+  };
+
+  const fetchBalances = async (nodeAddress) => {
+    try {
+      const response = await fetch(`http://localhost:3001/accounts?address=${selectedAccount.address}`);
+      if (!response.ok) {
+        throw new Error(`Error fetching balances for account ${selectedAccount.address}`);
+      }
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0 && data[0].balances) {
+        setBalances(data[0].balances);
+      } else {
+        setBalances([]);
+      }
+    } catch (error) {
+      console.error('Error fetching balances:', error.message);
+    }
+  };
+
   const checkConnectionStatus = () => {
     if (selectedAccount.connectedNodeAddress) 
     {
       setConnectedNodeAddress(selectedAccount.connectedNodeAddress);
       fetchTokens(selectedAccount.connectedNodeAddress);
+      fetchPools(selectedAccount.connectedNodeAddress);
+      fetchBalances(selectedAccount.connectedNodeAddress);
       setIsConnected(true);
     } 
     else if (selectedAccount.node && selectedAccount.node.length > 0) 
@@ -60,11 +116,15 @@ const Explore = () => {
       const firstNodeAddress = selectedAccount.node[0].address;
       setConnectedNodeAddress(firstNodeAddress);
       fetchTokens(firstNodeAddress);
+      fetchPools(firstNodeAddress);
+      fetchBalances(firstNodeAddress);
     } 
     else 
     {
       setConnectedNodeAddress('');
       setTokens([]);
+      setPools([]);
+      setBalances([]);
       setIsConnected(false);
     }
   };
@@ -78,16 +138,14 @@ const Explore = () => {
       <div className='app-content'>
         <div className='homepage'>
           <div className="main-content">
-            <div className="balance-section">
-              <h1>0 ETH</h1>
-            </div>
-
             <div className="tabs">
               <button className={`tab ${selectedTab === 'Exchanges' ? 'active' : ''}`} onClick={() => setSelectedTab('Exchanges')}>Tokens</button>
+              <button className={`tab ${selectedTab === 'Pools' ? 'active' : ''}`} onClick={() => setSelectedTab('Pools')}>Pools</button>
               <button className={`tab ${selectedTab === 'Transactions' ? 'active' : ''}`} onClick={() => setSelectedTab('Transactions')}>Transactions</button>
+              <button className={`tab ${selectedTab === 'Balances' ? 'active' : ''}`} onClick={() => setSelectedTab('Balances')}>Balances</button>
             </div>
 
-            {selectedTab === 'Exchanges' ? (
+            {selectedTab === 'Exchanges' && (
               <div className="activity-section">
                 <table className="table">
                   <thead>
@@ -130,7 +188,49 @@ const Explore = () => {
                   </tbody>
                 </table>
               </div>
-            ) : (
+            )}
+
+            {selectedTab === 'Pools' && (
+              <div className="activity-section">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Pool</th>
+                      <th>Transactions</th>
+                      <th>TVL</th>
+                      <th>1 day volume</th>
+                      <th>7 day volume</th>
+                      <th>1 day APR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pools.length > 0 ? (
+                      pools.map((pool, index) => (
+                        <tr key={pool.id}>
+                          <td>{index + 1}</td>
+                          <td>
+                            <CombinedTokenLogo logo1={pool.logo1} logo2={pool.logo2} />
+                            {pool.pool}
+                          </td>
+                          <td>{pool.transactions}</td>
+                          <td>{pool.tvl}</td>
+                          <td>{pool.dayVolume}</td>
+                          <td>{pool.weekVolume}</td>
+                          <td>{pool.apr}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="7">You have no pools</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {selectedTab === 'Transactions' && (
               <div className="activity-section">
                 <table className="table">
                   <thead>
@@ -158,6 +258,35 @@ const Explore = () => {
                     ) : (
                       <tr>
                         <td colSpan="6">You have no transactions</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {selectedTab === 'Balances' && (
+              <div className="activity-section">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Token</th>
+                      <th>Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {balances.length > 0 ? (
+                      balances.map((balance, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{balance.token}</td>
+                          <td>{balance.amount}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="3">You have no balances</td>
                       </tr>
                     )}
                   </tbody>

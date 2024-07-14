@@ -5,6 +5,7 @@ import { useAccount } from '../AccountContext';
 import '../components/Button.css';
 import './SwapCoin.css';
 import './Explore.css';
+import './AddLiquidity.css';
 
 import dropIcon from '../assets/dropdown-icon.svg';
 import switchIcon from '../assets/switch.png';
@@ -19,6 +20,7 @@ function SwapCoin() {
     const [toToken, setToToken] = useState(null);
     const [fromAmount, setFromAmount] = useState(0);
     const [toAmount, setToAmount] = useState(0);
+    const [exchangeRate, setExchangeRate] = useState(null);
     const [showFromTokenDropdown, setShowFromTokenDropdown] = useState(false);
     const [showToTokenDropdown, setShowToTokenDropdown] = useState(false);
     const [isAmountExceedBalance, setIsAmountExceedBalance] = useState(false);
@@ -44,6 +46,12 @@ function SwapCoin() {
         calculateToAmount();
     }, [fromAmount, fromToken, toToken]);
 
+    useEffect(() => {
+        if (fromToken && toToken) {
+            fetchExchangeRate();
+        }
+    }, [fromToken, toToken]);
+
     const fetchTokens = async () => {
         try {
             const response = await fetch('http://localhost:3001/tokens');
@@ -52,6 +60,13 @@ function SwapCoin() {
         } catch (error) {
             console.error('Error fetching tokens:', error);
         }
+    };
+
+    const fetchExchangeRate = () => {
+        // Placeholder for actual exchange rate fetching logic
+        // Example: 1 ETH = 3037.73 USDC
+        const exampleRate = 3037.73; 
+        setExchangeRate(exampleRate);
     };
 
     const getSwapButtonState = () => {
@@ -97,16 +112,12 @@ function SwapCoin() {
     };
 
     const calculateToAmount = () => {
-        if (!fromToken || !toToken || fromAmount <= 0) {
+        if (!fromToken || !toToken || fromAmount <= 0 || !exchangeRate) {
             setToAmount(0);
             return;
         }
-
-        // AMM logic to calculate toAmount??
-        const fromTokenReserve = 10000; // Example reserve value
-        const toTokenReserve = 10000; // Example reserve value
-        const amountOut = (fromAmount * toTokenReserve) / (fromTokenReserve + fromAmount);
-        setToAmount(amountOut.toFixed(4));
+        const amountOut = fromAmount * exchangeRate;
+        setToAmount(amountOut.toFixed(2));
     };
 
     const handleSwap = async () => {
@@ -220,6 +231,16 @@ function SwapCoin() {
                                     </div>
                                 </div>
                             </div>
+                            {fromToken && toToken && fromAmount > 0 && exchangeRate && (
+                                <div className='initial-prices'>
+                                    <div className="price-info">
+                                        1 {toToken.symbol} = {(1 / exchangeRate).toFixed(8)} {fromToken.symbol}
+                                    </div>
+                                    <div className="price-info">
+                                        Fee (0.25%) = 7.58
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div className="swap-footer">
                             <footer className='swap-footer-btn'>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
 
@@ -12,17 +12,33 @@ const AccountHeader = () => {
   const { selectedAccount, logout } = useAccount();
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current path
+  const location = useLocation();
+  const moreOptionsRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (moreOptionsRef.current && !moreOptionsRef.current.contains(event.target)) {
+        setShowMoreOptions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleMoreClick = () => {
-    setShowMoreOptions(prevState => !prevState);
+    setShowMoreOptions((prevState) => !prevState);
   };
 
   const handleViewAccountDetail = () => {
-    navigate('/account-details');
+    setShowMoreOptions(false);
+    navigate('/account');
   };
 
   const handleLogout = async () => {
+    setShowMoreOptions(false);
     await logout();
     alert('Logged out successfully');
     navigate('/');
@@ -33,7 +49,7 @@ const AccountHeader = () => {
     { name: 'Trade', path: '/swap' },
     { name: 'Explore', path: '/explore' },
     { name: 'Node', path: '/nodes' },
-    { name: 'Pool', path: '/pool' }
+    { name: 'Pool', path: '/pool' },
   ];
 
   const MoreOptions = [
@@ -83,10 +99,10 @@ const AccountHeader = () => {
 
         <div className='more-icon-wrapper'>
           <button className='more-icon-btn' onClick={handleMoreClick}>
-            <img src={moreIcon} className='more-icon'/>
+            <img src={moreIcon} className='more-icon' alt="More Options" />
           </button>
           {showMoreOptions && (
-            <div className="more-options">
+            <div className="more-options" ref={moreOptionsRef}>
               <ul>
                 {MoreOptions.map((menu) => (
                   <li key={menu.name} onClick={menu.action}>

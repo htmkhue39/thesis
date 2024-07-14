@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './OnboardingPage.css'; // You can style your welcome page in a separate CSS file
+import Header from '../components/Header';
+import './OnboardingPage.css'; 
 import '../components/Button.css'
 import logo from '../assets/logo.jpg';
 

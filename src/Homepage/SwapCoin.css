@@ -9,12 +9,11 @@
 
 .swap-coin-content {
   max-height: 82vh;
-  min-height: 570px;
+  min-height: 500px;
   flex: 0 0 auto;
   margin-right: auto;
   margin-left: auto;
   width: 460px;
-  height: 620px;
   background-color: var(--color-background-default);
   box-shadow: var(--shadow-size-xs) var(--color-shadow-default) ;
   border: 0.25px solid #ddd;
@@ -229,7 +228,7 @@
   bottom: 0;
   width: 100%;
   z-index: 1050;
-  overflow: auto;
+  overflow: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--color-icon-muted) transparent;
 }
@@ -237,7 +236,7 @@
 .token-modal-content {
   display: block;
   background: white;
-  overflow-y: auto;
+  overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 16px;
