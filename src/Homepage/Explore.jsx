@@ -7,7 +7,7 @@ import CombinedTokenLogo from '../components/CombinedTokenLogo';
 
 const Explore = () => {
   const { selectedAccount } = useAccount();
-  const [selectedTab, setSelectedTab] = useState('Exchanges');
+  const [selectedTab, setSelectedTab] = useState('Tokens');
   const [transactions, setTransactions] = useState([]);
   const [tokens, setTokens] = useState([]);
   const [pools, setPools] = useState([]);
@@ -87,13 +87,9 @@ const Explore = () => {
 
   const fetchBalances = async (nodeAddress) => {
     try {
-      const response = await fetch(`http://localhost:3001/accounts?address=${selectedAccount.address}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching balances for account ${selectedAccount.address}`);
-      }
-      const data = await response.json();
-      if (Array.isArray(data) && data.length > 0 && data[0].balances) {
-        setBalances(data[0].balances);
+      const accountNode = selectedAccount.node.find(node => node.address === nodeAddress);
+      if (accountNode && accountNode.balances) {
+        setBalances(accountNode.balances);
       } else {
         setBalances([]);
       }
@@ -139,13 +135,19 @@ const Explore = () => {
         <div className='homepage'>
           <div className="main-content">
             <div className="tabs">
-              <button className={`tab ${selectedTab === 'Exchanges' ? 'active' : ''}`} onClick={() => setSelectedTab('Exchanges')}>Tokens</button>
+              <button className={`tab ${selectedTab === 'Tokens' ? 'active' : ''}`} onClick={() => setSelectedTab('Tokens')}>Tokens</button>
               <button className={`tab ${selectedTab === 'Pools' ? 'active' : ''}`} onClick={() => setSelectedTab('Pools')}>Pools</button>
               <button className={`tab ${selectedTab === 'Transactions' ? 'active' : ''}`} onClick={() => setSelectedTab('Transactions')}>Transactions</button>
               <button className={`tab ${selectedTab === 'Balances' ? 'active' : ''}`} onClick={() => setSelectedTab('Balances')}>Balances</button>
             </div>
 
-            {selectedTab === 'Exchanges' && (
+            {/* {!isConnected && (
+              <div className="overlay">
+                <button className="btn-primary connect-button" onClick={() => navigate('/nodes')}>+ Connect to Node</button>
+              </div>
+            )} */}
+
+            {selectedTab === 'Tokens' && (
               <div className="activity-section">
                 <table className="table">
                   <thead>
@@ -189,7 +191,7 @@ const Explore = () => {
                 </table>
               </div>
             )}
-
+            
             {selectedTab === 'Pools' && (
               <div className="activity-section">
                 <table className="table">
@@ -278,7 +280,7 @@ const Explore = () => {
                   <tbody>
                     {balances.length > 0 ? (
                       balances.map((balance, index) => (
-                        <tr key={index}>
+                        <tr key={balance.id}>
                           <td>{index + 1}</td>
                           <td>{balance.token}</td>
                           <td>{balance.amount}</td>

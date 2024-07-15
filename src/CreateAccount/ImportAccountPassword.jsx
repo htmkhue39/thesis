@@ -35,22 +35,22 @@ const ImportAccountPassword = () => {
               <div className="circle-container">
                   <div className="circle-item">
                     <div className="circle blue-full">1</div>
-                    <div className="description">Enter mnemonic phrase</div>
+                    <div className="description blue">Enter mnemonic phrase</div>
                   </div>
                   
                   <div className="circle-item">
                     <div className="circle blue-border">2</div>
-                    <div className="description">Enter password</div>
+                    <div className="description blue">Enter passcode</div>
                   </div>
               </div>
 
-              <h2>Enter password</h2>
-              <p className="mnemonic-phrase-description">Please enter your password to import account.</p>
+              <h2>Enter passcode</h2>
+              <p className="mnemonic-phrase-description">Please enter your passcode to import account.</p>
 
               <div className='form-wrapper'>
                 <input 
                     type="password" 
-                    placeholder="Enter your password" 
+                    placeholder="Enter your passcode" 
                     value={password} 
                     onChange={handlePasswordChange} 
                     className="password-input"

@@ -44,12 +44,12 @@ const ImportAccountMnemonic = () => {
               <div className="circle-container">
                   <div className="circle-item">
                     <div className="circle blue-border">1</div>
-                    <div className="description">Enter mnemonic phrase</div>
+                    <div className="description blue">Enter mnemonic phrase</div>
                   </div>
                   
                   <div className="circle-item">
                     <div className="circle gray-border">2</div>
-                    <div className="description">Enter password</div>
+                    <div className="description">Enter passcode</div>
                   </div>
                 </div>
                 <h2>Enter mnemmonic phrase</h2>

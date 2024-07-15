@@ -1,0 +1,186 @@
+.order-book {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    width: 80%;
+    height: 82%;
+}
+
+.order-book-left-wrapper {
+    width: 60%;
+    background-color: var(--color-background-default);
+    max-height: 100%;
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid #ddd;
+}
+
+.order-book-left {
+    position: relative;
+    
+}
+
+.order-book-right {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 35%;
+}
+
+.order-book-right h3{
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.order-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-background-default);
+    z-index: 1;
+}
+
+.order-table th, .order-table td {
+    padding: 8px;
+}
+
+.order-table .bids {
+    color: green;
+    text-align: right;
+}
+
+.order-table .asks {
+    color: red;
+    text-align: left;
+}
+
+.order-table .bids-quantity{
+    text-align: right;
+}
+
+.order-table .asks-quantity{
+    text-align: left;
+}
+
+.trade-history-wrapper{
+    max-height: 60%;
+}
+
+.trade-history {
+    min-height: 260px;
+    max-height: 85%;
+    position: relative;
+    font-size: 13px;
+    overflow-y: auto;
+    background-color: var(--color-background-default);
+    border: 1px solid #ddd;
+}
+
+.trade-history table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.trade-history thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f9f9f9;
+    z-index: 1;
+}
+
+.trade-history th, .trade-history td {
+    padding: 8px;
+    border: none;
+}
+
+.trade-history h3, .create-order h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+.create-order {
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.create-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.create-order-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.order-type-buttons {
+    display: flex;
+}
+
+.order-type-button {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.order-type-button:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.order-type-button:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.order-type-button.active {
+    background-color: var(--color-primary-default);
+    color: white;
+}
+
+.order-type-button:not(.active) {
+    background-color: #f9f9f9;
+    color: black;
+}
+
+.create-order input, .create-order select{
+    display: block;
+    width: 90%;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.create-order button {
+    background-color: var(--color-primary-default);
+    color: white;
+    border: none;
+    cursor: pointer;
+
+}
+
+.create-order button:hover {
+    background-color: var(--color-primary-default);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+}
+
+.create-order button {
+    width: 50%;
+    margin-bottom: 0px;
+}

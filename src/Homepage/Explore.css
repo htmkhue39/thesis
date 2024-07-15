@@ -9,305 +9,304 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
   }
 
-  .app-content-wrapper {
-    overflow: auto;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+.app-content-wrapper {
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
   
-  .app-content{
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    align-items: center;
-    height: 100%;
-  }
+.app-content{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  height: 100%;
+}
   
-  .homepage {
-    display: flex;
-    justify-content: center;
-    flex: 1 0 auto;
-    min-height: 0;
-    height: 90%;
-    background-color: var(--color-background-default);
-  }
+.homepage {
+  display: flex;
+  justify-content: center;
+  flex: 1 0 auto;
+  min-height: 0;
+  background-color: var(--color-background-default);
+}
   
-  .main-content {
-    width: 70vw;
-    box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
-  }
+.main-content {
+  width: 70vw;
+  box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
+}
   
-  .balance-section {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  
-  .balance-section h1 {
-    font-size: 36px;
-    margin-bottom: 16px;
-  }
-  
-  .actions {
-    display: flex;
-    justify-content: space-around;
-    margin: 50px;
-  }
-  
-  .button-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .round-button {
-    background-color: var(--color-primary-default);
-    color: var(--white-color);
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    padding: 0;
-  }
-  
-  .round-button:hover {
-    background-color: var(--primary-hover-color);
-  }
-  
-  .button-icon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .button-label {
-    font-size: 12px;
-    margin-top: 5px;
-  }
-  
-  .tabs {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;  
-  }
+.balance-section {
+  text-align: center;
+  margin-bottom: 16px;
+}
 
-  .tabs select {
-    justify-content: center;
-    margin-bottom: 24px;
-    text-align: center;
-  }
+.balance-section h1 {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
 
-  .tabs .tab {
-    border: none;
-    padding: 10px 16px;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    border-radius: 0%;
-    background-color: var(--color-background-default);
-    font-size: 15px;  
+.actions {
+  display: flex;
+  justify-content: space-around;
+  margin: 50px;
+}
 
-  }
-  
-  .tabs .tab:hover,
-  .tabs .tab.active {
-    color: var(--color-primary-default);
-    border-radius: 0%;
-    font-weight: bold;
-  }
-  
-  .activity-section {
-    text-align: center;
-  }
-  
-  .transactions p {
-    font-size: 14px;
-    color: var(--gray-color);
-    margin-bottom: 8px;
-  }
-  
-  .transactions a {
-    color: var(--primary-color);
-    text-decoration: none;
-  }
-  
-  .transactions a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Overlay */
-  
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    z-index: 999;
-  }
-  
-  /* Account Selector Modal */
-  
-  .account-selector-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--white-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    width: 400px;
-    max-width: 100%;
-    z-index: 1000;
-    padding: 16px;
-  }
-  
-  .account-selector-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  
-  .account-selector-header span {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .close-button {
-    background: none;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-  }
-  
-  .account-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .account-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    cursor: pointer;
-    border-bottom: 1px solid var(--border-color);
-  }
-  
-  .account-item:hover {
-    background-color: var(--light-gray-color);
-  }
-  
-  .add-account-button {
-    display: block;
-    width: 100%;
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-    text-align: center;
-    cursor: pointer;
-    margin-top: 16px;
-  }
-  
-  .add-account-button:hover {
-    background-color: var(--primary-hover-color);
-  }
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    color: black;
-  }
-  
-  .table th, .table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .table .green {
-    color: green;
-  }
-  
-  .table .red {
-    color: red;
-  }
-  
-  .token-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .token-logo {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-  }
-  
-  .token-symbol {
-    color: #888;
-    font-size: 12px;
-  }
+.button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  button.tab,
-  button.tab.active{
-    margin-bottom: 0px;
-  }
-  
-  .connect-modal {
-    background: white;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 100%;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-  }
-  
-  .connect-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .connect-modal-body {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .close-button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
+.round-button {
+  background-color: var(--color-primary-default);
+  color: var(--white-color);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.round-button:hover {
+  background-color: var(--primary-hover-color);
+}
+
+.button-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.button-label {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;  
+}
+
+.tabs select {
+  justify-content: center;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.tabs .tab {
+  border: none;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  border-radius: 0%;
+  background-color: var(--color-background-default);
+  font-size: 15px;  
+
+}
+
+.tabs .tab:hover,
+.tabs .tab.active {
+  color: var(--color-primary-default);
+  border-radius: 0%;
+  font-weight: bold;
+}
+
+.activity-section {
+  text-align: center;
+}
+
+.transactions p {
+  font-size: 14px;
+  color: var(--gray-color);
+  margin-bottom: 8px;
+}
+
+.transactions a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.transactions a:hover {
+  text-decoration: underline;
+}
+
+/* Overlay */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+}
+
+/* Account Selector Modal */
+
+.account-selector-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--white-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  width: 400px;
+  max-width: 100%;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.account-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.account-selector-header span {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
+
+.account-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.account-item:hover {
+  background-color: var(--light-gray-color);
+}
+
+.add-account-button {
+  display: block;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.add-account-button:hover {
+  background-color: var(--primary-hover-color);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: black;
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table .green {
+  color: green;
+}
+
+.table .red {
+  color: red;
+}
+
+.token-info {
+  display: flex;
+  align-items: center;
+}
+
+.token-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.token-symbol {
+  color: #888;
+  font-size: 12px;
+}
+
+button.tab,
+button.tab.active{
+  margin-bottom: 0px;
+}
+
+.connect-modal {
+  background: white;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.connect-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.connect-modal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
   
 .button-disconnect {
   border: 2px solid red;
@@ -326,4 +325,26 @@
   cursor: pointer;
   margin-bottom: 0;
 }
-  
+
+.overlay {
+  position: absolute;
+  top: 0; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: calc(100% - 0); 
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.connect-button {
+  width: 200px;
+}
+
+.connect-button:hover {
+  background-color: #0056b3;
+}

@@ -52,7 +52,7 @@ const SecureAccount = () => {
               <div className="circle-container">
                 <div className="circle-item">
                   <div className="circle blue-full">1</div>
-                  <div className="description blue">Create password</div>
+                  <div className="description blue">Create passcode</div>
                 </div>
                 <div className="circle-item">
                   <div className="circle blue-border">2</div>

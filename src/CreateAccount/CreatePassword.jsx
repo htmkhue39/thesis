@@ -76,7 +76,7 @@ const CreatePassword = () => {
                 <div className="circle-container">
                   <div className="circle-item">
                     <div className="circle blue-border">1</div>
-                    <div className="description blue">Create password</div>
+                    <div className="description blue">Create passcode</div>
                   </div>
                   <div className="circle-item">
                     <div className="circle gray-border">2</div>
@@ -88,11 +88,11 @@ const CreatePassword = () => {
                   </div>
                 </div>
 
-                <h1>Create Password</h1>
+                <h1>Create Passcode</h1>
                 <div className='form-wrapper'>
                   <form className="password-form" onSubmit={handleCreate}>
                     <div className="form-group">
-                      <label htmlFor="new-password">New password (8 characters min)</label>
+                      <label htmlFor="new-password">New passcode (8 characters min)</label>
                       <input
                         type="password"
                         id="new-password"
@@ -101,14 +101,14 @@ const CreatePassword = () => {
                         className='password-input'
                       />
                       {passwordStrength && 
-                        <p className={passwordStrength === 'Password strength: Good' ? 'good' : 'error'}>
+                        <p className={passwordStrength === 'Passcode strength: Good' ? 'good' : 'error'}>
                           {passwordStrength}
                         </p>
                       }
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="confirm-password">Confirm Password</label>
+                      <label htmlFor="confirm-password">Confirm passcode</label>
                       <input
                         type="password"
                         id="confirm-password"
@@ -116,7 +116,7 @@ const CreatePassword = () => {
                         onChange={(e) => handleConfirmPasswordChange(e.target.value)}
                         className='password-input'
                       />
-                      {!passwordsMatch && <p className="error">Passwords don't match</p>}
+                      {!passwordsMatch && <p className="error">Passcode don't match</p>}
                     </div>
 
                     <button type="submit" className='btn-primary'>Create a new account</button>

@@ -14,6 +14,7 @@ import NodeItem from './Homepage/NodeItem';
 import Pool from './Homepage/Pool';
 import AddLiquidity from './Homepage/AddLiquidity';
 import AccountInfo from './Homepage/AccountInfo';
+import OrderBook from './Homepage/OrderBook';
 
 import { AccountProvider, useAccount } from './AccountContext';
 
@@ -61,6 +62,7 @@ const MainContent = () => {
               <Route path="/pool" element={<Pool />} />
               <Route path="/pool/liquidity" element={<AddLiquidity />} />
               <Route path="/account" element={<AccountInfo />} />
+              <Route path="/orderbook" element={<OrderBook />} />
               <Route path="*" element={<Navigate to="/swap" />} />
             </>
           )}

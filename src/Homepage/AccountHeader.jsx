@@ -42,7 +42,7 @@ const AccountHeader = () => {
     await logout();
     alert('Logged out successfully');
     navigate('/');
-    window.location.reload();
+    // window.location.reload();
   };
 
   const Menus = [
@@ -50,6 +50,7 @@ const AccountHeader = () => {
     { name: 'Explore', path: '/explore' },
     { name: 'Node', path: '/nodes' },
     { name: 'Pool', path: '/pool' },
+    { name: 'Order Book', path: '/orderbook' }
   ];
 
   const MoreOptions = [

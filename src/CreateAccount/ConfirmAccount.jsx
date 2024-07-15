@@ -91,16 +91,16 @@ const ConfirmAccount = () => {
               <div className="circle-container">
                 <div className="circle-item">
                   <div className="circle blue-full">1</div>
-                  <div className="description">Create password</div>
+                  <div className="description blue">Create passcode</div>
                 </div>
 
                 <div className="circle-item">
                   <div className="circle blue-full">2</div>
-                  <div className="description">Secure Account</div>
+                  <div className="description blue">Secure Account</div>
                 </div>
                 <div className="circle-item">
                   <div className="circle blue-border">3</div>
-                  <div className="description">Confirm secure chain</div>
+                  <div className="description blue">Confirm secure chain</div>
                 </div>
               </div>
 
