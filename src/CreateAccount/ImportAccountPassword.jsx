@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
 import Header from '../components/Header';
+import { checkAccount } from '../../mockApi';
 import './CreatePassword.css';
 import '../components/Button.css';
 import '../components/Step.css';
 
 const ImportAccountPassword = () => {
   const navigate = useNavigate();
-  const { accounts, setSelectedAccount } = useAccount(); // Use the account context
+  const location = useLocation();
+  const { mnemonic } = location.state || [];
+  const { setSelectedAccount } = useAccount();
   const [password, setPassword] = useState('');
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = () => {
-    const account = accounts.find(acc => acc.password === password);
-    if (account) {
+  const handleSubmit = async () => {
+    try {
+      const account = await checkAccount(mnemonic, password);
       setSelectedAccount(account);
       navigate('/swap');
-    } else {
-      alert('Password is incorrect.');
+    } catch (error) {
+      alert('Mnemonic phrase or password is incorrect.');
     }
   };
 

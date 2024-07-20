@@ -1,4 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { 
+  getAccounts, 
+  getNodes, 
+  connectNode as connectNodeApi, 
+  updateAccount as updateAccountApi, 
+  createAccount as createAccountApi, 
+  clearConnectedNodeAddress as clearConnectedNodeAddressApi 
+} from '../mockApi';
 
 const AccountContext = createContext();
 
@@ -10,87 +18,81 @@ export const AccountProvider = ({ children }) => {
 
   useEffect(() => {
     fetchAccounts();
+    const savedAccount = localStorage.getItem('selectedAccount');
+    if (savedAccount) {
+      setSelectedAccount(JSON.parse(savedAccount));
+    }
   }, []);
+
+  useEffect(() => {
+    if (selectedAccount) {
+      localStorage.setItem('selectedAccount', JSON.stringify(selectedAccount));
+    } else {
+      localStorage.removeItem('selectedAccount');
+    }
+  }, [selectedAccount]);
 
   const fetchAccounts = async () => {
     try {
-      const response = await fetch('http://localhost:3001/accounts');
-      const data = await response.json();
+      const data = await getAccounts();
       setAccounts(data);
-      const currentAccount = data.find(account => account.current === true);
-      setSelectedAccount(currentAccount);
     } catch (error) {
       console.error('Error fetching accounts:', error);
     }
   };
 
-  const handleAccountChange = (accountName) => {
-    const account = accounts.find(acc => acc.name === accountName);
-    setSelectedAccount(account);
-  };
-
-  const truncateAddress = (address) => `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
-
-  const copyAddress = () => {
-    navigator.clipboard.writeText(selectedAccount.address);
-    alert('Address copied to clipboard');
+  const createAccount = async (newAccount) => {
+    try {
+      const createdAccount = await createAccountApi(newAccount);
+      setAccounts(prevAccounts => [...prevAccounts, createdAccount]);
+      return createdAccount;
+    } catch (error) {
+      console.error('Error creating account:', error);
+      throw error;
+    }
   };
 
   const connectNode = async (nodeAddress, callback) => {
-    const updatedAccount = {
-      ...selectedAccount,
-      node: selectedAccount.node.some(node => node.address === nodeAddress)
-        ? selectedAccount.node
-        : [...selectedAccount.node, { address: nodeAddress }],
-      connectedNodeAddress: nodeAddress,
-      connected: true,
-    };
-
-    setSelectedAccount(updatedAccount);
-    setAccounts(prevAccounts =>
-      prevAccounts.map(acc =>
-        acc.id === selectedAccount.id
-          ? updatedAccount
-          : acc
-      )
-    );
-
-    await updateAccountInServer(updatedAccount);
-
-    if (callback) callback();
-  };
-
-  const updateAccountInServer = async (updatedAccount) => {
     try {
-      await fetch(`http://localhost:3001/accounts/${updatedAccount.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedAccount)
-      });
+      await connectNodeApi(selectedAccount.address, nodeAddress);
+
+      const updatedAccount = {
+        ...selectedAccount,
+        connectedNodeAddress: nodeAddress,
+        connected: true,
+      };
+
+      setSelectedAccount(updatedAccount);
+      setAccounts(prevAccounts =>
+        prevAccounts.map(acc =>
+          acc.id === selectedAccount.id
+            ? updatedAccount
+            : acc
+        )
+      );
+
+      if (callback) callback();
     } catch (error) {
-      console.error('Error updating account:', error);
+      console.error('Error connecting node:', error);
+      throw error;
     }
   };
 
   const clearConnectedNodeAddress = async () => {
-    const updatedAccount = { ...selectedAccount, connectedNodeAddress: '', current: false };
-    setSelectedAccount(null);
-    setAccounts(prevAccounts =>
-      prevAccounts.map(acc =>
-        acc.id === selectedAccount.id
-          ? updatedAccount
-          : acc
-      )
-    );
-    await fetch(`http://localhost:3001/accounts/${selectedAccount.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedAccount),
-    });
+    try {
+      await clearConnectedNodeAddressApi(selectedAccount.id);
+      const updatedAccount = { ...selectedAccount, connectedNodeAddress: '', connected: false };
+      setSelectedAccount(updatedAccount);
+      setAccounts(prevAccounts =>
+        prevAccounts.map(acc =>
+          acc.id === selectedAccount.id
+            ? updatedAccount
+            : acc
+        )
+      );
+    } catch (error) {
+      console.error('Error clearing connected node address:', error);
+    }
   };
 
   const logout = async () => {
@@ -104,11 +106,9 @@ export const AccountProvider = ({ children }) => {
     <AccountContext.Provider value={{
       selectedAccount,
       setSelectedAccount,
-      handleAccountChange,
-      truncateAddress,
-      copyAddress,
       accounts,
       setAccounts,
+      createAccount,
       connectNode,
       clearConnectedNodeAddress,
       logout,

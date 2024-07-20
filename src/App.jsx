@@ -19,6 +19,7 @@ import OrderBook from './Homepage/OrderBook';
 import { AccountProvider, useAccount } from './AccountContext';
 
 import './App.css';
+import '../mockApi';
 
 function App() {
   return (

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import './NodeList.css'
-import './Explore.css'
-import '../components/Button.css'
-
+import './NodeList.css';
+import './Explore.css';
+import '../components/Button.css';
 import { useAccount } from '../AccountContext';
+import { getNodes, checkNodeConnection } from '../../mockApi';
 
 const NodeList = () => {
   const { selectedAccount } = useAccount();
   const [nodes, setNodes] = useState([]);
+  const [nodeConnections, setNodeConnections] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -17,22 +17,38 @@ const NodeList = () => {
     fetchNodes();
   }, []);
 
+  useEffect(() => {
+    if (selectedAccount) {
+      checkConnections();
+    }
+  }, [selectedAccount, nodes]);
+
   const fetchNodes = async () => {
     try {
-      const response = await fetch('http://localhost:3001/nodes');
-      const data = await response.json();
-      setNodes(data);
+      const nodesData = await getNodes();
+      setNodes(nodesData);
     } catch (error) {
       console.error('Error fetching nodes:', error);
     }
   };
 
-  const handleNodeClick = (nodeAddress) => {
-    navigate(`/nodes/${nodeAddress}`);
+  const checkConnections = async () => {
+    const connections = {};
+    const promises = nodes.map(async (node) => {
+      try {
+        const isConnected = await checkNodeConnection(selectedAccount.address, node.address);
+        connections[node.address] = isConnected;
+      } catch (error) {
+        console.error('Error checking node connection:', error);
+      }
+    });
+
+    await Promise.all(promises);
+    setNodeConnections(connections);
   };
 
-  const isNodeConnected = (nodeAddress) => {
-    return selectedAccount.node.some(node => node.address === nodeAddress);
+  const handleNodeClick = (nodeAddress) => {
+    navigate(`/nodes/${nodeAddress}`);
   };
 
   const filteredNodes = nodes.filter(node =>
@@ -43,58 +59,46 @@ const NodeList = () => {
     <div className='app-content-wrapper'>
       <div className='app-content'>
         <div className='homepage'>
-            <div className="main-content">
-              <div className='balance-section'>
-                <h2>Node list</h2>
-              </div>
-              <div className='search-bar'>
-                <input
-                  type="text"
-                  placeholder="Search for nodes..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className='search-input'
-                />
-              </div>
-              <div className='activity-section'>
-                <table className='table'>
-                      <thead>
-                      <tr>
-                          <th>#</th>
-                          <th>Address</th>
-                          <th>Connection</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      {filteredNodes.length > 0 ? (
-                        filteredNodes.map((node, index) => (
-                          <tr key={node.id} onClick={() => handleNodeClick(node.address)} className='node-row'>
-                            <td>{index + 1}</td>
-                            <td>{node.address}</td>
-                            <td className={`connection-status ${isNodeConnected(node.address) ? 'connected' : 'disconnected'}`}>
-                              {isNodeConnected(node.address) ? 'Yes' : 'No'}
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        nodes.map((node, index) => (
-                          <tr key={node.id} onClick={() => handleNodeClick(node.address)} className='node-row'>
-                            <td>{index + 1}</td>
-                            <td>{node.address}</td>
-                            <td className={`connection-status ${isNodeConnected(node.address) ? 'connected' : 'disconnected'}`}>
-                              {isNodeConnected(node.address) ? 'Yes' : 'No'}
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                      </tbody>
-                  </table>
-              </div>
+          <div className="main-content">
+            <div className='balance-section'>
+              <h2>Node list</h2>
             </div>
+            <div className='search-bar'>
+              <input
+                type="text"
+                placeholder="Search for nodes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className='search-input'
+              />
+            </div>
+            <div className='activity-section'>
+              <table className='table'>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Address</th>
+                    <th>Connection</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredNodes.map((node, index) => (
+                    <tr key={node.id} onClick={() => handleNodeClick(node.address)} className='node-row'>
+                      <td>{index + 1}</td>
+                      <td>{node.address}</td>
+                      <td className={`connection-status ${nodeConnections[node.address] ? 'connected' : 'disconnected'}`}>
+                        {nodeConnections[node.address] ? 'Yes' : 'No'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default NodeList;

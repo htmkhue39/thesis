@@ -42,7 +42,6 @@ const AccountHeader = () => {
     await logout();
     alert('Logged out successfully');
     navigate('/');
-    // window.location.reload();
   };
 
   const Menus = [

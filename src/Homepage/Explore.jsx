@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
+import { getTransactions, getTokens, getPools, getBalances } from '../../mockApi';
 
 import './Explore.css';
 import CombinedTokenLogo from '../components/CombinedTokenLogo';
@@ -12,24 +13,23 @@ const Explore = () => {
   const [tokens, setTokens] = useState([]);
   const [pools, setPools] = useState([]);
   const [balances, setBalances] = useState([]);
-  const [isConnected, setIsConnected] = useState(false);
-  const [connectedNodeAddress, setConnectedNodeAddress] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (selectedAccount) {
-      fetchTransactions();
-      checkConnectionStatus();
+    if (selectedAccount && selectedAccount.connectedNodeAddress) {
+      fetchAllData(selectedAccount.connectedNodeAddress);
     }
   }, [selectedAccount]);
+
+  const fetchAllData = async (nodeAddress) => {
+    await Promise.all([fetchTransactions(), fetchTokens(nodeAddress), fetchPools(nodeAddress), fetchBalances(nodeAddress)]);
+  };
 
   const fetchTransactions = async () => {
     if (!selectedAccount) return;
     try {
-      const accountTransactions = selectedAccount.transactions.filter(
-        tx => tx.nodeAddress === selectedAccount.connectedNodeAddress
-      );
-      setTransactions(accountTransactions);
+      const transactions = await getTransactions(selectedAccount.address, selectedAccount.connectedNodeAddress);
+      setTransactions(transactions);
     } catch (error) {
       console.error('Error fetching transactions:', error);
     }
@@ -37,96 +37,62 @@ const Explore = () => {
 
   const fetchTokens = async (nodeAddress) => {
     try {
-      const response = await fetch(`http://localhost:3001/nodes?address=${nodeAddress}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching tokens for node ${nodeAddress}`);
-      }
-      const data = await response.json();
-      if (Array.isArray(data) && data.length > 0 && Array.isArray(data[0].tokens)) {
-        setTokens(data[0].tokens);
-      } else {
-        setTokens([]);
-      }
+      const tokens = await getTokens(nodeAddress);
+      setTokens(tokens);
     } catch (error) {
-      console.error('Error fetching tokens:', error.message);
+      console.error('Error fetching tokens:', error);
     }
   };
 
   const fetchPools = async (nodeAddress) => {
     try {
-      const response = await fetch(`http://localhost:3001/nodes?address=${nodeAddress}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching pools for node ${nodeAddress}`);
-      }
-      const data = await response.json();
-      if (Array.isArray(data) && data.length > 0 && Array.isArray(data[0].liquidityPools)) {
-        const node = data[0];
-        const poolData = node.liquidityPools.map((pool) => {
-          const tokenALogo = node.tokens.find(token => token.symbol === pool.tokenA)?.logo || '';
-          const tokenBLogo = node.tokens.find(token => token.symbol === pool.tokenB)?.logo || '';
-          return {
-            id: pool.id,
-            pool: `${pool.tokenA}/${pool.tokenB}`,
-            transactions: pool.transactions,
-            tvl: pool.tvl,
-            dayVolume: pool.dayVolume,
-            weekVolume: pool.weekVolume,
-            apr: pool.apr,
-            logo1: tokenALogo,
-            logo2: tokenBLogo,
-          };
-        });
-        setPools(poolData);
-      } else {
-        setPools([]);
-      }
+      const pools = await getPools(nodeAddress);
+      const tokens = await getTokens(nodeAddress); // Fetch tokens to get logos
+  
+      const poolData = pools.map(pool => {
+        const tokenALogo = tokens.find(token => token.symbol === pool.tokenA)?.logo || '';
+        const tokenBLogo = tokens.find(token => token.symbol === pool.tokenB)?.logo || '';
+  
+        return {
+          ...pool,
+          logo1: tokenALogo,
+          logo2: tokenBLogo,
+        };
+      });
+  
+      setPools(poolData);
     } catch (error) {
-      console.error('Error fetching pools:', error.message);
+      console.error('Error fetching pools:', error);
     }
   };
 
   const fetchBalances = async (nodeAddress) => {
     try {
-      const accountNode = selectedAccount.node.find(node => node.address === nodeAddress);
-      if (accountNode && accountNode.balances) {
-        setBalances(accountNode.balances);
-      } else {
-        setBalances([]);
-      }
+      const balances = await getBalances(selectedAccount.address, nodeAddress);
+      setBalances(balances);
     } catch (error) {
-      console.error('Error fetching balances:', error.message);
-    }
-  };
-
-  const checkConnectionStatus = () => {
-    if (selectedAccount.connectedNodeAddress) 
-    {
-      setConnectedNodeAddress(selectedAccount.connectedNodeAddress);
-      fetchTokens(selectedAccount.connectedNodeAddress);
-      fetchPools(selectedAccount.connectedNodeAddress);
-      fetchBalances(selectedAccount.connectedNodeAddress);
-      setIsConnected(true);
-    } 
-    else if (selectedAccount.node && selectedAccount.node.length > 0) 
-    {
-      const firstNodeAddress = selectedAccount.node[0].address;
-      setConnectedNodeAddress(firstNodeAddress);
-      fetchTokens(firstNodeAddress);
-      fetchPools(firstNodeAddress);
-      fetchBalances(firstNodeAddress);
-    } 
-    else 
-    {
-      setConnectedNodeAddress('');
-      setTokens([]);
-      setPools([]);
-      setBalances([]);
-      setIsConnected(false);
+      console.error('Error fetching balances:', error);
     }
   };
 
   if (!selectedAccount) {
     return <div>Loading...</div>;
+  }
+
+  if (!selectedAccount.connectedNodeAddress) {
+    return (
+      <div className='app-content-wrapper'>
+        <div className='app-content'>
+          <div className='homepage'>
+            <div className="main-content">
+              <div className="overlay">
+                <button className="btn-primary connect-button" onClick={() => navigate('/nodes')}>+ Connect to Node</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -140,12 +106,6 @@ const Explore = () => {
               <button className={`tab ${selectedTab === 'Transactions' ? 'active' : ''}`} onClick={() => setSelectedTab('Transactions')}>Transactions</button>
               <button className={`tab ${selectedTab === 'Balances' ? 'active' : ''}`} onClick={() => setSelectedTab('Balances')}>Balances</button>
             </div>
-
-            {/* {!isConnected && (
-              <div className="overlay">
-                <button className="btn-primary connect-button" onClick={() => navigate('/nodes')}>+ Connect to Node</button>
-              </div>
-            )} */}
 
             {selectedTab === 'Tokens' && (
               <div className="activity-section">
@@ -278,12 +238,12 @@ const Explore = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {balances.length > 0 ? (
-                      balances.map((balance, index) => (
-                        <tr key={balance.id}>
+                    {Object.keys(balances).length > 0 ? (
+                      Object.entries(balances).map(([token, amount], index) => (
+                        <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{balance.token}</td>
-                          <td>{balance.amount}</td>
+                          <td>{token}</td>
+                          <td>{amount}</td>
                         </tr>
                       ))
                     ) : (

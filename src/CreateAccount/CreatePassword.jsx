@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Header from '../components/Header';
-
 import './CreatePassword.css';
 import './OnboardingPage.css';
 import '../components/Button.css';
@@ -15,37 +14,32 @@ const CreatePassword = () => {
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const navigate = useNavigate();
 
-  const handleCreate = async (event) => {
-    // event.preventDefault();
+  const handleCreate = (event) => {
+    event.preventDefault();
 
-    // if (newPassword.length < 8) {
-    //   setPasswordStrength('Password not long enough');
-    //   return;
-    // }
+    if (passwordStrength !== 'Password strength: Good') {
+      return;
+    }
 
-    // setPasswordStrength('');
+    if (newPassword !== confirmPassword) {
+      setPasswordsMatch(false);
+      return;
+    }
 
-    // if (newPassword !== confirmPassword) {
-    //   setPasswordsMatch(false);
-    //   return;
-    // } else {
-    //   setPasswordsMatch(true);
-    //   localStorage.setItem('newPassword', newPassword);
-    //   navigate("/create-account/secure-account");      
-    // }
-
-    navigate("/create-account/secure-account");      
+    setPasswordsMatch(true);
+    localStorage.setItem('newPassword', newPassword);
+    navigate("/create-account/secure-account");
   };
 
   const handlePasswordChange = (password) => {
     setNewPassword(password);
-    
+
     const lengthRequirement = password.length >= 8;
     const uppercaseRequirement = /[A-Z]/.test(password);
     const lowercaseRequirement = /[a-z]/.test(password);
     const numberRequirement = /[0-9]/.test(password);
     const specialCharRequirement = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  
+
     if (!lengthRequirement) {
       setPasswordStrength('Password not long enough');
     } else if (!uppercaseRequirement) {
@@ -73,55 +67,55 @@ const CreatePassword = () => {
         <div className='app'>
           <div className='onboarding-flow'>
             <div className='onboarding-flow-wrapper'>
-                <div className="circle-container">
-                  <div className="circle-item">
-                    <div className="circle blue-border">1</div>
-                    <div className="description blue">Create passcode</div>
-                  </div>
-                  <div className="circle-item">
-                    <div className="circle gray-border">2</div>
-                    <div className="description">Secure Account</div>
-                  </div>
-                  <div className="circle-item">
-                    <div className="circle gray-border">3</div>
-                    <div className="description">Confirm secure chain</div>
-                  </div>
+              <div className="circle-container">
+                <div className="circle-item">
+                  <div className="circle blue-border">1</div>
+                  <div className="description blue">Create passcode</div>
                 </div>
+                <div className="circle-item">
+                  <div className="circle gray-border">2</div>
+                  <div className="description">Secure Account</div>
+                </div>
+                <div className="circle-item">
+                  <div className="circle gray-border">3</div>
+                  <div className="description">Confirm secure chain</div>
+                </div>
+              </div>
 
-                <h1>Create Passcode</h1>
-                <div className='form-wrapper'>
-                  <form className="password-form" onSubmit={handleCreate}>
-                    <div className="form-group">
-                      <label htmlFor="new-password">New passcode (8 characters min)</label>
-                      <input
-                        type="password"
-                        id="new-password"
-                        value={newPassword}
-                        onChange={(e) => handlePasswordChange(e.target.value)}
-                        className='password-input'
-                      />
-                      {passwordStrength && 
+              <h1>Create Passcode</h1>
+              <div className='form-wrapper'>
+                <form className="password-form" onSubmit={handleCreate}>
+                  <div className="form-group">
+                    <label htmlFor="new-password">New passcode (8 characters min)</label>
+                    <input
+                      type="password"
+                      id="new-password"
+                      value={newPassword}
+                      onChange={(e) => handlePasswordChange(e.target.value)}
+                      className='password-input'
+                    />
+                    {passwordStrength && 
                         <p className={passwordStrength === 'Passcode strength: Good' ? 'good' : 'error'}>
-                          {passwordStrength}
-                        </p>
-                      }
-                    </div>
+                        {passwordStrength}
+                      </p>
+                    }
+                  </div>
 
-                    <div className="form-group">
-                      <label htmlFor="confirm-password">Confirm passcode</label>
-                      <input
-                        type="password"
-                        id="confirm-password"
-                        value={confirmPassword}
-                        onChange={(e) => handleConfirmPasswordChange(e.target.value)}
-                        className='password-input'
-                      />
+                  <div className="form-group">
+                    <label htmlFor="confirm-password">Confirm passcode</label>
+                    <input
+                      type="password"
+                      id="confirm-password"
+                      value={confirmPassword}
+                      onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+                      className='password-input'
+                    />
                       {!passwordsMatch && <p className="error">Passcode don't match</p>}
-                    </div>
+                  </div>
 
-                    <button type="submit" className='btn-primary'>Create a new account</button>
-                  </form>
-                </div>
+                  <button type="submit" className='btn-primary'>Create a new account</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>

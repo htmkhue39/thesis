@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-
 import Header from '../components/Header';
-
 import './CreatePassword.css';
 import './Grid.css';
 import './OnboardingPage.css';
@@ -14,18 +12,14 @@ const ConfirmAccount = () => {
   const navigate = useNavigate(); 
   const location = useLocation();
   const { mnemonic } = location.state || [];
-  const { accounts, setSelectedAccount, setAccounts } = useAccount(); // Use the account context
+  const { setSelectedAccount, createAccount } = useAccount();
   const [inputMnemonic, setInputMnemonic] = useState(Array(12).fill(''));
 
   const handlePaste = (e) => {
     e.preventDefault();
     const pasteData = e.clipboardData.getData('text');
     const pastedWords = pasteData.split(' ').slice(0, 12);
-    const newInputMnemonic = Array(12).fill('');
-    pastedWords.forEach((word, index) => {
-      newInputMnemonic[index] = word;
-    });
-    setInputMnemonic(newInputMnemonic);
+    setInputMnemonic(pastedWords);
   };
 
   const handleInputChange = (index, value) => {
@@ -36,43 +30,25 @@ const ConfirmAccount = () => {
 
   const arraysEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] !== arr2[i]) return false;
-    }
-    return true;
+    return arr1.every((value, index) => value === arr2[index]);
   };
 
   const handleNextClick = async () => {
-    console.log("Input Mnemonic:", inputMnemonic);
-    console.log("Provided Mnemonic:", mnemonic);
     if (arraysEqual(inputMnemonic, mnemonic)) {
       alert('Mnemonic phrase matches!');
       const password = localStorage.getItem('newPassword');
       const newAccount = {
         name: 'New Account', 
-        address: '0xNewAddress', // Address needs to be generated dynamically or from the database
-        password: password,
-        mnemonic: mnemonic
+        address: '0xNewAddress',
+        password,
+        mnemonic,
       };
 
       try {
-        const response = await fetch('http://localhost:3001/accounts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(newAccount)
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setAccounts([...accounts, data]);
-          setSelectedAccount(data);
-          alert('Account created successfully!');
-          navigate('/swap'); 
-        } else {
-          console.error('Failed to create account');
-        }
+        const createdAccount = await createAccount(newAccount);
+        setSelectedAccount(createdAccount);
+        alert('Account created successfully!');
+        navigate('/swap');
       } catch (error) {
         console.error('Error creating account:', error);
       }

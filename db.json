@@ -20,11 +20,8 @@
       ],
       "password": "password123",
       "current": false,
-      "connectedNodeAddress": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",
-      "subAccounts": [
-        "2",
-        "3"
-      ],
+      "connectedNodeAddress": "",
+      "connected": false,
       "node": [
         {
           "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
@@ -88,27 +85,8 @@
               "totalPoolTokens": "9"
             }
           ]
-        },
-        {
-          "address": "0x53d284357ec70ce289d6d64134dfac8e511c8a3d",
-          "balances": [],
-          "transactions": [],
-          "liquidityPositions": []
-        },
-        {
-          "address": "0xdc24316b9ae028f1497c275eb9192a3ea0f67022",
-          "balances": [],
-          "transactions": [],
-          "liquidityPositions": []
-        },
-        {
-          "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",
-          "balances": [],
-          "transactions": [],
-          "liquidityPositions": []
         }
-      ],
-      "connected": true
+      ]
     },
     {
       "id": "2",
@@ -144,128 +122,6 @@
         }
       ],
       "connected": false
-    },
-    {
-      "id": "3",
-      "name": "Account 3",
-      "address": "0x1234500000000000000000000000004f7057e1234",
-      "mnemonic": [
-        "subword13",
-        "subword14",
-        "subword15",
-        "subword16",
-        "subword17",
-        "subword18",
-        "subword19",
-        "subword20",
-        "subword21",
-        "subword22",
-        "subword23",
-        "subword24"
-      ],
-      "password": "passwordSub2",
-      "current": false,
-      "connectedNodeAddress": "",
-      "subAccounts": [
-        "1",
-        "2"
-      ],
-      "node": [
-        {
-          "address": "0xdc76cd25977e0a5ae17155770273ad58648900d3",
-          "balances": [],
-          "transactions": [],
-          "liquidityPositions": []
-        },
-        {
-          "address": "0x61edcdf5bb737adffb0c940e9c3f76c82b008a47",
-          "balances": [],
-          "transactions": []
-        }
-      ],
-      "connected": false
-    },
-    {
-      "id": "f520",
-      "name": "New Account",
-      "address": "0xNewAddress",
-      "password": "aaaaaaA@1",
-      "mnemonic": [
-        "brush",
-        "swing",
-        "cram",
-        "width",
-        "spoon",
-        "visual",
-        "typical",
-        "recipe",
-        "obvious",
-        "damp",
-        "smart",
-        "depend"
-      ]
-    },
-    {
-      "id": "2053",
-      "name": "New Account",
-      "address": "0xNewAddress",
-      "password": "aaaaaA@1",
-      "mnemonic": [
-        "brush",
-        "swing",
-        "cram",
-        "width",
-        "spoon",
-        "visual",
-        "typical",
-        "recipe",
-        "obvious",
-        "damp",
-        "smart",
-        "depend"
-      ]
-    },
-    {
-      "id": "8e6b",
-      "name": "New Account",
-      "address": "0xNewAddress",
-      "password": "aaaaaA@1",
-      "mnemonic": [
-        "brush",
-        "swing",
-        "cram",
-        "width",
-        "spoon",
-        "visual",
-        "typical",
-        "recipe",
-        "obvious",
-        "damp",
-        "smart",
-        "depend"
-      ]
-    },
-    {
-      "id": "b211",
-      "name": "New Account",
-      "address": "0xNewAddress",
-      "password": "aaaaaA@1",
-      "mnemonic": [
-        "brush",
-        "swing",
-        "cram",
-        "width",
-        "spoon",
-        "visual",
-        "typical",
-        "recipe",
-        "obvious",
-        "damp",
-        "smart",
-        "depend"
-      ],
-      "connectedNodeAddress": "",
-      "current": false
     }
   ],
   "mnemonics": [

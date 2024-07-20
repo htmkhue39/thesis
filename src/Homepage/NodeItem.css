@@ -11,6 +11,7 @@
     padding-bottom: 12px;
     height: 66px;
     width: 100%;
+    background-color: var(--color-background-default);
 }
 
 .item-back-icon {

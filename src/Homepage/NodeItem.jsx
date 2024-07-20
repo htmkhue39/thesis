@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Header from '../components/Header';
-import AccountHeader from './AccountHeader';
-
 import './Explore.css';
 import './NodeItem.css';
-import '../components/Button.css'
+import '../components/Button.css';
 import backIcon from '../assets/back-icon.svg';
 
 import { useAccount } from '../AccountContext';
+import { getNodes } from '../../mockApi';
 
 const NodeItem = () => {
-  const { selectedAccount, connectNode} = useAccount();
+  const { connectNode } = useAccount();
   const { nodeAddress } = useParams();
   const [node, setNode] = useState(null);
   const navigate = useNavigate();
@@ -23,9 +21,8 @@ const NodeItem = () => {
 
   const fetchNodeData = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/nodes?address=${nodeAddress}`);
-      const data = await response.json();
-      setNode(data[0]);
+      const nodeData = await getNodes(nodeAddress);
+      setNode(nodeData[0]);
     } catch (error) {
       console.error('Error fetching node data:', error);
     }
@@ -35,8 +32,13 @@ const NodeItem = () => {
     navigate('/nodes');
   };
 
-  const handleConnect = () => {
-    connectNode(nodeAddress, () => navigate('/swap'));
+  const handleConnect = async () => {
+    try {
+      await connectNode(nodeAddress);
+      navigate('/swap');
+    } catch (error) {
+      console.error('Error connecting to node:', error);
+    }
   };
 
   if (!node) {
@@ -50,7 +52,7 @@ const NodeItem = () => {
           <div className="main-content">
             <div className='node-item-header'>
               <div className='item-back-icon'>
-                <img src={backIcon} className='item-back-icon-detail' onClick={handleBack}/>
+                <img src={backIcon} className='item-back-icon-detail' onClick={handleBack} />
               </div>
               <h2 className='node-item-title'>Node detail</h2>
               <button className='btn-connect' onClick={handleConnect}>+ Connect</button>
@@ -90,10 +92,10 @@ const NodeItem = () => {
               </tbody>
             </table>
           </div>
-      </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default NodeItem;
