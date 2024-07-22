@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import AccountHeader from './Homepage/AccountHeader';
 import OnboardingPage from './CreateAccount/OnboardingPage';
 import CreatePassword from './CreateAccount/CreatePassword';
@@ -14,19 +14,18 @@ import NodeItem from './Homepage/NodeItem';
 import Pool from './Homepage/Pool';
 import AddLiquidity from './Homepage/AddLiquidity';
 import AccountInfo from './Homepage/AccountInfo';
+import OrderBookList from './Homepage/OrderBookList';
 import OrderBook from './Homepage/OrderBook';
-
 import { AccountProvider, useAccount } from './AccountContext';
-
 import './App.css';
 import '../mockApi';
 
 function App() {
   return (
     <AccountProvider>
-      <BrowserRouter>
+      <Router>
         <MainContent />
-      </BrowserRouter>
+      </Router>
     </AccountProvider>
   );
 }
@@ -63,7 +62,8 @@ const MainContent = () => {
               <Route path="/pool" element={<Pool />} />
               <Route path="/pool/liquidity" element={<AddLiquidity />} />
               <Route path="/account" element={<AccountInfo />} />
-              <Route path="/orderbook" element={<OrderBook />} />
+              <Route path="/orderbooks" element={<OrderBookList />} />
+              <Route path="/orderbooks/:orderBookId" element={<OrderBook />} />
               <Route path="*" element={<Navigate to="/swap" />} />
             </>
           )}

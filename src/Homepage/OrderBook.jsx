@@ -1,26 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { getOrderBook, createOrder } from '../../mockApi';
+import { useParams } from 'react-router-dom';
+import { getOrderBook, submitOrder } from '../../mockApi';
 import './OrderBook.css';
 
 const OrderBook = () => {
-  const nodeAddress = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
-  const [orderBook, setOrderBook] = useState({ bids: [], asks: [] });
-  const [tradeHistory, setTradeHistory] = useState([]);
-  const [order, setOrder] = useState({ type: 'buy', price: '', amount: '' });
+  const { orderBookId } = useParams();
+  const [orderBook, setOrderBook] = useState({ bidsA: [], asksA: [], tradeHistoryA: [], bidsB: [], asksB: [], tradeHistoryB: [], tokenA: '', tokenB: '' });
+  const [order, setOrder] = useState({ type: 'buy', price: '', amount: '', token: 'A' });
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
-    const fetchOrderBook = async () => {
-      try {
-        const data = await getOrderBook(nodeAddress);
-        setOrderBook(data);
-        setTradeHistory(data.tradeHistory);
-      } catch (error) {
-        console.error('Error fetching order book:', error);
-      }
-    };
+    if (orderBookId) {
+      const fetchOrderBook = async () => {
+        try {
+          const data = await getOrderBook(orderBookId);
+          console.log('Fetched order book data:', data); // Debug log
+          setOrderBook(data);
+        } catch (error) {
+          console.error('Error fetching order book:', error);
+        }
+      };
 
-    fetchOrderBook();
-  }, [nodeAddress]);
+      fetchOrderBook();
+    }
+  }, [orderBookId]);
 
   const handleOrderChange = (e) => {
     const { name, value } = e.target;
@@ -31,19 +35,50 @@ const OrderBook = () => {
     setOrder({ ...order, type });
   };
 
+  const handleTokenChange = (e) => {
+    const token = e.target.value;
+    setOrder({ ...order, token });
+  };
+
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
+    const orderData = {
+      orderBookId,
+      type: order.type,
+      token: order.token,
+      price: parseFloat(order.price),
+      amount: parseFloat(order.amount)
+    };
+
     try {
-      const response = await createOrder({ nodeAddress, ...order });
+      setIsLoading(true);
+      const response = await submitOrder(orderData);
       if (response.success) {
-        const updatedOrderBook = await getOrderBook(nodeAddress);
+        const updatedOrderBook = await getOrderBook(orderBookId);
         setOrderBook(updatedOrderBook);
-        setTradeHistory(updatedOrderBook.tradeHistory);
-        setOrder({ type: 'buy', price: '', amount: '' }); // Reset order form
+        setOrder({ type: 'buy', price: '', amount: '', token: order.token });
+        setModalMessage('Order submitted successfully!');
+      } else {
+        setModalMessage('Failed to submit order. Please try again.');
       }
     } catch (error) {
       console.error('Error creating order:', error);
+      setModalMessage('Error creating order. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const getBids = () => {
+    return order.token === 'A' ? orderBook.bidsA : orderBook.bidsB;
+  };
+
+  const getAsks = () => {
+    return order.token === 'A' ? orderBook.asksA : orderBook.asksB;
+  };
+
+  const getTradeHistory = () => {
+    return order.token === 'A' ? orderBook.tradeHistoryA : orderBook.tradeHistoryB;
   };
 
   return (
@@ -53,19 +88,19 @@ const OrderBook = () => {
           <table className="order-table">
             <thead>
               <tr>
-                <th className="bids-quantity">Bids Quantity</th>
-                <th className="bids">Bids Price</th>
-                <th className="asks">Asks Price</th>
-                <th className="asks-quantity">Asks Quantity</th>
+                <th className="bids-quantity">Bids Quantity ({order.token === 'A' ? orderBook.tokenA : orderBook.tokenB})</th>
+                <th className="bids">Bids Price ({order.token === 'A' ? orderBook.tokenA : orderBook.tokenB})</th>
+                <th className="asks">Asks Price ({order.token === 'A' ? orderBook.tokenA : orderBook.tokenB})</th>
+                <th className="asks-quantity">Asks Quantity ({order.token === 'A' ? orderBook.tokenA : orderBook.tokenB})</th>
               </tr>
             </thead>
             <tbody>
-              {orderBook.bids.map((bid, index) => (
+              {getBids().map((bid, index) => (
                 <tr key={index}>
                   <td className="bids-quantity">{bid.quantity}</td>
                   <td className="bids">{bid.price}</td>
-                  <td className="asks">{orderBook.asks[index]?.price}</td>
-                  <td className="asks-quantity">{orderBook.asks[index]?.quantity}</td>
+                  <td className="asks">{getAsks()[index]?.price}</td>
+                  <td className="asks-quantity">{getAsks()[index]?.quantity}</td>
                 </tr>
               ))}
             </tbody>
@@ -85,7 +120,7 @@ const OrderBook = () => {
                 </tr>
               </thead>
               <tbody>
-                {tradeHistory.map((trade, index) => (
+                {getTradeHistory().map((trade, index) => (
                   <tr key={index}>
                     <td>{trade.price}</td>
                     <td>{trade.amount}</td>
@@ -100,6 +135,15 @@ const OrderBook = () => {
           <div className="create-order-header">
             <h3>Create Order</h3>
             <div className="order-type-buttons">
+              <select
+                name="token"
+                value={order.token}
+                onChange={handleTokenChange}
+                className="token-select"
+              >
+                <option value="A">{orderBook.tokenA}</option>
+                <option value="B">{orderBook.tokenB}</option>
+              </select>
               <button
                 className={`order-type-button ${order.type === 'buy' ? 'active' : ''}`}
                 onClick={() => handleOrderTypeChange('buy')}
@@ -135,6 +179,28 @@ const OrderBook = () => {
           </form>
         </div>
       </div>
+
+      {isLoading && (
+        <div className='modal-overlay'>
+          <div className='loading-modal'>
+            <div className='loading-modal-content'>
+              <div className='spinner'></div>
+              <div className='loading-text'>Submitting your order...</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {modalMessage && (
+        <div className='modal-overlay'>
+          <div className='result-modal'>
+            <div className='result-modal-content'>
+              <div className='result-text'>{modalMessage}</div>
+              <button onClick={() => setModalMessage('')} className='btn-primary'>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

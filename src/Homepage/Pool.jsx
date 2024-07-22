@@ -91,10 +91,10 @@ const Pool = () => {
                                                             <p>{position.poolShare}</p>
                                                         </div>
                                                     </div>
-                                                    <div className="pool-card-actions">
+                                                    {/* <div className="pool-card-actions">
                                                         <button className="pool-button">Add</button>
                                                         <button className="pool-button">Remove</button>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             )}                              
                                         </div>

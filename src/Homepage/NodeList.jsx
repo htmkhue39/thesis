@@ -4,7 +4,7 @@ import './NodeList.css';
 import './Explore.css';
 import '../components/Button.css';
 import { useAccount } from '../AccountContext';
-import { getNodes, checkNodeConnection } from '../../mockApi';
+import { getNodes, checkNodeConnection, searchNodes } from '../../mockApi';
 
 const NodeList = () => {
   const { selectedAccount } = useAccount();
@@ -32,6 +32,15 @@ const NodeList = () => {
     }
   };
 
+  const searchNodesByQuery = async (query) => {
+    try {
+      const nodesData = await searchNodes(query);
+      setNodes(nodesData);
+    } catch (error) {
+      console.error('Error searching nodes:', error);
+    }
+  };
+
   const checkConnections = async () => {
     const connections = {};
     const promises = nodes.map(async (node) => {
@@ -51,9 +60,11 @@ const NodeList = () => {
     navigate(`/nodes/${nodeAddress}`);
   };
 
-  const filteredNodes = nodes.filter(node =>
-    node.address.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    searchNodesByQuery(query);
+  };
 
   return (
     <div className='app-content-wrapper'>
@@ -68,7 +79,7 @@ const NodeList = () => {
                 type="text"
                 placeholder="Search for nodes..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
                 className='search-input'
               />
             </div>
@@ -82,7 +93,7 @@ const NodeList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredNodes.map((node, index) => (
+                  {nodes.map((node, index) => (
                     <tr key={node.id} onClick={() => handleNodeClick(node.address)} className='node-row'>
                       <td>{index + 1}</td>
                       <td>{node.address}</td>

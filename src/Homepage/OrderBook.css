@@ -17,7 +17,6 @@
 
 .order-book-left {
     position: relative;
-    
 }
 
 .order-book-right {
@@ -122,6 +121,8 @@
 
 .order-type-buttons {
     display: flex;
+    align-items: center; /* Align items vertically in the center */
+    gap: 10px; /* Add space between the token select and buttons */
 }
 
 .order-type-button {
@@ -155,11 +156,14 @@
 .create-order input, .create-order select{
     display: block;
     width: 90%;
-    margin-bottom: 10px;
     padding: 10px;
     font-size: 14px;
     border-radius: 5px;
     border: 1px solid #ddd;
+}
+
+.create-order input{
+    margin-bottom: 10px;
 }
 
 .create-order button {
@@ -167,7 +171,6 @@
     color: white;
     border: none;
     cursor: pointer;
-
 }
 
 .create-order button:hover {
@@ -182,5 +185,12 @@
 
 .create-order button {
     width: 50%;
+    margin-bottom: 0px;
+}
+
+.token-select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     margin-bottom: 0px;
 }

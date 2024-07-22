@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-import { getTokens, getBalances, addLiquidity, checkPool } from '../../mockApi';
+import { getTokens, getBalances, addInitialLiquidity, addLiquidity, checkPool } from '../../mockApi';
 
 import '../components/Button.css';
 import './AddLiquidity.css';
@@ -30,6 +30,8 @@ function AddLiquidity() {
     const [priceFromTo, setPriceFromTo] = useState(null);
     const [priceToFrom, setPriceToFrom] = useState(null);
     const [poolShare, setPoolShare] = useState('0%');
+    const [isLoading, setIsLoading] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     useEffect(() => {
         fetchTokens();
@@ -140,7 +142,7 @@ function AddLiquidity() {
     };
 
     const handleAddLiquidity = async () => {
-        if (!selectedAccount || !fromToken || !toToken || !fromAmount || !toAmount || !selectedFee) {
+        if (!selectedAccount || !fromToken || !toToken || !fromAmount || !toAmount) {
             return;
         }
 
@@ -155,14 +157,29 @@ function AddLiquidity() {
         };
 
         try {
-            const response = await addLiquidity(liquidityData);
-            if (response.success) {
-                navigate('/pool');
+            setIsLoading(true);
+            let response;
+            if (poolExists) {
+                response = await addLiquidity(liquidityData);
             } else {
-                console.error('Failed to add liquidity');
+                response = await addInitialLiquidity(liquidityData);
+            }
+
+            if (response.success) {
+                setModalMessage('Liquidity added successfully!');
+                setFromAmount(0);
+                setToAmount(0);
+                setPriceFromTo(response.priceFromTo);
+                setPriceToFrom(response.priceToFrom);
+                setPoolShare(response.poolShare);
+            } else {
+                setModalMessage('Failed to add liquidity. Please try again.');
             }
         } catch (error) {
             console.error('Error adding liquidity:', error);
+            setModalMessage('Error adding liquidity. Please try again.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -327,6 +344,28 @@ function AddLiquidity() {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {isLoading && (
+                <div className='modal-overlay'>
+                    <div className='loading-modal'>
+                        <div className='loading-modal-content'>
+                            <div className='spinner'></div>
+                            <div className='loading-text'>Submitting your liquidity...</div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {modalMessage && (
+                <div className='modal-overlay'>
+                    <div className='result-modal'>
+                        <div className='result-modal-content'>
+                            <div className='result-text'>{modalMessage}</div>
+                            <button onClick={() => setModalMessage('')} className='btn-primary'>Close</button>
                         </div>
                     </div>
                 </div>

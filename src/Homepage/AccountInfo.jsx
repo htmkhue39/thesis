@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAccount } from '../AccountContext';
-
+import { getAccountByAddress } from '../../mockApi';
 import './Explore.css';
 import './SwapCoin.css';
 import './AccountInfo.css';
@@ -19,9 +19,12 @@ const AccountInfo = () => {
   useEffect(() => {
     if (selectedAccount) {
       const fetchPassword = async () => {
-        const response = await fetch(`http://localhost:3001/accounts?address=${selectedAccount.address}`);
-        const data = await response.json();
-        setCorrectPassword(data[0].password);
+        try {
+          const data = await getAccountByAddress(selectedAccount.address);
+          setCorrectPassword(data.passcode);
+        } catch (error) {
+          console.error('Error fetching account password:', error);
+        }
       };
 
       fetchPassword();
@@ -69,7 +72,6 @@ const AccountInfo = () => {
             </div>
             <div className="account-detail-wrapper">
               <div className='account-detail'>
-                <p><strong>Account Name:</strong> {selectedAccount.name}</p>
                 <p><strong>Account Address:</strong>
                   <span className="address">
                     {truncateAddress(selectedAccount.address)}
