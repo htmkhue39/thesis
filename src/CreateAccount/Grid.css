@@ -1,37 +1,37 @@
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 cột */
-    grid-gap: 10px; /* Khoảng cách giữa các ô vuông */
-    margin-top: 40px;
-    margin-bottom: 40px;
-    max-width: 100%; 
-    box-sizing: border-box; 
-  }
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cột */
+  grid-gap: 10px; /* Khoảng cách giữa các ô vuông */
+  margin-top: 40px;
+  margin-bottom: 40px;
+  max-width: 100%; 
+  box-sizing: border-box; 
+}
+
+.grid-item {
+  display: flex; /* Sử dụng flexbox */
+  justify-content: center;
+  align-items: center; /* Canh giữa theo chiều dọc */
   
-  .grid-item {
-    display: flex; /* Sử dụng flexbox */
-    justify-content: center;
-    align-items: center; /* Canh giữa theo chiều dọc */
-    
-  }
-  
-  .grid-item-number {
-    width: 30px; /* Độ rộng cố định của số thứ tự */
-    text-align: center; /* Canh giữa nội dung của số thứ tự */
-  }
+}
+
+.grid-item-number {
+  width: 30px; /* Độ rộng cố định của số thứ tự */
+  text-align: center; /* Canh giữa nội dung của số thứ tự */
+}
   
 .grid-item-word,
 .grid-item-input {
-    background-color: white; /* Nền trắng */
-    border: 1px solid #ccc; /* Viền xám */
-    padding: 10px;
-    width: 125px; /* Độ rộng cố định */
-    height: 50px;
-    border-radius: 10px;
-    box-sizing: border-box; /* Bao gồm padding và border vào width và height */
+  background-color: white; /* Nền trắng */
+  border: 1px solid #ccc; /* Viền xám */
+  padding: 10px;
+  width: 125px; /* Độ rộng cố định */
+  height: 50px;
+  border-radius: 10px;
+  box-sizing: border-box; /* Bao gồm padding và border vào width và height */
 }
 
 .grid-item-input {
-    margin: 0; /* Loại bỏ margin của input */
+  margin: 0; /* Loại bỏ margin của input */
 }
   

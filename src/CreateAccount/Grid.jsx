@@ -1,5 +1,5 @@
 import React from 'react';
-import './Grid.css'; // Import file CSS để định dạng
+import './Grid.css';
 
 const Grid = React.forwardRef(({ mnemonic }, ref) => {
   return (
@@ -13,5 +13,7 @@ const Grid = React.forwardRef(({ mnemonic }, ref) => {
     </div>
   );
 });
+
+Grid.displayName = 'Grid';
 
 export default Grid;

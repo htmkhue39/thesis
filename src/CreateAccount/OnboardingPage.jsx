@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import './OnboardingPage.css'; 
@@ -26,7 +25,7 @@ const OnboardingPage = () => {
         <div className='app'>
           <div className="onboarding-flow">
             <div className="onboarding-flow-wrapper">
-              <h2>Let's get started</h2>
+              <h2>Let&apos;s get started</h2>
               <div className='logo-wrapper'>
                 <img src={logo} alt="Logo" className='logo' />
               </div>

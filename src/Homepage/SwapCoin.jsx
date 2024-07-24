@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
 import { getTokens, getBalances, getExchangeRate, getFees, createTransaction } from '../../mockApi';
@@ -62,7 +62,7 @@ function SwapCoin() {
     const fetchBalances = async (accountAddress, nodeAddress) => {
         try {
             const balances = await getBalances(accountAddress, nodeAddress);
-            console.log('Fetched balances:', balances); // Debug log
+            console.log('Fetched balances:', balances); 
             setBalances(balances);
         } catch (error) {
             console.error('Error fetching balances:', error);

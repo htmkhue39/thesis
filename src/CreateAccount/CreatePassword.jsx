@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Header from '../components/Header';
@@ -110,7 +110,7 @@ const CreatePassword = () => {
                       onChange={(e) => handleConfirmPasswordChange(e.target.value)}
                       className='password-input'
                     />
-                      {!passwordsMatch && <p className="error">Passcode don't match</p>}
+                      {!passwordsMatch && <p className="error">Passcode don&apos;t match</p>}
                   </div>
 
                   <button type="submit" className='btn-primary'>Create a new account</button>

@@ -1,4 +1,3 @@
-import React from 'react';
 import './CombinedTokenLogo.css';
 
 const CombinedTokenLogo = ({ logo1, logo2 }) => {

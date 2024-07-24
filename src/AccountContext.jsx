@@ -1,9 +1,7 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import { 
   getAccounts, 
-  getNodes, 
   connectNode as connectNodeApi, 
-  updateAccount as updateAccountApi, 
   createAccount as createAccountApi, 
   clearConnectedNodeAddress as clearConnectedNodeAddressApi 
 } from '../mockApi';

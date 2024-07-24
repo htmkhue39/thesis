@@ -137,8 +137,6 @@
   text-decoration: underline;
 }
 
-/* Overlay */
-
 .overlay {
   position: fixed;
   top: 0;
@@ -149,8 +147,6 @@
   backdrop-filter: blur(5px);
   z-index: 999;
 }
-
-/* Account Selector Modal */
 
 .account-selector-modal {
   position: fixed;

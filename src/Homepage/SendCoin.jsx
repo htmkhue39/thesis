@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AccountHeader from './AccountHeader';
 import Header from '../components/Header';
@@ -23,8 +23,8 @@ const mockApiCall = (address) => {
 };
 
 function SendCoin() {
-  const [selectedAccount, setSelectedAccount] = useState(accounts[0]);
-  const [showAccountSelector, setShowAccountSelector] = useState(false);
+  const [selectedAccount] = useState(accounts[0]);
+  const [setShowAccountSelector] = useState(false);
   const [recipientAddress, setRecipientAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [validAddress, setValidAddress] = useState(false);
@@ -38,12 +38,12 @@ function SendCoin() {
     alert('Address copied to clipboard');
   };
 
-  const handleAccountChange = (event) => {
-    const accountName = event.target.value;
-    const account = accounts.find((acc) => acc.name === accountName);
-    setSelectedAccount(account);
-    setShowAccountSelector(false);
-  };
+  // const handleAccountChange = (event) => {
+  //   const accountName = event.target.value;
+  //   const account = accounts.find((acc) => acc.name === accountName);
+  //   setSelectedAccount(account);
+  //   setShowAccountSelector(false);
+  // };
 
   const truncateAddress = (address) => `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
 

@@ -144,7 +144,7 @@
   padding: 8px;
   position: absolute;
   z-index: 1;
-  bottom: 125%; /* Position the tooltip above the button */
+  bottom: 125%;
   left: 50%;
   margin-left: -135px;
   opacity: 0;
@@ -154,7 +154,7 @@
 .tooltip .tooltiptext::after {
   content: "";
   position: absolute;
-  top: 100%; /* At the bottom of the tooltip */
+  top: 100%;
   left: 50%;
   margin-left: -5px;
   border-width: 5px;

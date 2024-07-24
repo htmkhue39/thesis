@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccount } from '../AccountContext';
 import { getAccountByAddress } from '../../mockApi';
 import './Explore.css';
