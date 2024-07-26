@@ -3,13 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import './NodeList.css';
 import './Explore.css';
 import '../components/Button.css';
-import { useAccount } from '../AccountContext';
-import { getNodes, checkNodeConnection, searchNodes } from '../../mockApi';
+import { searchNodes } from '../../mockApi';
+import { ListNodes } from '../api/nodes';
 
 const NodeList = () => {
-  const { selectedAccount } = useAccount();
   const [nodes, setNodes] = useState([]);
-  const [nodeConnections, setNodeConnections] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -17,16 +15,12 @@ const NodeList = () => {
     fetchNodes();
   }, []);
 
-  useEffect(() => {
-    if (selectedAccount) {
-      checkConnections();
-    }
-  }, [selectedAccount, nodes]);
-
   const fetchNodes = async () => {
     try {
-      const nodesData = await getNodes();
-      setNodes(nodesData);
+      const nodesData = await ListNodes();
+      console.log("List nodes: ", nodesData)
+      // setNodes(nodesData);
+      setNodes(nodesData.nodeList)
     } catch (error) {
       console.error('Error fetching nodes:', error);
     }
@@ -39,21 +33,6 @@ const NodeList = () => {
     } catch (error) {
       console.error('Error searching nodes:', error);
     }
-  };
-
-  const checkConnections = async () => {
-    const connections = {};
-    const promises = nodes.map(async (node) => {
-      try {
-        const isConnected = await checkNodeConnection(selectedAccount.address, node.address);
-        connections[node.address] = isConnected;
-      } catch (error) {
-        console.error('Error checking node connection:', error);
-      }
-    });
-
-    await Promise.all(promises);
-    setNodeConnections(connections);
   };
 
   const handleNodeClick = (nodeAddress) => {
@@ -97,8 +76,8 @@ const NodeList = () => {
                     <tr key={node.id} onClick={() => handleNodeClick(node.address)} className='node-row'>
                       <td>{index + 1}</td>
                       <td>{node.address}</td>
-                      <td className={`connection-status ${nodeConnections[node.address] ? 'connected' : 'disconnected'}`}>
-                        {nodeConnections[node.address] ? 'Yes' : 'No'}
+                      <td className={`connection-status ${node.connected ? 'connected' : 'disconnected'}`}>
+                        {node.connected ? 'Yes' : 'No'}
                       </td>
                     </tr>
                   ))}

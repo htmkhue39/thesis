@@ -38,14 +38,13 @@ const ConfirmAccount = () => {
       alert('Mnemonic phrase matches!');
       const password = localStorage.getItem('newPassword');
       const newAccount = {
-        name: 'New Account', 
-        address: '0xNewAddress',
         password,
         mnemonic,
       };
 
       try {
         const createdAccount = await createAccount(newAccount);
+        console.log("createdAccount: ", createdAccount)
         setSelectedAccount(createdAccount);
         alert('Account created successfully!');
         navigate('/swap');

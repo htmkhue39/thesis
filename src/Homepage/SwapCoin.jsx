@@ -40,7 +40,12 @@ function SwapCoin() {
     }, [selectedAccount]);
 
     useEffect(() => {
-        calculateToAmount();
+        if (!fromToken || !toToken || fromAmount <= 0 || !exchangeRate || fee === null) {
+            setToAmount(0);
+            return;
+        }
+        const amountOut = fromAmount * exchangeRate * (1 - fee / 100);
+        setToAmount(amountOut.toFixed(2));
     }, [fromAmount, fromToken, toToken, exchangeRate, fee]);
 
     useEffect(() => {
@@ -127,15 +132,6 @@ function SwapCoin() {
         const amount = value === '' ? 0 : Number(value);
         setFromAmount(amount);
         setIsAmountExceedBalance(amount > getBalance(fromToken));
-    };
-
-    const calculateToAmount = () => {
-        if (!fromToken || !toToken || fromAmount <= 0 || !exchangeRate || fee === null) {
-            setToAmount(0);
-            return;
-        }
-        const amountOut = fromAmount * exchangeRate * (1 - fee / 100);
-        setToAmount(amountOut.toFixed(2));
     };
 
     const handleSwap = async () => {

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
 import Header from '../components/Header';
-import { checkAccount } from '../../mockApi';
 import './CreatePassword.css';
 import '../components/Button.css';
 import '../components/Step.css';
+import { importAccount } from '../api/accounts';
 
 const ImportAccountPassword = () => {
   const navigate = useNavigate();
@@ -20,7 +20,8 @@ const ImportAccountPassword = () => {
 
   const handleSubmit = async () => {
     try {
-      const account = await checkAccount(mnemonic, password);
+      const account = await importAccount(mnemonic, password);
+      console.log("imported account: ", account)
       setSelectedAccount(account);
       navigate('/swap');
     } catch (error) {

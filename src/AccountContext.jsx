@@ -1,10 +1,10 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { 
   getAccounts, 
-  connectNode as connectNodeApi, 
-  createAccount as createAccountApi, 
+  connectNode as connectNodeApi,
   clearConnectedNodeAddress as clearConnectedNodeAddressApi 
 } from '../mockApi';
+import { createAccount as createAccountApi } from './api/accounts';
 
 const AccountContext = createContext();
 

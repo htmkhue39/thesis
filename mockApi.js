@@ -2,9 +2,14 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = 'http://127.0.0.1:8080';
 
-const mock = new MockAdapter(axios, { delayResponse: 500 });
+const axiosClient = axios.create({
+    baseURL: 'http://127.0.0.1:8080', // Replace with your API's base URL
+    timeout: 5000, // You can set a timeout if needed
+});
+
+const mock = new MockAdapter(axiosClient, { delayResponse: 500 });
 
 const accounts = [
     {
@@ -413,7 +418,7 @@ const tokens = [
 ];
 
 mock.onGet(`${API_URL}/accounts`).reply(200, accounts);
-mock.onGet(`${API_URL}/mnemonics`).reply(200, mnemonics);
+mock.onPost(`${API_URL}/mnemonics`).reply(200, mnemonics);
 mock.onGet(`${API_URL}/tokens`).reply(200, tokens);
 mock.onGet(`${API_URL}/exchangeRate`).reply(200, { rate: 3037.73 });
 mock.onGet(`${API_URL}/fees`).reply(200, { fee: 0.25 });
@@ -626,9 +631,19 @@ mock.onPost(`${API_URL}/orders`).reply(config => {
 
 
 // API functions
+export const generateMnemonic = async () => {
+    try {
+        const response = await axiosClient.post(`${API_URL}/mnemonics`);
+        return response.data;
+    } catch (error) {
+        console.error('Error generate mnemonic:', error);
+        throw error;
+    }
+}
+
 export const getAccounts = async () => {
     try {
-        const response = await axios.get(`${API_URL}/accounts`);
+        const response = await axiosClient.get(`${API_URL}/accounts`);
         return response.data;
     } catch (error) {
         console.error('Error fetching accounts:', error);
@@ -638,7 +653,7 @@ export const getAccounts = async () => {
 
 export const getAccountById = async (id) => {
     try {
-        const response = await axios.get(`${API_URL}/accounts/${id}`);
+        const response = await axiosClient.get(`${API_URL}/accounts/${id}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching account by id:', error);
@@ -648,7 +663,7 @@ export const getAccountById = async (id) => {
 
 export const getAccountByAddress = async (address) => {
     try {
-      const response = await axios.get(`${API_URL}/accounts`, { params: { address } });
+      const response = await axiosClient.get(`${API_URL}/accounts`, { params: { address } });
       return response.data[0];
     } catch (error) {
       console.error('Error fetching account by address:', error);
@@ -656,9 +671,9 @@ export const getAccountByAddress = async (address) => {
     }
 };
 
-export const getNodes = async (address) => {
+export const getNodes = async (accountId) => {
     try {
-        const response = await axios.get(`${API_URL}/nodes`, { params: { address } });
+        const response = await axiosClient.get(`${API_URL}/nodes`, { params: { accountId } });
         return response.data;
     } catch (error) {
         console.error('Error fetching nodes:', error);
@@ -668,7 +683,7 @@ export const getNodes = async (address) => {
 
 export const getTokens = async () => {
     try {
-        const response = await axios.get(`${API_URL}/tokens`);
+        const response = await axiosClient.get(`${API_URL}/tokens`);
         return response.data;
     } catch (error) {
         console.error('Error fetching tokens:', error);
@@ -678,7 +693,7 @@ export const getTokens = async () => {
 
 export const getExchangeRate = async () => {
     try {
-        const response = await axios.get(`${API_URL}/exchangeRate`);
+        const response = await axiosClient.get(`${API_URL}/exchangeRate`);
         return response.data.rate;
     } catch (error) {
         console.error('Error fetching exchange rate:', error);
@@ -688,7 +703,7 @@ export const getExchangeRate = async () => {
 
 export const getFees = async () => {
     try {
-        const response = await axios.get(`${API_URL}/fees`);
+        const response = await axiosClient.get(`${API_URL}/fees`);
         return response.data.fee;
     } catch (error) {
         console.error('Error fetching fees:', error);
@@ -762,14 +777,14 @@ export const connectNode = async (accountAddress, nodeAddress) => {
                 b_init_fund: 0,
                 timelock: 0
             };
-            await axios.post(`${API_URL}/channels`, newChannel);
+            await axiosClient.post(`${API_URL}/channels`, newChannel);
         }
 
         const accountIndex = accounts.findIndex(account => account.address === accountAddress);
         if (accountIndex !== -1) {
             accounts[accountIndex].connectedNodeAddress = nodeAddress;
             accounts[accountIndex].connected = true;
-            await axios.put(`${API_URL}/accounts/${accounts[accountIndex].id}`, accounts[accountIndex]);
+            await axiosClient.put(`${API_URL}/accounts/${accounts[accountIndex].id}`, accounts[accountIndex]);
         }
 
         return { success: true };
@@ -781,7 +796,7 @@ export const connectNode = async (accountAddress, nodeAddress) => {
 
 export const checkNodeConnection = async (accountAddress, nodeAddress) => {
     try {
-        const response = await axios.post(`${API_URL}/checkNodeConnection`, { accountAddress, nodeAddress });
+        const response = await axiosClient.post(`${API_URL}/checkNodeConnection`, { accountAddress, nodeAddress });
         return response.data.connected;
     } catch (error) {
         console.error('Error checking node connection:', error);
@@ -791,7 +806,7 @@ export const checkNodeConnection = async (accountAddress, nodeAddress) => {
 
 export const searchNodes = async (query) => {
     try {
-      const response = await axios.get(`${API_URL}/nodes`, { params: { address: query } });
+      const response = await axiosClient.get(`${API_URL}/nodes`, { params: { address: query } });
       return response.data;
     } catch (error) {
       console.error('Error searching nodes:', error);
@@ -805,7 +820,7 @@ export const clearConnectedNodeAddress = async (accountId) => {
         if (accountIndex !== -1) {
             accounts[accountIndex].connectedNodeAddress = '';
             accounts[accountIndex].connected = false;
-            await axios.put(`${API_URL}/accounts/${accountId}`, accounts[accountIndex]);
+            await axiosClient.put(`${API_URL}/accounts/${accountId}`, accounts[accountIndex]);
         }
         return { success: true };
     } catch (error) {
@@ -816,7 +831,7 @@ export const clearConnectedNodeAddress = async (accountId) => {
 
 export const createAccount = async (newAccount) => {
     try {
-        const response = await axios.post(`${API_URL}/accounts`, newAccount);
+        const response = await axiosClient.post(`${API_URL}/accounts`, newAccount);
         return response.data;
     } catch (error) {
         console.error('Error creating account:', error);
@@ -826,7 +841,7 @@ export const createAccount = async (newAccount) => {
 
 export const updateAccount = async (account) => {
     try {
-        const response = await axios.put(`${API_URL}/accounts/${account.id}`, account);
+        const response = await axiosClient.put(`${API_URL}/accounts/${account.id}`, account);
         return response.data;
     } catch (error) {
         console.error('Error updating account:', error);
@@ -836,7 +851,7 @@ export const updateAccount = async (account) => {
 
 export const checkAccount = async (mnemonic, password) => {
     try {
-        const response = await axios.post(`${API_URL}/checkAccount`, { mnemonic, password });
+        const response = await axiosClient.post(`${API_URL}/checkAccount`, { mnemonic, password });
         return response.data;
     } catch (error) {
         console.error('Error checking account:', error);
@@ -846,7 +861,7 @@ export const checkAccount = async (mnemonic, password) => {
 
 export const createTransaction = async (transaction) => {
     try {
-        const response = await axios.post(`${API_URL}/transactions`, transaction);
+        const response = await axiosClient.post(`${API_URL}/transactions`, transaction);
         return response.data;
     } catch (error) {
         console.error('Error creating transaction:', error);
@@ -857,7 +872,7 @@ export const createTransaction = async (transaction) => {
 
 export const addInitialLiquidity = async (data) => {
     try {
-      const response = await axios.post(`${API_URL}/initialLiquidity`, data);
+      const response = await axiosClient.post(`${API_URL}/initialLiquidity`, data);
       return response.data;
     } catch (error) {
       console.error('Error adding initial liquidity:', error);
@@ -867,7 +882,7 @@ export const addInitialLiquidity = async (data) => {
 
 export const addLiquidity = async (data) => {
     try {
-        const response = await axios.post(`${API_URL}/liquidity`, data);
+        const response = await axiosClient.post(`${API_URL}/liquidity`, data);
         return response.data;
     } catch (error) {
         console.error('Error adding liquidity:', error);
@@ -877,7 +892,7 @@ export const addLiquidity = async (data) => {
 
 export const checkPool = async (data) => {
     try {
-        const response = await axios.post(`${API_URL}/checkPool`, data);
+        const response = await axiosClient.post(`${API_URL}/checkPool`, data);
         return response.data;
     } catch (error) {
         console.error('Error checking pool:', error);
@@ -887,7 +902,7 @@ export const checkPool = async (data) => {
 
 export const getOrderBook = async (orderBookId, token) => {
   try {
-    const response = await axios.get(`${API_URL}/orderBook`, { params: { orderBookId, token } });
+    const response = await axiosClient.get(`${API_URL}/orderBook`, { params: { orderBookId, token } });
     return response.data;
   } catch (error) {
     console.error('Error fetching order book:', error);
@@ -898,7 +913,7 @@ export const getOrderBook = async (orderBookId, token) => {
 
 export const submitOrder = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/orders`, data);
+    const response = await axiosClient.post(`${API_URL}/orders`, data);
     return response.data;
   } catch (error) {
     console.error('Error creating order:', error);
@@ -908,7 +923,7 @@ export const submitOrder = async (data) => {
 
 export const getOrderBooks = async () => {
   try {
-      const response = await axios.get(`${API_URL}/orderBooks`);
+      const response = await axiosClient.get(`${API_URL}/orderBooks`);
       return response.data;
   } catch (error) {
       console.error('Error fetching order books:', error);
@@ -918,7 +933,7 @@ export const getOrderBooks = async () => {
 
 export const searchOrderBooks = async (searchQuery) => {
     try {
-      const response = await axios.get(`${API_URL}/searchOrderBooks`, { params: { searchQuery } });
+      const response = await axiosClient.get(`${API_URL}/searchOrderBooks`, { params: { searchQuery } });
       return response.data;
     } catch (error) {
       console.error('Error searching order books:', error);

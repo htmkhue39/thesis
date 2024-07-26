@@ -1,12 +1,12 @@
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Header from '../components/Header';
 import Grid from './Grid';
 import '../components/Button.css';
 import '../components/Step.css';
 import './CreatePassword.css';
 import './SecureAccount.css';
+import { generateMnemonic } from '../api/accounts';
 
 const SecureAccount = () => {
   const navigate = useNavigate();
@@ -16,9 +16,8 @@ const SecureAccount = () => {
   useEffect(() => {
     const fetchMnemonic = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/mnemonics');
-        const data = response.data;
-        setMnemonic(data[0]); // Use the first mnemonic phrase from the list
+        const res = await generateMnemonic()
+        setMnemonic(res.mnemonic)
       } catch (error) {
         console.error('Error fetching mnemonic:', error);
       }
