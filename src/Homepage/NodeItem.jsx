@@ -7,7 +7,8 @@ import '../components/Button.css';
 import backIcon from '../assets/back-icon.svg';
 
 import { useAccount } from '../AccountContext';
-import { getNodes } from '../../mockApi';
+import { getNode } from '../api/nodes';
+import { getCoinLogo } from '../helpers/GetCoinLogo';
 
 const NodeItem = () => {
   const { connectNode } = useAccount();
@@ -21,8 +22,8 @@ const NodeItem = () => {
 
   const fetchNodeData = async () => {
     try {
-      const nodeData = await getNodes(nodeAddress);
-      setNode(nodeData[0]);
+      const nodeData = await getNode(nodeAddress);
+      setNode(nodeData);
     } catch (error) {
       console.error('Error fetching node data:', error);
     }
@@ -75,7 +76,7 @@ const NodeItem = () => {
                     <td>{index + 1}</td>
                     <td>
                       <div className="token-info">
-                        <img src={token.logo} alt={`${token.name} logo`} className="token-logo" />
+                        <img src={getCoinLogo(token.symbol)} alt={`${token.name} logo`} className="token-logo" />
                         <div>
                           <div>{token.name}</div>
                           <div className="token-symbol">{token.symbol}</div>

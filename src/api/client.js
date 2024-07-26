@@ -8,13 +8,13 @@ export const publicClient = axios.create({
     timeout: timeout, // You can set a timeout if needed
 });
 
-export const AuthClient = axios.create({
+export const authClient = axios.create({
   baseURL: baseUrl,
   timeout: timeout,
 })
 
 // Add a request interceptor to include the token in the Authorization header
-AuthClient.interceptors.request.use(
+authClient.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('token');
       if (token) {

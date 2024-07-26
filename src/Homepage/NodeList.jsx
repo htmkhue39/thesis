@@ -4,7 +4,7 @@ import './NodeList.css';
 import './Explore.css';
 import '../components/Button.css';
 import { searchNodes } from '../../mockApi';
-import { ListNodes } from '../api/nodes';
+import { listNodes } from '../api/nodes';
 
 const NodeList = () => {
   const [nodes, setNodes] = useState([]);
@@ -17,7 +17,7 @@ const NodeList = () => {
 
   const fetchNodes = async () => {
     try {
-      const nodesData = await ListNodes();
+      const nodesData = await listNodes();
       console.log("List nodes: ", nodesData)
       // setNodes(nodesData);
       setNodes(nodesData.nodeList)
