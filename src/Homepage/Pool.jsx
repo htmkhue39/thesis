@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-import { getPoolsFromChannel } from '../../mockApi';
 
 import './Explore.css';
 import './Pool.css';
 import '../components/Button.css';
+import { listPositions } from '../api/node';
 
 const Pool = () => {
     const { selectedAccount } = useAccount();
@@ -21,8 +21,8 @@ const Pool = () => {
 
     const fetchLiquidityPositions = async (accountAddress, nodeAddress) => {
         try {
-            const pools = await getPoolsFromChannel(accountAddress, nodeAddress);
-            setLiquidityPositions(pools);
+            const res = await listPositions(nodeAddress);
+            setLiquidityPositions(res.positions);
         } catch (error) {
             console.error('Error fetching liquidity positions:', error);
         }
@@ -70,7 +70,7 @@ const Pool = () => {
                                                     <div className="pool-card-row">
                                                         <p className='pool-card-p'>Your total pool tokens: </p>
                                                         <div className='pool-card-row-detail'>
-                                                            <p>{position.totalPoolTokens}</p>
+                                                            <p>{position.lpTokens}</p>
                                                         </div>
                                                     </div>
                                                     <div className="pool-card-row">

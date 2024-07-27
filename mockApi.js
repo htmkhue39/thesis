@@ -749,11 +749,7 @@ export const getPools = async (nodeAddress) => {
 
 export const getPoolsFromChannel = async (accountAddress, nodeAddress) => {
     try {
-        const channel = channels.find(channel =>
-            (channel.address_a === accountAddress && channel.address_b === nodeAddress) ||
-            (channel.address_a === nodeAddress && channel.address_b === accountAddress)
-        );
-        return channel ? channel.liquidityPositions : [];
+        return channels[0].liquidityPositions;
     } catch (error) {
         console.error('Error fetching pools from channel:', error);
         throw error;

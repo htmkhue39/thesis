@@ -30,3 +30,13 @@ export const listBalances = async (nodeAddress) => {
         throw error;
     }
 };
+
+export const listPositions = async (nodeAddress) => {
+    try {
+        const response = await authClient.get(`nodes/${nodeAddress}/positions`)
+        return response.data
+    } catch (error) {
+        console.error('Error get position list:', error);
+        throw error;
+    }
+};
