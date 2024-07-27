@@ -1,3 +1,4 @@
+import axios from "axios";
 import { authClient } from "./client";
 
 export const listNodes = async () => {
@@ -12,10 +13,26 @@ export const listNodes = async () => {
 
 export const getNode = async (nodeAddress) => {
     try {
-        const response = await authClient.get(`nodes/` + nodeAddress);
+        const response = await authClient.get(`nodes/${nodeAddress}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching nodes:', error);
+        throw error;
+    }
+};
+
+export const connectNode = async (nodeAddress) => {
+    try {
+        const response = await authClient.post(`nodes/connect`, { nodeAddress })
+        
+        const ret = { connected: false }
+        if (response.status === axios.HttpStatusCode.Ok) {
+            ret.connected = true
+        }
+
+        return ret
+    } catch (error) {
+        console.error('Error connecting node:', error);
         throw error;
     }
 };

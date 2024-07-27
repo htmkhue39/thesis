@@ -1,10 +1,10 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { 
-  getAccounts, 
-  connectNode as connectNodeApi,
+  getAccounts,
   clearConnectedNodeAddress as clearConnectedNodeAddressApi 
 } from '../mockApi';
 import { createAccount as createAccountApi } from './api/accounts';
+import { connectNode as connectNodeApi } from './api/nodes';
 
 const AccountContext = createContext();
 
@@ -52,8 +52,13 @@ export const AccountProvider = ({ children }) => {
 
   const connectNode = async (nodeAddress, callback) => {
     try {
-      await connectNodeApi(selectedAccount.address, nodeAddress);
+      const res = await connectNodeApi(selectedAccount.address, nodeAddress);
 
+      if (!res.connected) {
+        alert("Error while connecting node")
+        return
+      }
+    
       const updatedAccount = {
         ...selectedAccount,
         connectedNodeAddress: nodeAddress,
