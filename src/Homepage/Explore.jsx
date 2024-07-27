@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-import { getBalances } from '../../mockApi';
 
 import './Explore.css';
 import CombinedTokenLogo from '../components/CombinedTokenLogo';
 import { getNode } from '../api/nodes';
-import { listPools, listTransactions } from '../api/node';
+import { listBalances, listPools, listTransactions } from '../api/node';
 import { getCoinLogo } from '../helpers/GetCoinLogo';
 
 const Explore = () => {
@@ -58,8 +57,8 @@ const Explore = () => {
 
   const fetchBalances = async (nodeAddress) => {
     try {
-      const balances = await getBalances(selectedAccount.address, nodeAddress);
-      setBalances(balances);
+      const res = await listBalances(nodeAddress);
+      setBalances(res.balances);
     } catch (error) {
       console.error('Error fetching balances:', error);
     }
@@ -229,12 +228,12 @@ const Explore = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.keys(balances).length > 0 ? (
-                      Object.entries(balances).map(([token, amount], index) => (
+                    {balances.length > 0 ? (
+                      balances.map((balance, index) => (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{token}</td>
-                          <td>{amount}</td>
+                          <td>{balance.token}</td>
+                          <td>{balance.amount}</td>
                         </tr>
                       ))
                     ) : (
