@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-import { getTransactions, getTokens, getPools, getBalances } from '../../mockApi';
+import { getBalances } from '../../mockApi';
 
 import './Explore.css';
 import CombinedTokenLogo from '../components/CombinedTokenLogo';
+import { getNode } from '../api/nodes';
+import { listPools, listTransactions } from '../api/node';
+import { getCoinLogo } from '../helpers/GetCoinLogo';
 
 const Explore = () => {
   const { selectedAccount } = useAccount();
@@ -22,14 +25,14 @@ const Explore = () => {
   }, [selectedAccount]);
 
   const fetchAllData = async (nodeAddress) => {
-    await Promise.all([fetchTransactions(), fetchTokens(nodeAddress), fetchPools(nodeAddress), fetchBalances(nodeAddress)]);
+    await Promise.all([fetchTransactions(nodeAddress), fetchTokens(nodeAddress), fetchPools(nodeAddress), fetchBalances(nodeAddress)]);
   };
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (nodeAddress) => {
     if (!selectedAccount) return;
     try {
-      const transactions = await getTransactions(selectedAccount.address, selectedAccount.connectedNodeAddress);
-      setTransactions(transactions);
+      const res = await listTransactions(nodeAddress)
+      setTransactions(res.transactions);
     } catch (error) {
       console.error('Error fetching transactions:', error);
     }
@@ -37,8 +40,8 @@ const Explore = () => {
 
   const fetchTokens = async (nodeAddress) => {
     try {
-      const tokens = await getTokens(nodeAddress);
-      setTokens(tokens);
+      const nodeData = await getNode(nodeAddress);
+      setTokens(nodeData.tokens);
     } catch (error) {
       console.error('Error fetching tokens:', error);
     }
@@ -46,21 +49,8 @@ const Explore = () => {
 
   const fetchPools = async (nodeAddress) => {
     try {
-      const pools = await getPools(nodeAddress);
-      const tokens = await getTokens(nodeAddress); // Fetch tokens to get logos
-  
-      const poolData = pools.map(pool => {
-        const tokenALogo = tokens.find(token => token.symbol === pool.tokenA)?.logo || '';
-        const tokenBLogo = tokens.find(token => token.symbol === pool.tokenB)?.logo || '';
-  
-        return {
-          ...pool,
-          logo1: tokenALogo,
-          logo2: tokenBLogo,
-        };
-      });
-  
-      setPools(poolData);
+      const res = await listPools(nodeAddress);
+      setPools(res.pools);
     } catch (error) {
       console.error('Error fetching pools:', error);
     }
@@ -128,7 +118,7 @@ const Explore = () => {
                           <td>{index + 1}</td>
                           <td>
                             <div className="token-info">
-                              <img src={token.logo} alt={`${token.name} logo`} className="token-logo" />
+                              <img src={getCoinLogo(token.symbol)} alt={`${token.name} logo`} className="token-logo" />
                               <div>
                                 <div>{token.name}</div>
                                 <div className="token-symbol">{token.symbol}</div>
@@ -172,7 +162,7 @@ const Explore = () => {
                         <tr key={pool.id}>
                           <td>{index + 1}</td>
                           <td>
-                            <CombinedTokenLogo logo1={pool.logo1} logo2={pool.logo2} />
+                            <CombinedTokenLogo logo1={getCoinLogo(pool.tokenA)} logo2={getCoinLogo(pool.tokenB)} />
                             {pool.pool}
                           </td>
                           <td>{pool.transactions}</td>
@@ -214,7 +204,8 @@ const Explore = () => {
                           <td>{tx.toToken}</td>
                           <td>{tx.fromAmount}</td>
                           <td>{tx.toAmount}</td>
-                          <td>{new Date(tx.date).toLocaleString()}</td>
+                          <td>{tx.date}</td>
+                          {/* <td>{new Date(tx.date).toLocaleString()}</td> */}
                         </tr>
                       ))
                     ) : (

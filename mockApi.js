@@ -194,7 +194,7 @@ const mnemonics = [
 const nodes = [
     {
         id: "1",
-        address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+        address: "cosmos164xgenflr89l5q3q20e342z4ezpvyutlygaayf",
         tokens: [
             { id: "1", name: "Bitcoin", symbol: "BTC", logo: "/coin/bitcoin.png", price: "$63.95k", change1h: "0.61", change24h: "-2.57", change7d: "-4.32", volume24h: "$20.22B" },
             { id: "2", name: "Ethereum", symbol: "ETH", logo: "/coin/ethereum.png", price: "$3.5k", change1h: "1.1", change24h: "-1.94", change7d: "-0.08", volume24h: "$13.27B" },
