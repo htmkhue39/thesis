@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-import { getTokens, getBalances, addInitialLiquidity, addLiquidity, checkPool } from '../../mockApi';
+import { addInitialLiquidity, addLiquidity } from '../../mockApi';
 
 import '../components/Button.css';
 import './AddLiquidity.css';
@@ -11,6 +11,9 @@ import './SwapCoin.css';
 import dropIcon from '../assets/dropdown-icon.svg';
 import searchIcon from '../assets/search-icon.svg';
 import backIcon from '../assets/back-icon.svg';
+import { getNode } from '../api/nodes';
+import { getCoinLogo } from '../helpers/GetCoinLogo';
+import { listBalances, checkPool } from '../api/node';
 
 function AddLiquidity() {
     const { selectedAccount } = useAccount();
@@ -26,7 +29,7 @@ function AddLiquidity() {
     const [isAmountExceedBalance, setIsAmountExceedBalance] = useState(false);
     const [showFeeOptions, setShowFeeOptions] = useState(false);
     const [selectedFee, setSelectedFee] = useState("0.30%");
-    const [poolExists, setPoolExists] = useState(false);
+    const [poolExisted, setPoolExisted] = useState(false);
     const [priceFromTo, setPriceFromTo] = useState(null);
     const [priceToFrom, setPriceToFrom] = useState(null);
     const [poolShare, setPoolShare] = useState('0%');
@@ -34,56 +37,57 @@ function AddLiquidity() {
     const [modalMessage, setModalMessage] = useState('');
 
     useEffect(() => {
-        fetchTokens();
-    }, []);
-
-    useEffect(() => {
         if (selectedAccount && selectedAccount.connectedNodeAddress) {
+            fetchTokens(selectedAccount.connectedNodeAddress);
             fetchBalances(selectedAccount.address, selectedAccount.connectedNodeAddress);
         }
     }, [selectedAccount]);
 
     useEffect(() => {
-        if (selectedAccount && selectedAccount.connectedNodeAddress) {
+        if (selectedAccount && selectedAccount.connectedNodeAddress && fromToken && toToken) {
             checkIfPoolExists();
         } else {
-            setPoolExists(false);
+            setPoolExisted(false);
         }
     }, [selectedAccount, fromToken, toToken]);
 
-    const fetchTokens = async () => {
+    const fetchTokens = async (nodeAddress) => {
         try {
-            const data = await getTokens();
-            setTokens(data);
+            const res = await getNode(nodeAddress);
+            setTokens(res.tokens);
         } catch (error) {
             console.error('Error fetching tokens:', error);
         }
     };
 
-    const fetchBalances = async (accountAddress, nodeAddress) => {
+    const fetchBalances = async (nodeAddress) => {
         try {
-            const balances = await getBalances(accountAddress, nodeAddress);
-            setBalances(balances);
+            const res = await listBalances(nodeAddress);
+
+            const balanceMap = {}
+            for (const balance of res.balances) {
+                balanceMap[balance.token] = balance.amount
+            }
+            console.log(balanceMap)
+
+            setBalances(balanceMap)
         } catch (error) {
             console.error('Error fetching balances:', error);
         }
     };
 
     const checkIfPoolExists = async () => {
-        if (!selectedAccount || !fromToken || !toToken) return;
-
-        const data = {
-            nodeAddress: selectedAccount.connectedNodeAddress,
-            fromToken: fromToken.symbol,
-            toToken: toToken.symbol
-        };
+        if (!selectedAccount || !selectedAccount.connectedNodeAddress || !fromToken || !toToken) return;
 
         try {
-            const response = await checkPool(data);
-            setPoolExists(response.poolExists);
+            const response = await checkPool(selectedAccount.connectedNodeAddress, fromToken.symbol, toToken.symbol, fromAmount, toAmount);
+            
+            console.log(response)
+
+            setPoolExisted(response.existed);
             setPriceFromTo(response.priceFromTo);
             setPriceToFrom(response.priceToFrom);
-            setPoolShare(response.poolShare);
+            // setPoolShare(response.poolShare);
         } catch (error) {
             console.error('Error checking pool:', error);
         }
@@ -127,6 +131,30 @@ function AddLiquidity() {
         return balances[token.symbol] || 0;
     };
 
+    useEffect(() => {
+        if (poolExisted)
+            return
+        if (fromAmount == 0 || toAmount == 0) {
+            setPriceFromTo(null)
+            setPriceToFrom(null)
+            return
+        }
+        setPriceFromTo(fromAmount / toAmount)
+        setPriceToFrom(toAmount / fromAmount)
+    }, [poolExisted, fromAmount, toAmount])
+
+    useEffect(() => {
+        if (!poolExisted)
+            return
+        setToAmount(fromAmount * priceFromTo)
+    }, [poolExisted, priceFromTo, fromAmount])
+
+    useEffect(() => {
+        if (!poolExisted)
+            return
+        setFromAmount(toAmount * priceToFrom)
+    }, [poolExisted, priceToFrom, toAmount])
+
     const handleFirstAmountChange = (e) => {
         const value = e.target.value;
         const amount = value === '' ? 0 : Number(value);
@@ -159,7 +187,7 @@ function AddLiquidity() {
         try {
             setIsLoading(true);
             let response;
-            if (poolExists) {
+            if (poolExisted) {
                 response = await addLiquidity(liquidityData);
             } else {
                 response = await addInitialLiquidity(liquidityData);
@@ -209,7 +237,7 @@ function AddLiquidity() {
                                     <div className='from-token'>
                                         <div className='token-dropdown' onClick={() => setShowFromTokenDropdown(true)}>
                                             <div className='token-list'>
-                                                {fromToken && <img src={fromToken.logo} alt={fromToken.symbol} className='token-logo' />}
+                                                {fromToken && <img src={getCoinLogo(fromToken.symbol)} alt={fromToken.symbol} className='token-logo' />}
                                                 <span className='swap-token-name'>{fromToken ? fromToken.symbol : 'Select token'}</span>
                                             </div>
                                             <img src={dropIcon} className="dropdown-search" alt="Dropdown" />
@@ -233,7 +261,7 @@ function AddLiquidity() {
                                     <div className='to-token'>
                                         <div className='token-dropdown' onClick={() => setShowToTokenDropdown(true)}>
                                             <div className='token-list'>
-                                                {toToken && <img src={toToken.logo} alt={toToken.symbol} className='token-logo' />}
+                                                {toToken && <img src={getCoinLogo(toToken.symbol)} alt={toToken.symbol} className='token-logo' />}
                                                 <span className='swap-token-name'>{toToken ? toToken.symbol : 'Select token'}</span>
                                             </div>
                                             <img src={dropIcon} className="dropdown-search" alt="Dropdown" />
@@ -255,7 +283,7 @@ function AddLiquidity() {
                             </div>
                         </div>
 
-                        {!poolExists && (toToken != null) && (
+                        {!poolExisted && (toToken != null) && (
                             <div className='fee-dropdown'>
                                 <div className='fee-dropdown-header' onClick={toggleFeeOptions}>
                                     <span>{selectedFee}</span>
@@ -334,7 +362,7 @@ function AddLiquidity() {
                                                 className='token-modal-item'
                                                 onClick={() => handleTokenSelect(token, showFromTokenDropdown ? setFromToken : setToToken)}
                                             >
-                                                <img src={token.logo} alt={token.name} className='token-modal-logo' />
+                                                <img src={getCoinLogo(token.symbol)} alt={token.name} className='token-modal-logo' />
                                                 <div className='token-modal-info'>
                                                     <span className='token-modal-name'>{token.name}</span>
                                                     <span className='token-modal-symbol'>{token.symbol}</span>
