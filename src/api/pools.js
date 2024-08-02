@@ -14,6 +14,7 @@ export const checkPool = async (nodeAddress, fromToken, toToken, fromAmount, toA
 
         return {
             existed: res.existed,
+            feeTier: res.feeTier,
             priceFromTo: res.priceAToB,
             priceToFrom: res.priceBToA,
         }
@@ -89,6 +90,29 @@ export const confirmProvideLiquidity = async (nodeAddress, poolIndex, fromToken,
         }
     } catch (error) {
         console.error('Error simulate provide initial liquidity: ', error)
+        throw error
+    }
+}
+
+export const simulateTrade = async (nodeAddress, fromToken, toToken, forwardDirection, amount) => {
+    try {
+        const req = {
+            fromToken: fromToken,
+            toToken: toToken,
+            forwardDirection: forwardDirection,
+            amount: amount
+        }
+
+        const response = await authClient.post(`nodes/${nodeAddress}/pools/trade`, req)
+        const res = response.data
+
+        return {
+            poolIndex: res.poolId,
+            otherAmount: res.otherAmount,
+            fee: res.fee
+        }
+    } catch (error) {
+        console.error('Error simulate trade: ', error)
         throw error
     }
 }

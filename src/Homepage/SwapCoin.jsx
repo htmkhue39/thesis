@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-import { getTokens, getBalances, getExchangeRate, getFees, createTransaction } from '../../mockApi';
+import { createTransaction } from '../../mockApi';
 
 import '../components/Button.css';
 import './SwapCoin.css';
@@ -11,17 +11,22 @@ import './AddLiquidity.css';
 import dropIcon from '../assets/dropdown-icon.svg';
 import switchIcon from '../assets/switch.png';
 import searchIcon from '../assets/search-icon.svg';
+import { getNode } from '../api/nodes';
+import { listBalances } from '../api/node';
+import { getCoinLogo } from '../helpers/GetCoinLogo';
+import { checkPool, simulateTrade } from '../api/pools';
+import { formatCurrency } from '../helpers/FormatCurrency';
 
 function SwapCoin() {
     const { selectedAccount } = useAccount();
     const navigate = useNavigate();
+    const [pool, setPool] = useState({})
     const [tokens, setTokens] = useState([]);
     const [balances, setBalances] = useState({});
     const [fromToken, setFromToken] = useState({ symbol: 'ETH', logo: '/coin/ethereum.png' });
     const [toToken, setToToken] = useState(null);
     const [fromAmount, setFromAmount] = useState(0);
     const [toAmount, setToAmount] = useState(0);
-    const [exchangeRate, setExchangeRate] = useState(null);
     const [fee, setFee] = useState(null);
     const [showFromTokenDropdown, setShowFromTokenDropdown] = useState(false);
     const [showToTokenDropdown, setShowToTokenDropdown] = useState(false);
@@ -30,65 +35,80 @@ function SwapCoin() {
     const [modalMessage, setModalMessage] = useState('');
 
     useEffect(() => {
-        fetchTokens();
-    }, []);
-
-    useEffect(() => {
         if (selectedAccount && selectedAccount.connectedNodeAddress) {
-            fetchBalances(selectedAccount.address, selectedAccount.connectedNodeAddress);
+            fetchTokens(selectedAccount.connectedNodeAddress);
+            fetchBalances(selectedAccount.connectedNodeAddress);
         }
     }, [selectedAccount]);
 
     useEffect(() => {
-        if (!fromToken || !toToken || fromAmount <= 0 || !exchangeRate || fee === null) {
-            setToAmount(0);
-            return;
+        if (selectedAccount && selectedAccount.connectedNodeAddress && fromToken && toToken) {
+            checkIfPoolExists();
         }
-        const amountOut = fromAmount * exchangeRate * (1 - fee / 100);
-        setToAmount(amountOut.toFixed(2));
-    }, [fromAmount, fromToken, toToken, exchangeRate, fee]);
+    }, [selectedAccount, fromToken, toToken]);
 
-    useEffect(() => {
-        if (fromToken && toToken) {
-            fetchExchangeRate();
-            fetchFees();
-        }
-    }, [fromToken, toToken]);
+    const checkIfPoolExists = async () => {
+        if (!selectedAccount || !selectedAccount.connectedNodeAddress || !fromToken || !toToken) return;
 
-    const fetchTokens = async () => {
         try {
-            const data = await getTokens();
-            setTokens(data);
+            const res = await checkPool(selectedAccount.connectedNodeAddress, fromToken.symbol, toToken.symbol, fromAmount, toAmount);
+            setPool(res)
+        } catch (error) {
+            console.error('Error checking pool:', error);
+        }
+    };
+
+    // useEffect(() => {
+    //     if (!fromToken || !toToken || fromAmount <= 0 || !exchangeRate || fee === null) {
+    //         setToAmount(0);
+    //         return;
+    //     }
+    //     const amountOut = fromAmount * exchangeRate * (1 - fee / 100);
+    //     setToAmount(amountOut.toFixed(2));
+    // }, [fromAmount, fromToken, toToken, exchangeRate, fee]);
+
+    const forwardTrade = async (fromAmount) => {
+        try {
+            const res = await simulateTrade(selectedAccount.connectedNodeAddress, fromToken.symbol, toToken.symbol, true, fromAmount)
+            setToAmount(res.otherAmount)
+            setFee(res.fee)
+        } catch (error) {
+            console.log("Error simulating trade: ", error)
+        }
+    }
+
+    const backwardTrade = async (toAmount) => {
+        try {
+            const res = await simulateTrade(selectedAccount.connectedNodeAddress, fromToken.symbol, toToken.symbol, false, toAmount)
+            setFromAmount(res.otherAmount)
+            setFee(res.fee)
+        } catch (error) {
+            console.log("Error simulating trade: ", error)
+        }
+    }
+
+    const fetchTokens = async (nodeAddress) => {
+        try {
+            const data = await getNode(nodeAddress);
+            setTokens(data.tokens);
         } catch (error) {
             console.error('Error fetching tokens:', error);
         }
     };
 
-    const fetchBalances = async (accountAddress, nodeAddress) => {
+    const fetchBalances = async (nodeAddress) => {
         try {
-            const balances = await getBalances(accountAddress, nodeAddress);
-            console.log('Fetched balances:', balances); 
-            setBalances(balances);
+            const res = await listBalances(nodeAddress);
+
+            const balanceMap = {}
+            for (const balance of res.balances) {
+                balanceMap[balance.token] = balance.amount
+            }
+            console.log(balanceMap)
+
+            setBalances(balanceMap)
         } catch (error) {
             console.error('Error fetching balances:', error);
-        }
-    };
-
-    const fetchExchangeRate = async () => {
-        try {
-            const rate = await getExchangeRate();
-            setExchangeRate(rate);
-        } catch (error) {
-            console.error('Error fetching exchange rate:', error);
-        }
-    };
-
-    const fetchFees = async () => {
-        try {
-            const fee = await getFees();
-            setFee(fee);
-        } catch (error) {
-            console.error('Error fetching fees:', error);
         }
     };
 
@@ -127,11 +147,20 @@ function SwapCoin() {
         return balances[token.symbol] || 0;
     };
 
-    const handleAmountChange = (e) => {
+    const handleFromAmountChange = (e) => {
         const value = e.target.value;
         const amount = value === '' ? 0 : Number(value);
         setFromAmount(amount);
         setIsAmountExceedBalance(amount > getBalance(fromToken));
+        forwardTrade(amount)
+    };
+
+    const handleToAmountChange = (e) => {
+        const value = e.target.value;
+        const amount = value === '' ? 0 : Number(value);
+        setToAmount(amount);
+        setIsAmountExceedBalance(amount > getBalance(toToken));
+        backwardTrade(amount)
     };
 
     const handleSwap = async () => {
@@ -181,7 +210,7 @@ function SwapCoin() {
                                     <div className='from-token'>
                                         <div className='token-dropdown' onClick={() => setShowFromTokenDropdown(true)}>
                                             <div className='token-list'>
-                                                {fromToken && <img src={fromToken.logo} alt={fromToken.symbol} className='token-logo' />}
+                                                {fromToken && <img src={getCoinLogo(fromToken.symbol)} alt={fromToken.symbol} className='token-logo' />}
                                                 <span className='swap-token-name'>{fromToken ? fromToken.symbol : 'Select token'}</span>
                                             </div>
                                             <img src={dropIcon} className="dropdown-search" alt="Dropdown" />
@@ -189,8 +218,8 @@ function SwapCoin() {
                                         <div className='amount-wrapper'>
                                             <input 
                                                 type='number' 
-                                                value={fromAmount || 0} 
-                                                onChange={handleAmountChange} 
+                                                value={formatCurrency(fromAmount) || 0} 
+                                                onChange={handleFromAmountChange} 
                                                 className='amount-input' 
                                             />
                                         </div>
@@ -213,7 +242,7 @@ function SwapCoin() {
                                     <div className='to-token'>
                                         <div className='token-dropdown' onClick={() => setShowToTokenDropdown(true)}>
                                             <div className='token-list'>
-                                                {toToken && <img src={toToken.logo} alt={toToken.symbol} className='token-logo' />}
+                                                {toToken && <img src={getCoinLogo(toToken.symbol)} alt={toToken.symbol} className='token-logo' />}
                                                 <span className='swap-token-name'>{toToken ? toToken.symbol : 'Select token'}</span>
                                             </div>
                                             <img src={dropIcon} className="dropdown-search" alt="Dropdown" />
@@ -221,8 +250,8 @@ function SwapCoin() {
                                         <div className='amount-wrapper'>
                                             <input 
                                                 type='number' 
-                                                value={toAmount || 0} 
-                                                readOnly 
+                                                value={formatCurrency(toAmount) || 0} 
+                                                onChange={handleToAmountChange} 
                                                 className='amount-input' 
                                             />
                                         </div>
@@ -232,13 +261,16 @@ function SwapCoin() {
                                     </div>
                                 </div>
                             </div>
-                            {fromToken && toToken && fromAmount > 0 && exchangeRate && fee !== null && (
+                            {fromToken && toToken && pool && (
                                 <div className='initial-prices'>
                                     <div className="price-info">
-                                        1 {toToken.symbol} = {(1 / exchangeRate).toFixed(8)} {fromToken.symbol}
+                                        1 {fromToken.symbol} = {formatCurrency(pool.priceFromTo)} {toToken.symbol}
                                     </div>
                                     <div className="price-info">
-                                        Fee ({fee}%) = {(fromAmount * fee / 100).toFixed(2)} {fromToken.symbol}
+                                        1 {toToken.symbol} = {formatCurrency(pool.priceToFrom)} {fromToken.symbol}
+                                    </div>
+                                    <div className="price-info">
+                                        Fee ({pool.feeTier * 100}%) = {fee ? formatCurrency(fee) : 0} {fromToken.symbol}
                                     </div>
                                 </div>
                             )}
@@ -284,7 +316,7 @@ function SwapCoin() {
                                                 className='token-modal-item'
                                                 onClick={() => handleTokenSelect(token, showFromTokenDropdown ? setFromToken : setToToken)}
                                             >
-                                                <img src={token.logo} alt={token.name} className='token-modal-logo' />
+                                                <img src={getCoinLogo(token.symbol)} alt={token.name} className='token-modal-logo' />
                                                 <div className='token-modal-info'>
                                                     <span className='token-modal-name'>{token.name}</span>
                                                     <span className='token-modal-symbol'>{token.symbol}</span>
