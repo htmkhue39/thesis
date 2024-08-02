@@ -40,26 +40,3 @@ export const listPositions = async (nodeAddress) => {
         throw error;
     }
 };
-
-export const checkPool = async (nodeAddress, fromToken, toToken, fromAmount, toAmount) => {
-    try {
-        const req = {
-            tokenA: fromToken,
-            tokenB: toToken,
-            amountA: fromAmount,
-            amountB: toAmount,
-        }
-
-        const response = await authClient.post(`nodes/${nodeAddress}/check_pool`, req);
-        const res = response.data
-
-        return {
-            existed: res.existed,
-            priceFromTo: res.priceAToB,
-            priceToFrom: res.priceBToA,
-        }
-    } catch (error) {
-        console.error('Error checking pool:', error);
-        throw error;
-    }
-};

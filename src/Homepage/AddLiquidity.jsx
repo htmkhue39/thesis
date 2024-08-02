@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-import { addInitialLiquidity, addLiquidity } from '../../mockApi';
 
 import '../components/Button.css';
 import './AddLiquidity.css';
@@ -13,7 +12,8 @@ import searchIcon from '../assets/search-icon.svg';
 import backIcon from '../assets/back-icon.svg';
 import { getNode } from '../api/nodes';
 import { getCoinLogo } from '../helpers/GetCoinLogo';
-import { listBalances, checkPool } from '../api/node';
+import { listBalances } from '../api/node';
+import { checkPool, confirmProvideLiquidity, simulateProvideInitialLiquidity, simulateProvideLiquidity } from '../api/pools';
 
 function AddLiquidity() {
     const { selectedAccount } = useAccount();
@@ -28,11 +28,13 @@ function AddLiquidity() {
     const [showToTokenDropdown, setShowToTokenDropdown] = useState(false);
     const [isAmountExceedBalance, setIsAmountExceedBalance] = useState(false);
     const [showFeeOptions, setShowFeeOptions] = useState(false);
-    const [selectedFee, setSelectedFee] = useState("0.30%");
+    const [selectedFee, setSelectedFee] = useState(0.3);
     const [poolExisted, setPoolExisted] = useState(false);
     const [priceFromTo, setPriceFromTo] = useState(null);
     const [priceToFrom, setPriceToFrom] = useState(null);
-    const [poolShare, setPoolShare] = useState('0%');
+    const [poolShare, setPoolShare] = useState(null);
+    const [lpTokens, setLPTokens] = useState(null);
+    const [poolIndex, setPoolIndex] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
 
@@ -155,54 +157,73 @@ function AddLiquidity() {
         setFromAmount(toAmount * priceToFrom)
     }, [poolExisted, priceToFrom, toAmount])
 
+    const handleSimulateProvideLiquidity = async () => {
+        try {
+            const response = await simulateProvideLiquidity(selectedAccount.connectedNodeAddress, fromToken.symbol, toToken.symbol, fromAmount, toAmount, selectedFee / 100);
+            setPoolShare(response.poolShare);
+            setLPTokens(response.lpTokens);
+            setPoolIndex(response.poolId);
+        } catch (error) {
+            console.error('Error getting pool share:', error);
+        }
+    }
+
+    const handleSimulateProvideInitialLiquidity = async () => {
+        try {
+            const response = await simulateProvideInitialLiquidity(selectedAccount.connectedNodeAddress, fromToken.symbol, toToken.symbol, fromAmount, toAmount, selectedFee / 100);
+            setPoolShare(response.poolShare);
+            setLPTokens(response.lpTokens);
+            setPoolIndex(response.poolId);
+        } catch (error) {
+            console.error('Error getting pool share:', error);
+        }
+    }
+
+    useEffect(() => {
+        if (!toToken)
+            return
+        if (fromAmount <= 0 || toAmount <= 0)
+            return
+        if (fromAmount > getBalance(fromToken) || toAmount > getBalance(toToken)) {
+            setIsAmountExceedBalance(true)
+        } else {
+            setIsAmountExceedBalance(false)
+        }
+
+        if (poolExisted) {
+            handleSimulateProvideLiquidity()
+        } else {
+            handleSimulateProvideInitialLiquidity()
+        }
+    }, [fromAmount, toAmount])
+
     const handleFirstAmountChange = (e) => {
         const value = e.target.value;
         const amount = value === '' ? 0 : Number(value);
         setFromAmount(amount);
-        setIsAmountExceedBalance(amount > getBalance(fromToken));
     };
 
     const handleSecondAmountChange = (e) => {
         const value = e.target.value;
         const amount = value === '' ? 0 : Number(value);
         setToAmount(amount);
-        setIsAmountExceedBalance(amount > getBalance(toToken));
     };
 
     const handleAddLiquidity = async () => {
-        if (!selectedAccount || !fromToken || !toToken || !fromAmount || !toAmount) {
+        console.log("poolIndex: ", poolIndex)
+
+        if (!selectedAccount || !poolIndex || !fromToken || !toToken || !fromAmount || !toAmount) {
             return;
         }
 
-        const liquidityData = {
-            accountId: selectedAccount.id,
-            nodeAddress: selectedAccount.connectedNodeAddress,
-            fromToken: fromToken.symbol,
-            toToken: toToken.symbol,
-            fromAmount: fromAmount,
-            toAmount: toAmount,
-            fee: selectedFee
-        };
-
         try {
             setIsLoading(true);
-            let response;
-            if (poolExisted) {
-                response = await addLiquidity(liquidityData);
-            } else {
-                response = await addInitialLiquidity(liquidityData);
-            }
+            const response = await confirmProvideLiquidity(selectedAccount.connectedNodeAddress, poolIndex, fromToken.symbol, toToken.symbol, fromAmount, toAmount)
 
-            if (response.success) {
-                setModalMessage('Liquidity added successfully!');
-                setFromAmount(0);
-                setToAmount(0);
-                setPriceFromTo(response.priceFromTo);
-                setPriceToFrom(response.priceToFrom);
-                setPoolShare(response.poolShare);
-            } else {
-                setModalMessage('Failed to add liquidity. Please try again.');
-            }
+            setModalMessage('Liquidity added successfully!');
+            setFromAmount(0);
+            setToAmount(0);
+            setPoolShare(response.poolShare);
         } catch (error) {
             console.error('Error adding liquidity:', error);
             setModalMessage('Error adding liquidity. Please try again.');
@@ -291,13 +312,13 @@ function AddLiquidity() {
                                 </div>
                                 {showFeeOptions && (
                                     <div className='fee-options'>
-                                        {['0.01%', '0.05%', '0.30%', '1.00%'].map(fee => (
+                                        {[0.01, 0.05, 0.3, 1.00].map(fee => (
                                             <div
                                                 key={fee}
                                                 className={`fee-option ${selectedFee === fee ? 'selected' : ''}`}
                                                 onClick={() => selectFeeOption(fee)}
                                             >
-                                                {fee} fee tier
+                                                {fee}% fee tier
                                             </div>
                                         ))}
                                     </div>
@@ -317,7 +338,11 @@ function AddLiquidity() {
                                 </div>
                                 <div className='pool-share'>
                                     <span>Share of pool:</span>
-                                    <span>{poolShare}</span>
+                                    <span>{poolShare ? poolShare : '-'}</span>
+                                </div>
+                                <div className='pool-share'>
+                                    <span>Minted LP Tokens:</span>
+                                    <span>{lpTokens ? lpTokens : '-'}</span>
                                 </div>
                             </div>
                         )}
