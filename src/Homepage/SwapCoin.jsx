@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../AccountContext';
-import { createTransaction } from '../../mockApi';
 
 import '../components/Button.css';
 import './SwapCoin.css';
@@ -14,13 +13,14 @@ import searchIcon from '../assets/search-icon.svg';
 import { getNode } from '../api/nodes';
 import { listBalances } from '../api/node';
 import { getCoinLogo } from '../helpers/GetCoinLogo';
-import { checkPool, simulateTrade } from '../api/pools';
+import { checkPool, confirmTrade, simulateTrade } from '../api/pools';
 import { formatCurrency } from '../helpers/FormatCurrency';
 
 function SwapCoin() {
     const { selectedAccount } = useAccount();
     const navigate = useNavigate();
-    const [pool, setPool] = useState({})
+    const [pool, setPool] = useState(null)
+    const [poolId, setPoolId] = useState(null)
     const [tokens, setTokens] = useState([]);
     const [balances, setBalances] = useState({});
     const [fromToken, setFromToken] = useState({ symbol: 'ETH', logo: '/coin/ethereum.png' });
@@ -58,19 +58,11 @@ function SwapCoin() {
         }
     };
 
-    // useEffect(() => {
-    //     if (!fromToken || !toToken || fromAmount <= 0 || !exchangeRate || fee === null) {
-    //         setToAmount(0);
-    //         return;
-    //     }
-    //     const amountOut = fromAmount * exchangeRate * (1 - fee / 100);
-    //     setToAmount(amountOut.toFixed(2));
-    // }, [fromAmount, fromToken, toToken, exchangeRate, fee]);
-
     const forwardTrade = async (fromAmount) => {
         try {
             const res = await simulateTrade(selectedAccount.connectedNodeAddress, fromToken.symbol, toToken.symbol, true, fromAmount)
             setToAmount(res.otherAmount)
+            setPoolId(res.poolIndex)
             setFee(res.fee)
         } catch (error) {
             console.log("Error simulating trade: ", error)
@@ -81,6 +73,7 @@ function SwapCoin() {
         try {
             const res = await simulateTrade(selectedAccount.connectedNodeAddress, fromToken.symbol, toToken.symbol, false, toAmount)
             setFromAmount(res.otherAmount)
+            setPoolId(res.poolIndex)
             setFee(res.fee)
         } catch (error) {
             console.log("Error simulating trade: ", error)
@@ -164,24 +157,15 @@ function SwapCoin() {
     };
 
     const handleSwap = async () => {
-        if (!selectedAccount || !fromToken || !toToken || !fromAmount) {
+        if (!selectedAccount || !poolId || !fromToken || !toToken || !fromAmount) {
             return;
         }
 
-        const newTransaction = {
-            id: Date.now().toString(),
-            address: selectedAccount.address,
-            nodeAddress: selectedAccount.connectedNodeAddress,
-            fromToken: fromToken.symbol,
-            toToken: toToken.symbol,
-            fromAmount: fromAmount,
-            toAmount: toAmount,
-            date: new Date().toISOString(),
-        };
-
         try {
             setIsLoading(true);
-            await createTransaction(newTransaction);
+            await confirmTrade(selectedAccount.connectedNodeAddress, poolId, fromToken.symbol, toToken.symbol, fromAmount)
+            setFromAmount(0);
+            setToAmount(0);
             setModalMessage('Swap successful!');
         } catch (error) {
             console.error('Error recording transaction:', error);

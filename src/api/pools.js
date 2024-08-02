@@ -116,3 +116,26 @@ export const simulateTrade = async (nodeAddress, fromToken, toToken, forwardDire
         throw error
     }
 }
+
+export const confirmTrade = async (nodeAddress, poolId, fromToken, toToken, fromAmount) => {
+    try {
+        const req = {
+            poolId: poolId,
+            fromToken: fromToken,
+            toToken: toToken,
+            fromAmount:fromAmount,
+        }
+
+        const response = await authClient.post(`nodes/${nodeAddress}/pools/confirm_trade`, req)
+        const res = response.data
+
+        return {
+            poolIndex: res.poolId,
+            otherAmount: res.otherAmount,
+            fee: res.fee
+        }
+    } catch (error) {
+        console.error('Error confirming trade: ', error)
+        throw error
+    }
+}
