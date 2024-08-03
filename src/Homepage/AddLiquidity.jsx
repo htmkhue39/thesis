@@ -187,18 +187,22 @@ function AddLiquidity() {
   };
 
   useEffect(() => {
-    if (!poolExisted) return;
-
     const toAmount = fromAmount * priceFromTo;
-    setToAmount(toAmount);
+
+    if (poolExisted) {
+      setToAmount(toAmount);
+    }
+
     simulateProvide(fromAmount, toAmount);
   }, [poolExisted, priceFromTo, fromAmount]);
 
   useEffect(() => {
-    if (!poolExisted) return;
-
     const fromAmount = toAmount * priceToFrom;
-    setFromAmount(toAmount * priceToFrom);
+
+    if (poolExisted) {
+      setFromAmount(fromAmount);
+    }
+
     simulateProvide(fromAmount, toAmount);
   }, [poolExisted, priceToFrom, toAmount]);
 
@@ -438,7 +442,7 @@ function AddLiquidity() {
                 </div>
                 <div className="pool-share">
                   <span>Share of pool:</span>
-                  <span>{formatCurrency(poolShare) ? poolShare : "-"}</span>
+                  <span>{poolShare ? formatCurrency(poolShare) : "-"}</span>
                 </div>
                 <div className="pool-share">
                   <span>Minted LP Tokens:</span>
