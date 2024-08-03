@@ -2,35 +2,25 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Explore.css';
 import '../components/Button.css';
-import { getOrderBooks, getTokens, searchOrderBooks } from '../../mockApi';
 import CombinedTokenLogo from '../components/CombinedTokenLogo';
+import { getCoinLogo } from '../helpers/GetCoinLogo';
+import { listOrderbooks } from '../api/orderBooks';
 
 const OrderBookList = () => {
   const [orderBooks, setOrderBooks] = useState([]);
-  const [tokens, setTokens] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  // const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrderBooks();
-    fetchTokens();
   }, []);
 
   const fetchOrderBooks = async () => {
     try {
-      const data = await getOrderBooks();
-      setOrderBooks(data);
+      const data = await listOrderbooks();
+      setOrderBooks(data.orderbooks);
     } catch (error) {
       console.error('Error fetching order books:', error);
-    }
-  };
-
-  const fetchTokens = async () => {
-    try {
-      const tokenData = await getTokens();
-      setTokens(tokenData);
-    } catch (error) {
-      console.error('Error fetching tokens:', error);
     }
   };
 
@@ -38,21 +28,16 @@ const OrderBookList = () => {
     navigate(`/orderbooks/${orderBookId}`);
   };
 
-  const getTokenLogo = (symbol) => {
-    const token = tokens.find(token => token.symbol === symbol);
-    return token ? token.logo : '';
-  };
-
-  const handleSearchChange = async (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    if (query) {
-      const data = await searchOrderBooks(query);
-      setOrderBooks(data);
-    } else {
-      fetchOrderBooks();
-    }
-  };
+  // const handleSearchChange = async (e) => {
+  //   const query = e.target.value;
+  //   setSearchQuery(query);
+  //   if (query) {
+  //     const data = await searchOrderBooks(query);
+  //     setOrderBooks(data);
+  //   } else {
+  //     fetchOrderBooks();
+  //   }
+  // };
 
   return (
     <div className='app-content-wrapper'>
@@ -62,7 +47,7 @@ const OrderBookList = () => {
             <div className='balance-section'>
               <h2>Order Book List</h2>
             </div>
-            <div className='search-bar'>
+            {/* <div className='search-bar'>
               <input
                 type="text"
                 placeholder="Search for order books..."
@@ -70,15 +55,15 @@ const OrderBookList = () => {
                 onChange={handleSearchChange}
                 className='search-input'
               />
-            </div>
+            </div> */}
             <div className='activity-section'>
               <table className='table'>
                 <thead>
                   <tr>
                     <th>#</th>
                     <th>Token Pair</th>
-                    <th>Token A</th>
-                    <th>Token B</th>
+                    <th>Base token</th>
+                    <th>Quote token</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -87,12 +72,12 @@ const OrderBookList = () => {
                       <td>{index + 1}</td>
                       <td>
                         <CombinedTokenLogo
-                          logo1={getTokenLogo(orderBook.tokenA)}
-                          logo2={getTokenLogo(orderBook.tokenB)}
+                          logo1={getCoinLogo(orderBook.baseToken)}
+                          logo2={getCoinLogo(orderBook.quoteToken)}
                         />
                       </td>
-                      <td>{orderBook.tokenA}</td>
-                      <td>{orderBook.tokenB}</td>
+                      <td>{orderBook.baseToken}</td>
+                      <td>{orderBook.quoteToken}</td>
                     </tr>
                   ))}
                 </tbody>
