@@ -7,6 +7,7 @@ import CombinedTokenLogo from "../components/CombinedTokenLogo";
 import { getNode } from "../api/nodes";
 import { listBalances, listPools, listTransactions } from "../api/node";
 import { getCoinLogo } from "../helpers/GetCoinLogo";
+import { formatCurrency } from "../helpers/FormatCurrency";
 
 const Explore = () => {
   const { selectedAccount } = useAccount();
@@ -258,8 +259,8 @@ const Explore = () => {
                           <td>{index + 1}</td>
                           <td>{tx.fromToken}</td>
                           <td>{tx.toToken}</td>
-                          <td>{tx.fromAmount}</td>
-                          <td>{tx.toAmount}</td>
+                          <td>{formatCurrency(tx.fromAmount)}</td>
+                          <td>{formatCurrency(tx.toAmount)}</td>
                           <td>{tx.date}</td>
                           {/* <td>{new Date(tx.date).toLocaleString()}</td> */}
                         </tr>
@@ -290,7 +291,7 @@ const Explore = () => {
                         <tr key={index}>
                           <td>{index + 1}</td>
                           <td>{balance.token}</td>
-                          <td>{balance.amount}</td>
+                          <td>{formatCurrency(balance.amount)}</td>
                         </tr>
                       ))
                     ) : (

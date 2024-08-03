@@ -6,6 +6,7 @@ import "./Explore.css";
 import "./Pool.css";
 import "../components/Button.css";
 import { listPositions } from "../api/node";
+import { formatCurrency } from "../helpers/FormatCurrency";
 
 const Pool = () => {
   const { selectedAccount } = useAccount();
@@ -17,7 +18,7 @@ const Pool = () => {
     if (selectedAccount && selectedAccount.connectedNodeAddress) {
       fetchLiquidityPositions(
         selectedAccount.address,
-        selectedAccount.connectedNodeAddress,
+        selectedAccount.connectedNodeAddress
       );
     }
   }, [selectedAccount]);
@@ -87,7 +88,7 @@ const Pool = () => {
                               Your total pool tokens:{" "}
                             </p>
                             <div className="pool-card-row-detail">
-                              <p>{position.lpTokens}</p>
+                              <p>{formatCurrency(position.lpTokens)}</p>
                             </div>
                           </div>
                           <div className="pool-card-row">
@@ -95,7 +96,7 @@ const Pool = () => {
                               Pooled {position.tokenA}:
                             </p>
                             <div className="pool-card-row-detail">
-                              <p>{position.amountA}</p>
+                              <p>{formatCurrency(position.amountA)}</p>
                             </div>
                           </div>
                           <div className="pool-card-row">
@@ -103,13 +104,13 @@ const Pool = () => {
                               Pooled {position.tokenB}:
                             </p>
                             <div className="pool-card-row-detail">
-                              <p>{position.amountB}</p>
+                              <p>{formatCurrency(position.amountB)}</p>
                             </div>
                           </div>
                           <div className="pool-card-row">
                             <p className="pool-card-p">Your pool share:</p>
                             <div className="pool-card-row-detail">
-                              <p>{position.poolShare}</p>
+                              <p>{position.poolShare * 100}%</p>
                             </div>
                           </div>
                           {/* <div className="pool-card-actions">

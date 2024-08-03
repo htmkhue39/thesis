@@ -13,6 +13,7 @@ const OrderBook = () => {
     quoteToken: "",
     bidOrders: [],
     askOrders: [],
+    trades: [],
   });
   const [order, setOrder] = useState({
     type: "buy",
@@ -166,13 +167,14 @@ const OrderBook = () => {
                 </tr>
               </thead>
               <tbody>
-                {/* {getTradeHistory().map((trade, index) => (
-                  <tr key={index}>
-                    <td>{trade.price}</td>
-                    <td>{trade.amount}</td>
-                    <td>{new Date(trade.time).toLocaleString()}</td>
-                  </tr>
-                ))} */}
+                {orderBook.trades &&
+                  orderBook.trades.map((trade, index) => (
+                    <tr key={index}>
+                      <td>{trade.price}</td>
+                      <td>{trade.amount}</td>
+                      <td>{new Date(trade.time).toLocaleString()}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -196,20 +198,26 @@ const OrderBook = () => {
             </div>
           </div>
           <form onSubmit={handleOrderSubmit}>
-            <input
-              type="text"
-              name="price"
-              placeholder="Price"
-              value={order.price}
-              onChange={handleOrderChange}
-            />
-            <input
-              type="text"
-              name="amount"
-              placeholder="Amount"
-              value={order.amount}
-              onChange={handleOrderChange}
-            />
+            <div className="create-order-input">
+              <h4 className="create-order-text">Price</h4>
+              <input
+                type="text"
+                name="price"
+                placeholder="Price"
+                value={order.price}
+                onChange={handleOrderChange}
+              />
+            </div>
+            <div className="create-order-input">
+              <h4 className="create-order-text">Amount</h4>
+              <input
+                type="text"
+                name="amount"
+                placeholder="Amount"
+                value={order.amount}
+                onChange={handleOrderChange}
+              />
+            </div>
             <div className="button-container">
               <button type="submit">Submit</button>
             </div>

@@ -70,7 +70,7 @@ function SwapCoin() {
         fromToken.symbol,
         toToken.symbol,
         fromAmount,
-        toAmount,
+        toAmount
       );
       setPool(res);
     } catch (error) {
@@ -85,7 +85,7 @@ function SwapCoin() {
         fromToken.symbol,
         toToken.symbol,
         true,
-        fromAmount,
+        fromAmount
       );
       setToAmount(res.otherAmount);
       setPoolId(res.poolIndex);
@@ -102,7 +102,7 @@ function SwapCoin() {
         fromToken.symbol,
         toToken.symbol,
         false,
-        toAmount,
+        toAmount
       );
       setFromAmount(res.otherAmount);
       setPoolId(res.poolIndex);
@@ -200,8 +200,9 @@ function SwapCoin() {
         poolId,
         fromToken.symbol,
         toToken.symbol,
-        fromAmount,
+        fromAmount
       );
+      fetchBalances(selectedAccount.connectedNodeAddress);
       setFromAmount(0);
       setToAmount(0);
       setModalMessage("Swap successful!");
@@ -264,7 +265,7 @@ function SwapCoin() {
                     </div>
                   </div>
                   <div className="balance">
-                    Balance: {getBalance(fromToken)}
+                    Balance: {formatCurrency(getBalance(fromToken))}
                   </div>
                   {isAmountExceedBalance && (
                     <div className="balance-error">Not enough balance</div>
@@ -312,7 +313,9 @@ function SwapCoin() {
                       />
                     </div>
                   </div>
-                  <div className="balance">Balance: {getBalance(toToken)}</div>
+                  <div className="balance">
+                    Balance: {formatCurrency(getBalance(toToken))}
+                  </div>
                 </div>
               </div>
               {fromToken && toToken && pool && (
@@ -387,7 +390,7 @@ function SwapCoin() {
                         onClick={() =>
                           handleTokenSelect(
                             token,
-                            showFromTokenDropdown ? setFromToken : setToToken,
+                            showFromTokenDropdown ? setFromToken : setToToken
                           )
                         }
                       >
