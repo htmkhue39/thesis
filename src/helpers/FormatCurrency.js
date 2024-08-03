@@ -1,3 +1,3 @@
 export const formatCurrency = (amount) => {
-    return amount.toFixed(6)
-}
+  return amount.toFixed(6);
+};

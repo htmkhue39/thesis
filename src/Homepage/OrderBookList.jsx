@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Explore.css';
-import '../components/Button.css';
-import CombinedTokenLogo from '../components/CombinedTokenLogo';
-import { getCoinLogo } from '../helpers/GetCoinLogo';
-import { listOrderbooks } from '../api/orderBooks';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Explore.css";
+import "../components/Button.css";
+import CombinedTokenLogo from "../components/CombinedTokenLogo";
+import { getCoinLogo } from "../helpers/GetCoinLogo";
+import { listOrderbooks } from "../api/orderBooks";
 
 const OrderBookList = () => {
   const [orderBooks, setOrderBooks] = useState([]);
@@ -20,7 +20,7 @@ const OrderBookList = () => {
       const data = await listOrderbooks();
       setOrderBooks(data.orderbooks);
     } catch (error) {
-      console.error('Error fetching order books:', error);
+      console.error("Error fetching order books:", error);
     }
   };
 
@@ -40,11 +40,11 @@ const OrderBookList = () => {
   // };
 
   return (
-    <div className='app-content-wrapper'>
-      <div className='app-content'>
-        <div className='homepage'>
+    <div className="app-content-wrapper">
+      <div className="app-content">
+        <div className="homepage">
           <div className="main-content">
-            <div className='balance-section'>
+            <div className="balance-section">
               <h2>Order Book List</h2>
             </div>
             {/* <div className='search-bar'>
@@ -56,8 +56,8 @@ const OrderBookList = () => {
                 className='search-input'
               />
             </div> */}
-            <div className='activity-section'>
-              <table className='table'>
+            <div className="activity-section">
+              <table className="table">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -68,7 +68,10 @@ const OrderBookList = () => {
                 </thead>
                 <tbody>
                   {orderBooks.map((orderBook, index) => (
-                    <tr key={orderBook.id} onClick={() => handleOrderBookClick(orderBook.id)}>
+                    <tr
+                      key={orderBook.id}
+                      onClick={() => handleOrderBookClick(orderBook.id)}
+                    >
                       <td>{index + 1}</td>
                       <td>
                         <CombinedTokenLogo

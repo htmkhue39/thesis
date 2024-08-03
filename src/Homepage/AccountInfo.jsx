@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react';
-import { useAccount } from '../AccountContext';
-import { getAccountByAddress } from '../../mockApi';
-import './Explore.css';
-import './SwapCoin.css';
-import './AccountInfo.css';
-import Grid from '../CreateAccount/Grid';
-import copyIcon from '../assets/copy-icon.svg';
-import showIcon from '../assets/show-icon.png';
+import { useState, useEffect } from "react";
+import { useAccount } from "../AccountContext";
+import { getAccountByAddress } from "../../mockApi";
+import "./Explore.css";
+import "./SwapCoin.css";
+import "./AccountInfo.css";
+import Grid from "../CreateAccount/Grid";
+import copyIcon from "../assets/copy-icon.svg";
+import showIcon from "../assets/show-icon.png";
 
 const AccountInfo = () => {
   const { selectedAccount } = useAccount();
   const [mnemonicVisible, setMnemonicVisible] = useState(false);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [correctPassword, setCorrectPassword] = useState('');
+  const [correctPassword, setCorrectPassword] = useState("");
 
   useEffect(() => {
     if (selectedAccount) {
@@ -23,7 +23,7 @@ const AccountInfo = () => {
           const data = await getAccountByAddress(selectedAccount.address);
           setCorrectPassword(data.passcode);
         } catch (error) {
-          console.error('Error fetching account password:', error);
+          console.error("Error fetching account password:", error);
         }
       };
 
@@ -46,12 +46,12 @@ const AccountInfo = () => {
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(selectedAccount.address);
-    alert('Address copied to clipboard');
+    alert("Address copied to clipboard");
   };
 
   const handleCopyMnemonic = () => {
-    navigator.clipboard.writeText(selectedAccount.mnemonic.join(' '));
-    alert('Mnemonic Phrase copied to clipboard');
+    navigator.clipboard.writeText(selectedAccount.mnemonic.join(" "));
+    alert("Mnemonic Phrase copied to clipboard");
   };
 
   const truncateAddress = (address) => {
@@ -64,15 +64,16 @@ const AccountInfo = () => {
 
   return (
     <div className="app-content-wrapper">
-      <div className='app-content'>
-        <div className='swap-coin-wrapper'>
+      <div className="app-content">
+        <div className="swap-coin-wrapper">
           <div className="swap-coin-content">
-            <div className='swap-coin-header'>
-              <h2 className='title'>Account Details</h2>
+            <div className="swap-coin-header">
+              <h2 className="title">Account Details</h2>
             </div>
             <div className="account-detail-wrapper">
-              <div className='account-detail'>
-                <p><strong>Account Address:</strong>
+              <div className="account-detail">
+                <p>
+                  <strong>Account Address:</strong>
                   <span className="address">
                     {truncateAddress(selectedAccount.address)}
                     <img
@@ -84,9 +85,9 @@ const AccountInfo = () => {
                   </span>
                 </p>
                 <p>
-                  <strong>Mnemonic Phrase:</strong> 
+                  <strong>Mnemonic Phrase:</strong>
                   <span>
-                    {'**********'}
+                    {"**********"}
                     <img
                       src={showIcon}
                       alt="Show"
@@ -108,8 +109,11 @@ const AccountInfo = () => {
               {mnemonicVisible ? (
                 <>
                   <Grid mnemonic={selectedAccount.mnemonic} />
-                  <div className='button-wrapper'>
-                    <button className="btn-secondary medium" onClick={handleCopyMnemonic}>
+                  <div className="button-wrapper">
+                    <button
+                      className="btn-secondary medium"
+                      onClick={handleCopyMnemonic}
+                    >
                       Copy Mnemonic Phrase
                     </button>
                   </div>
@@ -123,16 +127,26 @@ const AccountInfo = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  {!isPasswordCorrect && <p className="error-message">Incorrect password</p>}
-                  <div className='button-wrapper'>
-                    <button className="btn-secondary medium" onClick={handleRevealMnemonic}>
+                  {!isPasswordCorrect && (
+                    <p className="error-message">Incorrect password</p>
+                  )}
+                  <div className="button-wrapper">
+                    <button
+                      className="btn-secondary medium"
+                      onClick={handleRevealMnemonic}
+                    >
                       Reveal
                     </button>
                   </div>
                 </>
               )}
-              <div className='button-wrapper'>
-                <button className="btn-primary medium" onClick={() => setShowModal(false)}>Close</button>
+              <div className="button-wrapper">
+                <button
+                  className="btn-primary medium"
+                  onClick={() => setShowModal(false)}
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
@@ -140,6 +154,6 @@ const AccountInfo = () => {
       )}
     </div>
   );
-}
+};
 
 export default AccountInfo;

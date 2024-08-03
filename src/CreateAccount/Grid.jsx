@@ -1,5 +1,5 @@
-import React from 'react';
-import './Grid.css';
+import React from "react";
+import "./Grid.css";
 
 const Grid = React.forwardRef(({ mnemonic }, ref) => {
   return (
@@ -14,6 +14,6 @@ const Grid = React.forwardRef(({ mnemonic }, ref) => {
   );
 });
 
-Grid.displayName = 'Grid';
+Grid.displayName = "Grid";
 
 export default Grid;

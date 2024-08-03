@@ -1,26 +1,26 @@
 export const getCoinLogo = (symbol) => {
-    switch (symbol) {
+  switch (symbol) {
     case "BTC":
-        return "/coin/bitcoin.png"
+      return "/coin/bitcoin.png";
     case "ETH":
-        return "/coin/ethereum.png"
+      return "/coin/ethereum.png";
     case "USDT":
-        return "/coin/cardano.png"
+      return "/coin/cardano.png";
     case "BNB":
-        return "/coin/binance.png"
+      return "/coin/binance.png";
     case "SOL":
-        return "/coin/solana.png"
+      return "/coin/solana.png";
     case "STETH":
-        return "/coin/shiba-inu.png"
+      return "/coin/shiba-inu.png";
     case "USDC":
-        return "/coin/usdc.png"
+      return "/coin/usdc.png";
     case "XRP":
-        return "/coin/ripple.png"
+      return "/coin/ripple.png";
     case "DOGE":
-        return "/coin/dogecoin.png"
+      return "/coin/dogecoin.png";
     case "TON":
-        return "/coin/usdt.png"
+      return "/coin/usdt.png";
     default:
-        return "/coin/usdc.png"
-    }
-}
+      return "/coin/usdc.png";
+  }
+};

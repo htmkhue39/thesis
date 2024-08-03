@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAccount } from '../AccountContext';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAccount } from "../AccountContext";
 
-import './Explore.css';
-import CombinedTokenLogo from '../components/CombinedTokenLogo';
-import { getNode } from '../api/nodes';
-import { listBalances, listPools, listTransactions } from '../api/node';
-import { getCoinLogo } from '../helpers/GetCoinLogo';
+import "./Explore.css";
+import CombinedTokenLogo from "../components/CombinedTokenLogo";
+import { getNode } from "../api/nodes";
+import { listBalances, listPools, listTransactions } from "../api/node";
+import { getCoinLogo } from "../helpers/GetCoinLogo";
 
 const Explore = () => {
   const { selectedAccount } = useAccount();
-  const [selectedTab, setSelectedTab] = useState('Tokens');
+  const [selectedTab, setSelectedTab] = useState("Tokens");
   const [transactions, setTransactions] = useState([]);
   const [tokens, setTokens] = useState([]);
   const [pools, setPools] = useState([]);
@@ -24,16 +24,21 @@ const Explore = () => {
   }, [selectedAccount]);
 
   const fetchAllData = async (nodeAddress) => {
-    await Promise.all([fetchTransactions(nodeAddress), fetchTokens(nodeAddress), fetchPools(nodeAddress), fetchBalances(nodeAddress)]);
+    await Promise.all([
+      fetchTransactions(nodeAddress),
+      fetchTokens(nodeAddress),
+      fetchPools(nodeAddress),
+      fetchBalances(nodeAddress),
+    ]);
   };
 
   const fetchTransactions = async (nodeAddress) => {
     if (!selectedAccount) return;
     try {
-      const res = await listTransactions(nodeAddress)
+      const res = await listTransactions(nodeAddress);
       setTransactions(res.transactions);
     } catch (error) {
-      console.error('Error fetching transactions:', error);
+      console.error("Error fetching transactions:", error);
     }
   };
 
@@ -42,7 +47,7 @@ const Explore = () => {
       const nodeData = await getNode(nodeAddress);
       setTokens(nodeData.tokens);
     } catch (error) {
-      console.error('Error fetching tokens:', error);
+      console.error("Error fetching tokens:", error);
     }
   };
 
@@ -51,7 +56,7 @@ const Explore = () => {
       const res = await listPools(nodeAddress);
       setPools(res.pools);
     } catch (error) {
-      console.error('Error fetching pools:', error);
+      console.error("Error fetching pools:", error);
     }
   };
 
@@ -60,7 +65,7 @@ const Explore = () => {
       const res = await listBalances(nodeAddress);
       setBalances(res.balances);
     } catch (error) {
-      console.error('Error fetching balances:', error);
+      console.error("Error fetching balances:", error);
     }
   };
 
@@ -70,12 +75,17 @@ const Explore = () => {
 
   if (!selectedAccount.connectedNodeAddress) {
     return (
-      <div className='app-content-wrapper'>
-        <div className='app-content'>
-          <div className='homepage'>
+      <div className="app-content-wrapper">
+        <div className="app-content">
+          <div className="homepage">
             <div className="main-content">
               <div className="overlay">
-                <button className="btn-primary connect-button" onClick={() => navigate('/nodes')}>+ Connect to Node</button>
+                <button
+                  className="btn-primary connect-button"
+                  onClick={() => navigate("/nodes")}
+                >
+                  + Connect to Node
+                </button>
               </div>
             </div>
           </div>
@@ -85,18 +95,38 @@ const Explore = () => {
   }
 
   return (
-    <div className='app-content-wrapper'>
-      <div className='app-content'>
-        <div className='homepage'>
+    <div className="app-content-wrapper">
+      <div className="app-content">
+        <div className="homepage">
           <div className="main-content">
             <div className="tabs">
-              <button className={`tab ${selectedTab === 'Tokens' ? 'active' : ''}`} onClick={() => setSelectedTab('Tokens')}>Tokens</button>
-              <button className={`tab ${selectedTab === 'Pools' ? 'active' : ''}`} onClick={() => setSelectedTab('Pools')}>Pools</button>
-              <button className={`tab ${selectedTab === 'Transactions' ? 'active' : ''}`} onClick={() => setSelectedTab('Transactions')}>Transactions</button>
-              <button className={`tab ${selectedTab === 'Balances' ? 'active' : ''}`} onClick={() => setSelectedTab('Balances')}>Balances</button>
+              <button
+                className={`tab ${selectedTab === "Tokens" ? "active" : ""}`}
+                onClick={() => setSelectedTab("Tokens")}
+              >
+                Tokens
+              </button>
+              <button
+                className={`tab ${selectedTab === "Pools" ? "active" : ""}`}
+                onClick={() => setSelectedTab("Pools")}
+              >
+                Pools
+              </button>
+              <button
+                className={`tab ${selectedTab === "Transactions" ? "active" : ""}`}
+                onClick={() => setSelectedTab("Transactions")}
+              >
+                Transactions
+              </button>
+              <button
+                className={`tab ${selectedTab === "Balances" ? "active" : ""}`}
+                onClick={() => setSelectedTab("Balances")}
+              >
+                Balances
+              </button>
             </div>
 
-            {selectedTab === 'Tokens' && (
+            {selectedTab === "Tokens" && (
               <div className="activity-section">
                 <table className="table">
                   <thead>
@@ -117,17 +147,41 @@ const Explore = () => {
                           <td>{index + 1}</td>
                           <td>
                             <div className="token-info">
-                              <img src={getCoinLogo(token.symbol)} alt={`${token.name} logo`} className="token-logo" />
+                              <img
+                                src={getCoinLogo(token.symbol)}
+                                alt={`${token.name} logo`}
+                                className="token-logo"
+                              />
                               <div>
                                 <div>{token.name}</div>
-                                <div className="token-symbol">{token.symbol}</div>
+                                <div className="token-symbol">
+                                  {token.symbol}
+                                </div>
                               </div>
                             </div>
                           </td>
                           <td>{token.price}</td>
-                          <td className={parseFloat(token.change1h) > 0 ? 'green' : 'red'}>{token.change1h}%</td>
-                          <td className={parseFloat(token.change24h) > 0 ? 'green' : 'red'}>{token.change24h}%</td>
-                          <td className={parseFloat(token.change7d) > 0 ? 'green' : 'red'}>{token.change7d}%</td>
+                          <td
+                            className={
+                              parseFloat(token.change1h) > 0 ? "green" : "red"
+                            }
+                          >
+                            {token.change1h}%
+                          </td>
+                          <td
+                            className={
+                              parseFloat(token.change24h) > 0 ? "green" : "red"
+                            }
+                          >
+                            {token.change24h}%
+                          </td>
+                          <td
+                            className={
+                              parseFloat(token.change7d) > 0 ? "green" : "red"
+                            }
+                          >
+                            {token.change7d}%
+                          </td>
                           <td>{token.volume24h}</td>
                         </tr>
                       ))
@@ -140,8 +194,8 @@ const Explore = () => {
                 </table>
               </div>
             )}
-            
-            {selectedTab === 'Pools' && (
+
+            {selectedTab === "Pools" && (
               <div className="activity-section">
                 <table className="table">
                   <thead>
@@ -161,7 +215,10 @@ const Explore = () => {
                         <tr key={pool.id}>
                           <td>{index + 1}</td>
                           <td>
-                            <CombinedTokenLogo logo1={getCoinLogo(pool.tokenA)} logo2={getCoinLogo(pool.tokenB)} />
+                            <CombinedTokenLogo
+                              logo1={getCoinLogo(pool.tokenA)}
+                              logo2={getCoinLogo(pool.tokenB)}
+                            />
                             {pool.pool}
                           </td>
                           <td>{pool.transactions}</td>
@@ -181,7 +238,7 @@ const Explore = () => {
               </div>
             )}
 
-            {selectedTab === 'Transactions' && (
+            {selectedTab === "Transactions" && (
               <div className="activity-section">
                 <table className="table">
                   <thead>
@@ -217,7 +274,7 @@ const Explore = () => {
               </div>
             )}
 
-            {selectedTab === 'Balances' && (
+            {selectedTab === "Balances" && (
               <div className="activity-section">
                 <table className="table">
                   <thead>
@@ -250,6 +307,6 @@ const Explore = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Explore;

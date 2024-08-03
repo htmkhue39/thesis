@@ -1,4 +1,4 @@
-import './CombinedTokenLogo.css';
+import "./CombinedTokenLogo.css";
 
 const CombinedTokenLogo = ({ logo1, logo2 }) => {
   return (
@@ -7,6 +7,6 @@ const CombinedTokenLogo = ({ logo1, logo2 }) => {
       <img src={logo2} alt="Second Token" className="token-logo-right" />
     </div>
   );
-}
+};
 
 export default CombinedTokenLogo;

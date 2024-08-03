@@ -109,10 +109,7 @@
       "password": "passwordSub1",
       "current": false,
       "connectedNodeAddress": "",
-      "subAccounts": [
-        "1",
-        "3"
-      ],
+      "subAccounts": ["1", "3"],
       "node": [
         {
           "address": "0xfe9e8709d3215310075d67e3ed32a380ccf451c8",

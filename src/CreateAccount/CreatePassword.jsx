@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import Header from '../components/Header';
-import './CreatePassword.css';
-import './OnboardingPage.css';
-import '../components/Button.css';
-import '../components/Step.css';
+import Header from "../components/Header";
+import "./CreatePassword.css";
+import "./OnboardingPage.css";
+import "../components/Button.css";
+import "../components/Step.css";
 
 const CreatePassword = () => {
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordStrength, setPasswordStrength] = useState('');
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const navigate = useNavigate();
 
   const handleCreate = (event) => {
     event.preventDefault();
 
-    if (passwordStrength !== 'Password strength: Good') {
+    if (passwordStrength !== "Password strength: Good") {
       return;
     }
 
@@ -27,7 +27,7 @@ const CreatePassword = () => {
     }
 
     setPasswordsMatch(true);
-    localStorage.setItem('newPassword', newPassword);
+    localStorage.setItem("newPassword", newPassword);
     navigate("/create-account/secure-account");
   };
 
@@ -41,17 +41,23 @@ const CreatePassword = () => {
     const specialCharRequirement = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
     if (!lengthRequirement) {
-      setPasswordStrength('Password not long enough');
+      setPasswordStrength("Password not long enough");
     } else if (!uppercaseRequirement) {
-      setPasswordStrength('Password should contain at least one uppercase letter');
+      setPasswordStrength(
+        "Password should contain at least one uppercase letter",
+      );
     } else if (!lowercaseRequirement) {
-      setPasswordStrength('Password should contain at least one lowercase letter');
+      setPasswordStrength(
+        "Password should contain at least one lowercase letter",
+      );
     } else if (!numberRequirement) {
-      setPasswordStrength('Password should contain at least one number');
+      setPasswordStrength("Password should contain at least one number");
     } else if (!specialCharRequirement) {
-      setPasswordStrength('Password should contain at least one special character');
+      setPasswordStrength(
+        "Password should contain at least one special character",
+      );
     } else {
-      setPasswordStrength('Password strength: Good');
+      setPasswordStrength("Password strength: Good");
     }
   };
 
@@ -61,12 +67,12 @@ const CreatePassword = () => {
   };
 
   return (
-    <div className='app-content-wrapper'>
-      <div className='app-content'>
+    <div className="app-content-wrapper">
+      <div className="app-content">
         <Header />
-        <div className='app'>
-          <div className='onboarding-flow'>
-            <div className='onboarding-flow-wrapper'>
+        <div className="app">
+          <div className="onboarding-flow">
+            <div className="onboarding-flow-wrapper">
               <div className="circle-container">
                 <div className="circle-item">
                   <div className="circle blue-border">1</div>
@@ -83,22 +89,30 @@ const CreatePassword = () => {
               </div>
 
               <h1>Create Passcode</h1>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <form className="password-form" onSubmit={handleCreate}>
                   <div className="form-group">
-                    <label htmlFor="new-password">New passcode (8 characters min)</label>
+                    <label htmlFor="new-password">
+                      New passcode (8 characters min)
+                    </label>
                     <input
                       type="password"
                       id="new-password"
                       value={newPassword}
                       onChange={(e) => handlePasswordChange(e.target.value)}
-                      className='password-input'
+                      className="password-input"
                     />
-                    {passwordStrength && 
-                        <p className={passwordStrength === 'Passcode strength: Good' ? 'good' : 'error'}>
+                    {passwordStrength && (
+                      <p
+                        className={
+                          passwordStrength === "Passcode strength: Good"
+                            ? "good"
+                            : "error"
+                        }
+                      >
                         {passwordStrength}
                       </p>
-                    }
+                    )}
                   </div>
 
                   <div className="form-group">
@@ -107,13 +121,19 @@ const CreatePassword = () => {
                       type="password"
                       id="confirm-password"
                       value={confirmPassword}
-                      onChange={(e) => handleConfirmPasswordChange(e.target.value)}
-                      className='password-input'
+                      onChange={(e) =>
+                        handleConfirmPasswordChange(e.target.value)
+                      }
+                      className="password-input"
                     />
-                      {!passwordsMatch && <p className="error">Passcode don&apos;t match</p>}
+                    {!passwordsMatch && (
+                      <p className="error">Passcode don&apos;t match</p>
+                    )}
                   </div>
 
-                  <button type="submit" className='btn-primary'>Create a new account</button>
+                  <button type="submit" className="btn-primary">
+                    Create a new account
+                  </button>
                 </form>
               </div>
             </div>
@@ -122,6 +142,6 @@ const CreatePassword = () => {
       </div>
     </div>
   );
-}
+};
 
 export default CreatePassword;

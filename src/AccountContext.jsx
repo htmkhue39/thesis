@@ -1,10 +1,10 @@
-import { createContext, useState, useContext, useEffect } from 'react';
-import { 
+import { createContext, useState, useContext, useEffect } from "react";
+import {
   getAccounts,
-  clearConnectedNodeAddress as clearConnectedNodeAddressApi 
-} from '../mockApi';
-import { createAccount as createAccountApi } from './api/accounts';
-import { connectNode as connectNodeApi } from './api/nodes';
+  clearConnectedNodeAddress as clearConnectedNodeAddressApi,
+} from "../mockApi";
+import { createAccount as createAccountApi } from "./api/accounts";
+import { connectNode as connectNodeApi } from "./api/nodes";
 
 const AccountContext = createContext();
 
@@ -16,7 +16,7 @@ export const AccountProvider = ({ children }) => {
 
   useEffect(() => {
     fetchAccounts();
-    const savedAccount = localStorage.getItem('selectedAccount');
+    const savedAccount = localStorage.getItem("selectedAccount");
     if (savedAccount) {
       setSelectedAccount(JSON.parse(savedAccount));
     }
@@ -24,9 +24,9 @@ export const AccountProvider = ({ children }) => {
 
   useEffect(() => {
     if (selectedAccount) {
-      localStorage.setItem('selectedAccount', JSON.stringify(selectedAccount));
+      localStorage.setItem("selectedAccount", JSON.stringify(selectedAccount));
     } else {
-      localStorage.removeItem('selectedAccount');
+      localStorage.removeItem("selectedAccount");
     }
   }, [selectedAccount]);
 
@@ -35,17 +35,17 @@ export const AccountProvider = ({ children }) => {
       const data = await getAccounts();
       setAccounts(data);
     } catch (error) {
-      console.error('Error fetching accounts:', error);
+      console.error("Error fetching accounts:", error);
     }
   };
 
   const createAccount = async (newAccount) => {
     try {
       const createdAccount = await createAccountApi(newAccount);
-      setAccounts(prevAccounts => [...prevAccounts, createdAccount]);
+      setAccounts((prevAccounts) => [...prevAccounts, createdAccount]);
       return createdAccount;
     } catch (error) {
-      console.error('Error creating account:', error);
+      console.error("Error creating account:", error);
       throw error;
     }
   };
@@ -55,10 +55,10 @@ export const AccountProvider = ({ children }) => {
       const res = await connectNodeApi(selectedAccount.address, nodeAddress);
 
       if (!res.connected) {
-        alert("Error while connecting node")
-        return
+        alert("Error while connecting node");
+        return;
       }
-    
+
       const updatedAccount = {
         ...selectedAccount,
         connectedNodeAddress: nodeAddress,
@@ -66,17 +66,15 @@ export const AccountProvider = ({ children }) => {
       };
 
       setSelectedAccount(updatedAccount);
-      setAccounts(prevAccounts =>
-        prevAccounts.map(acc =>
-          acc.id === selectedAccount.id
-            ? updatedAccount
-            : acc
-        )
+      setAccounts((prevAccounts) =>
+        prevAccounts.map((acc) =>
+          acc.id === selectedAccount.id ? updatedAccount : acc,
+        ),
       );
 
       if (callback) callback();
     } catch (error) {
-      console.error('Error connecting node:', error);
+      console.error("Error connecting node:", error);
       throw error;
     }
   };
@@ -84,17 +82,19 @@ export const AccountProvider = ({ children }) => {
   const clearConnectedNodeAddress = async () => {
     try {
       await clearConnectedNodeAddressApi(selectedAccount.id);
-      const updatedAccount = { ...selectedAccount, connectedNodeAddress: '', connected: false };
+      const updatedAccount = {
+        ...selectedAccount,
+        connectedNodeAddress: "",
+        connected: false,
+      };
       setSelectedAccount(updatedAccount);
-      setAccounts(prevAccounts =>
-        prevAccounts.map(acc =>
-          acc.id === selectedAccount.id
-            ? updatedAccount
-            : acc
-        )
+      setAccounts((prevAccounts) =>
+        prevAccounts.map((acc) =>
+          acc.id === selectedAccount.id ? updatedAccount : acc,
+        ),
       );
     } catch (error) {
-      console.error('Error clearing connected node address:', error);
+      console.error("Error clearing connected node address:", error);
     }
   };
 
@@ -106,16 +106,18 @@ export const AccountProvider = ({ children }) => {
   };
 
   return (
-    <AccountContext.Provider value={{
-      selectedAccount,
-      setSelectedAccount,
-      accounts,
-      setAccounts,
-      createAccount,
-      connectNode,
-      clearConnectedNodeAddress,
-      logout,
-    }}>
+    <AccountContext.Provider
+      value={{
+        selectedAccount,
+        setSelectedAccount,
+        accounts,
+        setAccounts,
+        createAccount,
+        connectNode,
+        clearConnectedNodeAddress,
+        logout,
+      }}
+    >
       {children}
     </AccountContext.Provider>
   );
