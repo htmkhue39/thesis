@@ -4,7 +4,7 @@ import "./Explore.css";
 import "../components/Button.css";
 import CombinedTokenLogo from "../components/CombinedTokenLogo";
 import { getCoinLogo } from "../helpers/GetCoinLogo";
-import { listOrderbooks } from "../api/orderBooks";
+import { listOrderbooks } from "../api/orderbooks";
 
 const OrderBookList = () => {
   const [orderBooks, setOrderBooks] = useState([]);

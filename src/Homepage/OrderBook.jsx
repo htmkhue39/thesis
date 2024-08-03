@@ -1,34 +1,36 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getOrderBook, submitOrder } from "../../mockApi";
 import "./OrderBook.css";
+import { useAccount } from "../AccountContext";
+import { getOrderbook, placeOrder } from "../api/orderbooks";
+import { HttpStatusCode } from "axios";
 
 const OrderBook = () => {
   const { orderBookId } = useParams();
+  const { selectedAccount } = useAccount();
   const [orderBook, setOrderBook] = useState({
-    bidsA: [],
-    asksA: [],
-    tradeHistoryA: [],
-    bidsB: [],
-    asksB: [],
-    tradeHistoryB: [],
-    tokenA: "",
-    tokenB: "",
+    baseToken: "",
+    quoteToken: "",
+    bidOrders: [],
+    askOrders: [],
   });
   const [order, setOrder] = useState({
     type: "buy",
-    price: "",
-    amount: "",
+    price: 0,
+    amount: 0,
     token: "A",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
-    if (orderBookId) {
+    if (selectedAccount && orderBookId) {
       const fetchOrderBook = async () => {
         try {
-          const data = await getOrderBook(orderBookId);
+          const data = await getOrderbook(
+            selectedAccount.connectedNodeAddress,
+            orderBookId
+          );
           console.log("Fetched order book data:", data); // Debug log
           setOrderBook(data);
         } catch (error) {
@@ -38,37 +40,39 @@ const OrderBook = () => {
 
       fetchOrderBook();
     }
-  }, [orderBookId]);
+  }, [selectedAccount, orderBookId]);
 
   const handleOrderChange = (e) => {
     const { name, value } = e.target;
-    setOrder({ ...order, [name]: value });
+    const amount = value === "" ? 0 : Number(value);
+    setOrder({ ...order, [name]: amount });
   };
 
   const handleOrderTypeChange = (type) => {
     setOrder({ ...order, type });
   };
 
-  const handleTokenChange = (e) => {
-    const token = e.target.value;
-    setOrder({ ...order, token });
-  };
-
   const handleOrderSubmit = async (e) => {
+    if (!selectedAccount) return;
+
     e.preventDefault();
-    const orderData = {
-      orderBookId,
-      type: order.type,
-      token: order.token,
-      price: parseFloat(order.price),
-      amount: parseFloat(order.amount),
-    };
 
     try {
       setIsLoading(true);
-      const response = await submitOrder(orderData);
-      if (response.success) {
-        const updatedOrderBook = await getOrderBook(orderBookId);
+      const responseStatus = await placeOrder(
+        selectedAccount.connectedNodeAddress,
+        orderBookId,
+        orderBook.baseToken,
+        orderBook.quoteToken,
+        order.price,
+        order.amount,
+        order.type === "buy"
+      );
+      if (responseStatus == HttpStatusCode.Created) {
+        const updatedOrderBook = await getOrderbook(
+          selectedAccount.connectedNodeAddress,
+          orderBookId
+        );
         setOrderBook(updatedOrderBook);
         setOrder({ type: "buy", price: "", amount: "", token: order.token });
         setModalMessage("Order submitted successfully!");
@@ -83,18 +87,49 @@ const OrderBook = () => {
     }
   };
 
-  const getBids = () => {
-    return order.token === "A" ? orderBook.bidsA : orderBook.bidsB;
-  };
+  const renderOrderTable = () => {
+    const rows = [];
+    const minLen = Math.min(
+      orderBook.bidOrders.length,
+      orderBook.askOrders.length
+    );
 
-  const getAsks = () => {
-    return order.token === "A" ? orderBook.asksA : orderBook.asksB;
-  };
+    for (let i = 0; i < minLen; i++) {
+      rows.push(
+        <tr key={i}>
+          <td className="bids-quantity">{orderBook.bidOrders[i].amount}</td>
+          <td className="bids">{orderBook.bidOrders[i].price}</td>
+          <td className="asks">{orderBook.askOrders[i].price}</td>
+          <td className="asks-quantity">{orderBook.askOrders[i].amount}</td>
+        </tr>
+      );
+    }
 
-  const getTradeHistory = () => {
-    return order.token === "A"
-      ? orderBook.tradeHistoryA
-      : orderBook.tradeHistoryB;
+    if (minLen < orderBook.bidOrders.length) {
+      for (let i = minLen; i < orderBook.bidOrders.length; i++) {
+        rows.push(
+          <tr key={i}>
+            <td className="bids-quantity">{orderBook.bidOrders[i].amount}</td>
+            <td className="bids">{orderBook.bidOrders[i].price}</td>
+            <td className="asks"></td>
+            <td className="asks-quantity"></td>
+          </tr>
+        );
+      }
+    } else {
+      for (let i = minLen; i < orderBook.askOrders.length; i++) {
+        rows.push(
+          <tr key={i}>
+            <td className="bids-quantity"></td>
+            <td className="bids"></td>
+            <td className="asks">{orderBook.askOrders[i].price}</td>
+            <td className="asks-quantity">{orderBook.askOrders[i].amount}</td>
+          </tr>
+        );
+      }
+    }
+
+    return rows;
   };
 
   return (
@@ -105,35 +140,16 @@ const OrderBook = () => {
             <thead>
               <tr>
                 <th className="bids-quantity">
-                  Bids Quantity (
-                  {order.token === "A" ? orderBook.tokenA : orderBook.tokenB})
+                  Bids Quantity ({orderBook.baseToken})
                 </th>
-                <th className="bids">
-                  Bids Price (
-                  {order.token === "A" ? orderBook.tokenA : orderBook.tokenB})
-                </th>
-                <th className="asks">
-                  Asks Price (
-                  {order.token === "A" ? orderBook.tokenA : orderBook.tokenB})
-                </th>
+                <th className="bids">Bids Price ({orderBook.quoteToken})</th>
+                <th className="asks">Asks Price ({orderBook.quoteToken})</th>
                 <th className="asks-quantity">
-                  Asks Quantity (
-                  {order.token === "A" ? orderBook.tokenA : orderBook.tokenB})
+                  Asks Quantity ({orderBook.baseToken})
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {getBids().map((bid, index) => (
-                <tr key={index}>
-                  <td className="bids-quantity">{bid.quantity}</td>
-                  <td className="bids">{bid.price}</td>
-                  <td className="asks">{getAsks()[index]?.price}</td>
-                  <td className="asks-quantity">
-                    {getAsks()[index]?.quantity}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            <tbody>{renderOrderTable()}</tbody>
           </table>
         </div>
       </div>
@@ -150,13 +166,13 @@ const OrderBook = () => {
                 </tr>
               </thead>
               <tbody>
-                {getTradeHistory().map((trade, index) => (
+                {/* {getTradeHistory().map((trade, index) => (
                   <tr key={index}>
                     <td>{trade.price}</td>
                     <td>{trade.amount}</td>
                     <td>{new Date(trade.time).toLocaleString()}</td>
                   </tr>
-                ))}
+                ))} */}
               </tbody>
             </table>
           </div>
@@ -165,15 +181,6 @@ const OrderBook = () => {
           <div className="create-order-header">
             <h3>Create Order</h3>
             <div className="order-type-buttons">
-              <select
-                name="token"
-                value={order.token}
-                onChange={handleTokenChange}
-                className="token-select"
-              >
-                <option value="A">{orderBook.tokenA}</option>
-                <option value="B">{orderBook.tokenB}</option>
-              </select>
               <button
                 className={`order-type-button ${order.type === "buy" ? "active" : ""}`}
                 onClick={() => handleOrderTypeChange("buy")}

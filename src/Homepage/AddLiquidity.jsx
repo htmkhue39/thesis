@@ -51,7 +51,7 @@ function AddLiquidity() {
       fetchTokens(selectedAccount.connectedNodeAddress);
       fetchBalances(
         selectedAccount.address,
-        selectedAccount.connectedNodeAddress,
+        selectedAccount.connectedNodeAddress
       );
     }
   }, [selectedAccount]);
@@ -109,7 +109,7 @@ function AddLiquidity() {
         fromToken.symbol,
         toToken.symbol,
         fromAmount,
-        toAmount,
+        toAmount
       );
 
       console.log(response);
@@ -190,7 +190,7 @@ function AddLiquidity() {
         toToken.symbol,
         fromAmount,
         toAmount,
-        selectedFee / 100,
+        selectedFee / 100
       );
       setPoolShare(response.poolShare);
       setLPTokens(response.lpTokens);
@@ -208,7 +208,7 @@ function AddLiquidity() {
         toToken.symbol,
         fromAmount,
         toAmount,
-        selectedFee / 100,
+        selectedFee / 100
       );
       setPoolShare(response.poolShare);
       setLPTokens(response.lpTokens);
@@ -268,7 +268,7 @@ function AddLiquidity() {
         fromToken.symbol,
         toToken.symbol,
         fromAmount,
-        toAmount,
+        toAmount
       );
 
       setModalMessage("Liquidity added successfully!");
@@ -491,7 +491,7 @@ function AddLiquidity() {
                         onClick={() =>
                           handleTokenSelect(
                             token,
-                            showFromTokenDropdown ? setFromToken : setToToken,
+                            showFromTokenDropdown ? setFromToken : setToToken
                           )
                         }
                       >
