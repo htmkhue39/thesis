@@ -1,4 +1,4 @@
 export const formatCurrency = (amount) => {
   if (!amount) return null;
-  return amount.toFixed(6);
+  return parseFloat(amount).toFixed(6);
 };

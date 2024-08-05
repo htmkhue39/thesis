@@ -216,10 +216,15 @@ const Explore = () => {
                         <tr key={pool.id}>
                           <td>{index + 1}</td>
                           <td>
-                            <CombinedTokenLogo
-                              logo1={getCoinLogo(pool.tokenA)}
-                              logo2={getCoinLogo(pool.tokenB)}
-                            />
+                            <div className="token-info">
+                              <CombinedTokenLogo
+                                logo1={getCoinLogo(pool.tokenA)}
+                                logo2={getCoinLogo(pool.tokenB)}
+                              />
+                              <div>
+                                {pool.tokenA}/{pool.tokenB}
+                              </div>
+                            </div>
                             {pool.pool}
                           </td>
                           <td>{pool.transactions}</td>
@@ -257,8 +262,26 @@ const Explore = () => {
                       transactions.map((tx, index) => (
                         <tr key={tx.id}>
                           <td>{index + 1}</td>
-                          <td>{tx.fromToken}</td>
-                          <td>{tx.toToken}</td>
+                          <td>
+                            <div className="token-info">
+                              <img
+                                src={getCoinLogo(tx.fromToken)}
+                                alt={`${tx.fromToken} logo`}
+                                className="token-logo"
+                              />
+                              <div>{tx.fromToken}</div>
+                            </div>
+                          </td>
+                          <td>
+                            <div className="token-info">
+                              <img
+                                src={getCoinLogo(tx.toToken)}
+                                alt={`${tx.toToken} logo`}
+                                className="token-logo"
+                              />
+                              <div>{tx.toToken}</div>
+                            </div>
+                          </td>
                           <td>{formatCurrency(tx.fromAmount)}</td>
                           <td>{formatCurrency(tx.toAmount)}</td>
                           <td>{tx.date}</td>
@@ -290,7 +313,16 @@ const Explore = () => {
                       balances.map((balance, index) => (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{balance.token}</td>
+                          <td>
+                            <div className="token-info">
+                              <img
+                                src={getCoinLogo(balance.token)}
+                                alt={`${balance.token} logo`}
+                                className="token-logo"
+                              />
+                              <div>{balance.token}</div>
+                            </div>
+                          </td>
                           <td>{formatCurrency(balance.amount)}</td>
                         </tr>
                       ))

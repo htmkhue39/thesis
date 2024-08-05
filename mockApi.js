@@ -1029,7 +1029,7 @@ mock.onGet(new RegExp(`${API_URL}/nodes`)).reply((config) => {
   const { address } = config.params || {};
   if (address) {
     const filteredNodes = nodes.filter((node) =>
-      node.address.toLowerCase().includes(address.toLowerCase()),
+      node.address.toLowerCase().includes(address.toLowerCase())
     );
     return [200, filteredNodes];
   }
@@ -1054,7 +1054,7 @@ mock.onGet(new RegExp(`${API_URL}/accounts/*`)).reply((config) => {
 mock.onPut(new RegExp(`${API_URL}/accounts/*`)).reply((config) => {
   const updatedAccount = JSON.parse(config.data);
   const index = accounts.findIndex(
-    (account) => account.id === updatedAccount.id,
+    (account) => account.id === updatedAccount.id
   );
   if (index !== -1) {
     accounts[index] = updatedAccount;
@@ -1081,7 +1081,7 @@ mock.onPost(`${API_URL}/checkAccount`).reply((config) => {
   const account = accounts.find(
     (acc) =>
       JSON.stringify(acc.mnemonic) === JSON.stringify(mnemonic) &&
-      acc.passcode === password,
+      acc.passcode === password
   );
   return account ? [200, account] : [404, { message: "Account not found" }];
 });
@@ -1093,7 +1093,7 @@ mock.onPost(`${API_URL}/checkNodeConnection`).reply((config) => {
       (channel.address_a === accountAddress &&
         channel.address_b === nodeAddress) ||
       (channel.address_a === nodeAddress &&
-        channel.address_b === accountAddress),
+        channel.address_b === accountAddress)
   );
   return channel ? [200, { connected: true }] : [200, { connected: false }];
 });
@@ -1101,7 +1101,7 @@ mock.onPost(`${API_URL}/checkNodeConnection`).reply((config) => {
 mock.onPost(`${API_URL}/transactions`).reply((config) => {
   const newTransaction = JSON.parse(config.data);
   const accountIndex = accounts.findIndex(
-    (account) => account.address === newTransaction.address,
+    (account) => account.address === newTransaction.address
   );
 
   if (accountIndex !== -1) {
@@ -1121,7 +1121,7 @@ mock.onPost(`${API_URL}/checkPool`).reply((config) => {
     const pool = node.liquidityPools.find(
       (p) =>
         (p.tokenA === fromToken && p.tokenB === toToken) ||
-        (p.tokenA === toToken && p.tokenB === fromToken),
+        (p.tokenA === toToken && p.tokenB === fromToken)
     );
     if (pool) {
       const priceFromTo = (
@@ -1203,7 +1203,7 @@ mock.onPost(`${API_URL}/liquidity`).reply((config) => {
   let pool = node.liquidityPools.find(
     (pool) =>
       (pool.tokenA === fromToken && pool.tokenB === toToken) ||
-      (pool.tokenA === toToken && pool.tokenB === fromToken),
+      (pool.tokenA === toToken && pool.tokenB === fromToken)
   );
 
   if (!pool) return [404, { message: "Pool not found" }];
@@ -1222,7 +1222,7 @@ mock.onPost(`${API_URL}/liquidity`).reply((config) => {
   ).toString();
 
   let providerPosition = pool.liquidityProviderPositions.find(
-    (position) => position.accountId === accountId,
+    (position) => position.accountId === accountId
   );
   if (providerPosition) {
     providerPosition.amountA = (
@@ -1263,7 +1263,7 @@ mock.onGet(new RegExp(`${API_URL}/channels`)).reply((config) => {
       (channel.address_a === accountAddress &&
         channel.address_b === nodeAddress) ||
       (channel.address_a === nodeAddress &&
-        channel.address_b === accountAddress),
+        channel.address_b === accountAddress)
   );
   return [200, channel || {}];
 });
@@ -1292,7 +1292,7 @@ mock.onGet(`${API_URL}/searchOrderBooks`).reply((config) => {
     filteredOrderBooks = orderBooks.filter(
       (ob) =>
         ob.tokenA.toLowerCase().includes(query) ||
-        ob.tokenB.toLowerCase().includes(query),
+        ob.tokenB.toLowerCase().includes(query)
     );
   }
 
@@ -1407,7 +1407,7 @@ export const getTransactions = async (accountAddress, nodeAddress) => {
         (channel.address_a === accountAddress &&
           channel.address_b === nodeAddress) ||
         (channel.address_a === nodeAddress &&
-          channel.address_b === accountAddress),
+          channel.address_b === accountAddress)
     );
     return channel ? channel.transactions : [];
   } catch (error) {
@@ -1423,7 +1423,7 @@ export const getBalances = async (accountAddress, nodeAddress) => {
         (channel.address_a === accountAddress &&
           channel.address_b === nodeAddress) ||
         (channel.address_a === nodeAddress &&
-          channel.address_b === accountAddress),
+          channel.address_b === accountAddress)
     );
     return channel ? channel.balances : {};
   } catch (error) {
@@ -1458,7 +1458,7 @@ export const connectNode = async (accountAddress, nodeAddress) => {
         (channel.address_a === accountAddress &&
           channel.address_b === nodeAddress) ||
         (channel.address_a === nodeAddress &&
-          channel.address_b === accountAddress),
+          channel.address_b === accountAddress)
     );
 
     if (!existingChannel) {
@@ -1475,14 +1475,14 @@ export const connectNode = async (accountAddress, nodeAddress) => {
     }
 
     const accountIndex = accounts.findIndex(
-      (account) => account.address === accountAddress,
+      (account) => account.address === accountAddress
     );
     if (accountIndex !== -1) {
       accounts[accountIndex].connectedNodeAddress = nodeAddress;
       accounts[accountIndex].connected = true;
       await axiosClient.put(
         `${API_URL}/accounts/${accounts[accountIndex].id}`,
-        accounts[accountIndex],
+        accounts[accountIndex]
       );
     }
 
@@ -1521,14 +1521,14 @@ export const searchNodes = async (query) => {
 export const clearConnectedNodeAddress = async (accountId) => {
   try {
     const accountIndex = accounts.findIndex(
-      (account) => account.id === accountId,
+      (account) => account.id === accountId
     );
     if (accountIndex !== -1) {
       accounts[accountIndex].connectedNodeAddress = "";
       accounts[accountIndex].connected = false;
       await axiosClient.put(
         `${API_URL}/accounts/${accountId}`,
-        accounts[accountIndex],
+        accounts[accountIndex]
       );
     }
     return { success: true };
@@ -1552,7 +1552,7 @@ export const updateAccount = async (account) => {
   try {
     const response = await axiosClient.put(
       `${API_URL}/accounts/${account.id}`,
-      account,
+      account
     );
     return response.data;
   } catch (error) {
@@ -1578,7 +1578,7 @@ export const createTransaction = async (transaction) => {
   try {
     const response = await axiosClient.post(
       `${API_URL}/transactions`,
-      transaction,
+      transaction
     );
     return response.data;
   } catch (error) {
@@ -1591,7 +1591,7 @@ export const addInitialLiquidity = async (data) => {
   try {
     const response = await axiosClient.post(
       `${API_URL}/initialLiquidity`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {

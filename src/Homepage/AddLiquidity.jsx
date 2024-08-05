@@ -33,11 +33,13 @@ function AddLiquidity() {
   const [toToken, setToToken] = useState(null);
   const [fromAmount, setFromAmount] = useState(0);
   const [toAmount, setToAmount] = useState(0);
+  const [fromAmountStr, setFromAmountStr] = useState("0");
+  const [toAmountStr, setToAmountStr] = useState("0");
   const [showFromTokenDropdown, setShowFromTokenDropdown] = useState(false);
   const [showToTokenDropdown, setShowToTokenDropdown] = useState(false);
   const [isAmountExceedBalance, setIsAmountExceedBalance] = useState(false);
   const [showFeeOptions, setShowFeeOptions] = useState(false);
-  const [selectedFee, setSelectedFee] = useState(0.3);
+  const [selectedFee, setSelectedFee] = useState(0.03);
   const [poolExisted, setPoolExisted] = useState(false);
   const [priceFromTo, setPriceFromTo] = useState(null);
   const [priceToFrom, setPriceToFrom] = useState(null);
@@ -115,7 +117,7 @@ function AddLiquidity() {
       setPoolExisted(response.existed);
       setPriceFromTo(response.priceFromTo);
       setPriceToFrom(response.priceToFrom);
-      // setPoolShare(response.poolShare);
+      setPoolShare(response.poolShare);
     } catch (error) {
       console.error("Error checking pool:", error);
     }
@@ -186,26 +188,6 @@ function AddLiquidity() {
     }
   };
 
-  useEffect(() => {
-    const toAmount = fromAmount * priceFromTo;
-
-    if (poolExisted) {
-      setToAmount(toAmount);
-    }
-
-    simulateProvide(fromAmount, toAmount);
-  }, [poolExisted, priceFromTo, fromAmount]);
-
-  useEffect(() => {
-    const fromAmount = toAmount * priceToFrom;
-
-    if (poolExisted) {
-      setFromAmount(fromAmount);
-    }
-
-    simulateProvide(fromAmount, toAmount);
-  }, [poolExisted, priceToFrom, toAmount]);
-
   const handleSimulateProvideLiquidity = async (fromAmount, toAmount) => {
     try {
       const response = await simulateProvideLiquidity(
@@ -245,20 +227,51 @@ function AddLiquidity() {
     }
   };
 
-  const handleFirstAmountChange = (e) => {
-    const value = e.target.value;
-    const amount = value === "" ? 0 : Number(value);
-    setFromAmount(amount);
+  const handleAmountChange = (setState) => {
+    return (e) => {
+      const value = e.target.value;
+      if (value[0] == "-") return;
+      setState(e.target.value);
+    };
   };
 
-  const handleSecondAmountChange = (e) => {
-    const value = e.target.value;
-    const amount = value === "" ? 0 : Number(value);
-    setToAmount(amount);
+  const handleFromAmountFormat = () => {
+    const fromAmount = fromAmountStr === "" ? 0 : Number(fromAmountStr);
+
+    setFromAmount(fromAmount);
+    setFromAmountStr(formatCurrency(fromAmount));
+
+    let calcToAmount = toAmount;
+    if (poolExisted) {
+      calcToAmount = fromAmount * priceFromTo;
+      setToAmount(calcToAmount);
+      setToAmountStr(formatCurrency(calcToAmount));
+    }
+
+    simulateProvide(fromAmount, calcToAmount);
+  };
+
+  const handleToAmountFormat = () => {
+    const toAmount = toAmountStr === "" ? 0 : Number(toAmountStr);
+
+    setToAmount(toAmount);
+    setToAmountStr(formatCurrency(toAmount));
+
+    let calcFromAmount = fromAmount;
+    if (poolExisted) {
+      calcFromAmount = toAmount * priceToFrom;
+      setFromAmount(calcFromAmount);
+      setFromAmountStr(formatCurrency(calcFromAmount));
+    }
+
+    simulateProvide(calcFromAmount, toAmount);
   };
 
   const handleAddLiquidity = async () => {
     console.log("poolIndex: ", poolIndex);
+
+    const fromAmount = fromAmountStr === "" ? 0 : Number(fromAmountStr);
+    const toAmount = toAmountStr === "" ? 0 : Number(toAmountStr);
 
     if (
       !selectedAccount ||
@@ -273,7 +286,7 @@ function AddLiquidity() {
 
     try {
       setIsLoading(true);
-      const response = await confirmProvideLiquidity(
+      await confirmProvideLiquidity(
         selectedAccount.connectedNodeAddress,
         poolIndex,
         fromToken.symbol,
@@ -286,7 +299,10 @@ function AddLiquidity() {
       fetchBalances(selectedAccount.connectedNodeAddress);
       setFromAmount(0);
       setToAmount(0);
-      setPoolShare(response.poolShare);
+      setFromAmountStr("0");
+      setToAmountStr("0");
+      setLPTokens(0);
+      checkIfPoolExists();
     } catch (error) {
       console.error("Error adding liquidity:", error);
       setModalMessage("Error adding liquidity. Please try again.");
@@ -348,8 +364,10 @@ function AddLiquidity() {
                     <div className="amount-wrapper">
                       <input
                         type="number"
-                        value={formatCurrency(fromAmount) || 0}
-                        onChange={handleFirstAmountChange}
+                        value={fromAmountStr}
+                        onChange={handleAmountChange(setFromAmountStr)}
+                        onBlur={handleFromAmountFormat}
+                        pattern="[0-9]*[.,]?[0-9]*"
                         className="amount-input"
                         disabled={!selectedAccount.connectedNodeAddress}
                       />
@@ -386,8 +404,10 @@ function AddLiquidity() {
                     <div className="amount-wrapper">
                       <input
                         type="number"
-                        value={formatCurrency(toAmount) || 0}
-                        onChange={handleSecondAmountChange}
+                        value={toAmountStr}
+                        onChange={handleAmountChange(setToAmountStr)}
+                        onBlur={handleToAmountFormat}
+                        pattern="[0-9]*[.,]?[0-9]*"
                         className="amount-input"
                         disabled={!selectedAccount.connectedNodeAddress}
                       />
@@ -412,7 +432,7 @@ function AddLiquidity() {
                 </div>
                 {showFeeOptions && (
                   <div className="fee-options">
-                    {[0.01, 0.05, 0.3, 1.0].map((fee) => (
+                    {[0.01, 0.05, 0.03, 1.0].map((fee) => (
                       <div
                         key={fee}
                         className={`fee-option ${selectedFee === fee ? "selected" : ""}`}
@@ -442,7 +462,9 @@ function AddLiquidity() {
                 </div>
                 <div className="pool-share">
                   <span>Share of pool:</span>
-                  <span>{poolShare ? formatCurrency(poolShare) : "-"}</span>
+                  <span>
+                    {poolShare ? formatCurrency(poolShare * 100) : "-"}%
+                  </span>
                 </div>
                 <div className="pool-share">
                   <span>Minted LP Tokens:</span>

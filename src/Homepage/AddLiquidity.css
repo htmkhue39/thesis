@@ -1,13 +1,13 @@
 .liquidity-content {
   max-height: 82vh;
-  min-height: 450px;
+  min-height: 82vh;
   flex: 0 0 auto;
   margin-right: auto;
   margin-left: auto;
   width: 460px;
-  height: 620px;
+  height: 740px;
   background-color: var(--color-background-default);
-  box-shadow: var(--shadow-size-xs) var(--color-shadow-default) ;
+  box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
   border: 0.25px solid #ddd;
   z-index: 25;
   display: flex;
@@ -17,7 +17,7 @@
   overflow-y: auto;
 }
 
-.liquidity-header{
+.liquidity-header {
   display: flex;
   align-items: center;
 
@@ -27,19 +27,19 @@
   width: 100%;
 }
 
-.liquidity-back-icon{
+.liquidity-back-icon {
   position: relative;
   left: 1rem;
 }
 
-.liquidity-back-icon-detail{
+.liquidity-back-icon-detail {
   width: 24px;
   height: 24px;
   cursor: pointer;
   display: inline-block;
 }
 
-.liquidity-title{
+.liquidity-title {
   flex: 1;
   margin-right: 20px;
 }
@@ -86,7 +86,7 @@
   background-color: #e7f1ff;
 }
 
-.prepare-liquidity-wrapper{
+.prepare-liquidity-wrapper {
   display: flex;
   flex-flow: column;
   width: 100%;
@@ -121,4 +121,3 @@
   border-radius: 8px;
   margin-bottom: 10px;
 }
-  

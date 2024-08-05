@@ -30,6 +30,8 @@ function SwapCoin() {
   const [toToken, setToToken] = useState(null);
   const [fromAmount, setFromAmount] = useState(0);
   const [toAmount, setToAmount] = useState(0);
+  const [fromAmountStr, setFromAmountStr] = useState("0");
+  const [toAmountStr, setToAmountStr] = useState("0");
   const [fee, setFee] = useState(null);
   const [showFromTokenDropdown, setShowFromTokenDropdown] = useState(false);
   const [showToTokenDropdown, setShowToTokenDropdown] = useState(false);
@@ -88,6 +90,7 @@ function SwapCoin() {
         fromAmount
       );
       setToAmount(res.otherAmount);
+      setToAmountStr(formatCurrency(res.otherAmount));
       setPoolId(res.poolIndex);
       setFee(res.fee);
     } catch (error) {
@@ -105,6 +108,8 @@ function SwapCoin() {
         toAmount
       );
       setFromAmount(res.otherAmount);
+      setFromAmountStr(formatCurrency(res.otherAmount));
+      setIsAmountExceedBalance(res.otherAmount > getBalance(fromToken));
       setPoolId(res.poolIndex);
       setFee(res.fee);
     } catch (error) {
@@ -172,26 +177,44 @@ function SwapCoin() {
     return balances[token.symbol] || 0;
   };
 
-  const handleFromAmountChange = (e) => {
-    const value = e.target.value;
-    const amount = value === "" ? 0 : Number(value);
+  const handleAmountChange = (setState) => {
+    return (e) => {
+      const value = e.target.value;
+      if (value[0] == "-") return;
+      setState(e.target.value);
+    };
+  };
+
+  const handleFromAmountFormat = () => {
+    const amount = fromAmountStr === "" ? 0 : Number(fromAmountStr);
+
+    setFromAmountStr(formatCurrency(amount));
     setFromAmount(amount);
     setIsAmountExceedBalance(amount > getBalance(fromToken));
     forwardTrade(amount);
   };
 
-  const handleToAmountChange = (e) => {
-    const value = e.target.value;
-    const amount = value === "" ? 0 : Number(value);
+  const handleToAmountFormat = () => {
+    const amount = toAmountStr === "" ? 0 : Number(toAmountStr);
+
+    setToAmountStr(formatCurrency(amount));
     setToAmount(amount);
     setIsAmountExceedBalance(amount > getBalance(toToken));
     backwardTrade(amount);
   };
 
   const handleSwap = async () => {
-    if (!selectedAccount || !poolId || !fromToken || !toToken || !fromAmount) {
+    if (
+      !selectedAccount ||
+      !poolId ||
+      !fromToken ||
+      !toToken ||
+      !fromAmountStr
+    ) {
       return;
     }
+
+    const fromAmount = fromAmountStr === "" ? 0 : Number(fromAmountStr);
 
     try {
       setIsLoading(true);
@@ -205,6 +228,8 @@ function SwapCoin() {
       fetchBalances(selectedAccount.connectedNodeAddress);
       setFromAmount(0);
       setToAmount(0);
+      setFromAmountStr("0");
+      setToAmountStr("0");
       setModalMessage("Swap successful!");
     } catch (error) {
       console.error("Error recording transaction:", error);
@@ -258,8 +283,10 @@ function SwapCoin() {
                     <div className="amount-wrapper">
                       <input
                         type="number"
-                        value={formatCurrency(fromAmount) || 0}
-                        onChange={handleFromAmountChange}
+                        value={fromAmountStr}
+                        onChange={handleAmountChange(setFromAmountStr)}
+                        onBlur={handleFromAmountFormat}
+                        pattern="[0-9]*[.,]?[0-9]*"
                         className="amount-input"
                       />
                     </div>
@@ -307,8 +334,9 @@ function SwapCoin() {
                     <div className="amount-wrapper">
                       <input
                         type="number"
-                        value={formatCurrency(toAmount) || 0}
-                        onChange={handleToAmountChange}
+                        value={toAmountStr}
+                        onChange={handleAmountChange(setToAmountStr)}
+                        onBlur={handleToAmountFormat}
                         className="amount-input"
                       />
                     </div>

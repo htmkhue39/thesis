@@ -4,6 +4,7 @@ import "./OrderBook.css";
 import { useAccount } from "../AccountContext";
 import { getOrderbook, placeOrder } from "../api/orderbooks";
 import { HttpStatusCode } from "axios";
+import { formatCurrency } from "../helpers/FormatCurrency";
 
 const OrderBook = () => {
   const { orderBookId } = useParams();
@@ -19,7 +20,10 @@ const OrderBook = () => {
     type: "buy",
     price: 0,
     amount: 0,
-    token: "A",
+  });
+  const [orderStr, setOrderStr] = useState({
+    price: "0",
+    amount: "0",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -45,8 +49,19 @@ const OrderBook = () => {
 
   const handleOrderChange = (e) => {
     const { name, value } = e.target;
+    setOrderStr({ ...orderStr, [name]: value });
+  };
+
+  const handleFormatOrder = (e) => {
+    const { name, value } = e.target;
     const amount = value === "" ? 0 : Number(value);
-    setOrder({ ...order, [name]: amount });
+    if (amount) {
+      setOrder({ ...order, [name]: amount });
+      setOrderStr({
+        ...orderStr,
+        [name]: formatCurrency(amount),
+      });
+    }
   };
 
   const handleOrderTypeChange = (type) => {
@@ -55,6 +70,9 @@ const OrderBook = () => {
 
   const handleOrderSubmit = async (e) => {
     if (!selectedAccount) return;
+
+    const price = orderStr.price === "" ? 0 : Number(orderStr.price);
+    const amount = orderStr.amount === "" ? 0 : Number(orderStr.amount);
 
     e.preventDefault();
 
@@ -65,8 +83,8 @@ const OrderBook = () => {
         orderBookId,
         orderBook.baseToken,
         orderBook.quoteToken,
-        order.price,
-        order.amount,
+        price,
+        amount,
         order.type === "buy"
       );
       if (responseStatus == HttpStatusCode.Created) {
@@ -75,7 +93,8 @@ const OrderBook = () => {
           orderBookId
         );
         setOrderBook(updatedOrderBook);
-        setOrder({ type: "buy", price: "", amount: "", token: order.token });
+        setOrder({ type: "buy", price: 0, amount: 0 });
+        setOrderStr({ price: "", amount: "" });
         setModalMessage("Order submitted successfully!");
       } else {
         setModalMessage("Failed to submit order. Please try again.");
@@ -201,21 +220,25 @@ const OrderBook = () => {
             <div className="create-order-input">
               <h4 className="create-order-text">Price</h4>
               <input
-                type="text"
+                type="number"
                 name="price"
                 placeholder="Price"
-                value={order.price}
+                value={orderStr.price}
+                pattern="[0-9]*[.,]?[0-9]*"
                 onChange={handleOrderChange}
+                onBlur={handleFormatOrder}
               />
             </div>
             <div className="create-order-input">
               <h4 className="create-order-text">Amount</h4>
               <input
-                type="text"
+                type="number"
                 name="amount"
                 placeholder="Amount"
-                value={order.amount}
+                value={orderStr.amount}
+                pattern="[0-9]*[.,]?[0-9]*"
                 onChange={handleOrderChange}
+                onBlur={handleFormatOrder}
               />
             </div>
             <div className="button-container">
