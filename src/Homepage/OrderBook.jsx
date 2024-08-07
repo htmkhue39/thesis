@@ -117,10 +117,18 @@ const OrderBook = () => {
     for (let i = 0; i < minLen; i++) {
       rows.push(
         <tr key={i}>
-          <td className="bids-quantity">{orderBook.bidOrders[i].amount}</td>
-          <td className="bids">{orderBook.bidOrders[i].price}</td>
-          <td className="asks">{orderBook.askOrders[i].price}</td>
-          <td className="asks-quantity">{orderBook.askOrders[i].amount}</td>
+          <td className="bids-quantity">
+            {formatCurrency(orderBook.bidOrders[i].amount)}
+          </td>
+          <td className="bids">
+            {formatCurrency(orderBook.bidOrders[i].price)}
+          </td>
+          <td className="asks">
+            {formatCurrency(orderBook.askOrders[i].price)}
+          </td>
+          <td className="asks-quantity">
+            {formatCurrency(orderBook.askOrders[i].amount)}
+          </td>
         </tr>
       );
     }
@@ -129,8 +137,12 @@ const OrderBook = () => {
       for (let i = minLen; i < orderBook.bidOrders.length; i++) {
         rows.push(
           <tr key={i}>
-            <td className="bids-quantity">{orderBook.bidOrders[i].amount}</td>
-            <td className="bids">{orderBook.bidOrders[i].price}</td>
+            <td className="bids-quantity">
+              {formatCurrency(orderBook.bidOrders[i].amount)}
+            </td>
+            <td className="bids">
+              {formatCurrency(orderBook.bidOrders[i].price)}
+            </td>
             <td className="asks"></td>
             <td className="asks-quantity"></td>
           </tr>
@@ -142,8 +154,12 @@ const OrderBook = () => {
           <tr key={i}>
             <td className="bids-quantity"></td>
             <td className="bids"></td>
-            <td className="asks">{orderBook.askOrders[i].price}</td>
-            <td className="asks-quantity">{orderBook.askOrders[i].amount}</td>
+            <td className="asks">
+              {formatCurrency(orderBook.askOrders[i].price)}
+            </td>
+            <td className="asks-quantity">
+              {formatCurrency(orderBook.askOrders[i].amount)}
+            </td>
           </tr>
         );
       }
@@ -189,8 +205,8 @@ const OrderBook = () => {
                 {orderBook.trades &&
                   orderBook.trades.map((trade, index) => (
                     <tr key={index}>
-                      <td>{trade.price}</td>
-                      <td>{trade.amount}</td>
+                      <td>{formatCurrency(trade.price)}</td>
+                      <td>{formatCurrency(trade.amount)}</td>
                       <td>{new Date(trade.time).toLocaleString()}</td>
                     </tr>
                   ))}
